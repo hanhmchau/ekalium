@@ -1,0 +1,178 @@
+﻿@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Newtonsoft.Json
+@using Kalium.Shared.Models
+
+<div class="woocommerce-account my-modal" id="register-modal">
+    <form method="post" class="woocommerce-form woocommerce-form-register register">
+        <h2>Register</h2>
+
+        @if (GeneralError)
+        {
+            <div class="background-red text-white" style="text-align: center; padding: 10px;">
+                Registration failed. Please try again.
+            </div>
+        }
+        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row">
+            <label for="reg_email">Username<span class="required">*</span></label>
+            <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(username => CheckUsername(username.Value as string))"
+                   name="email" id="reg_email" autocomplete="email" value="" type="email" />
+        </p>
+        @if (DuplicateUsername)
+        {
+            <div class="text-red">This username is already used.</div>
+        }
+        @if (HasTypedUsername && string.IsNullOrWhiteSpace(Username))
+        {
+            <div class="text-red">Username cannot be empty or contain only whitespaces.</div>
+        }
+
+        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row">
+            <label for="reg_email">Email address<span class="required">*</span></label>
+            <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(email => CheckEmail(email.Value as string))"
+                   name="email" id="reg_email" autocomplete="email" value="" type="email" />
+        </p>
+        @if (DuplicateEmail)
+        {
+            <div class="text-red">This email address is already used.</div>
+        }
+        @if (HasTypedPassword && string.IsNullOrWhiteSpace(Email))
+        {
+            <div class="text-red">Email cannot be empty or contain only whitespaces.</div>
+        }
+
+        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--wrap">
+            <label for="reg_password">Password<span class="required">*</span></label>
+            <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(password => { Password = password.Value as string; HasTypedPassword = true; })"
+                   name="password" id="reg_password" autocomplete="off" type="@(PasswordMode ? "password" : "text")" />
+            <div onclick=@TogglePasswordMode><i class="icon @(PasswordMode ? "icon-basic-eye" : "icon-basic-eye-closed")"></i></div>
+        </p>
+        @if (HasTypedPassword && (string.IsNullOrEmpty(Password) || Password.Length < 4))
+        {
+            <div class="text-red">Password must contain at least 4 characters.</div>
+        }
+
+        <div class="woocommerce-privacy-policy-text"></div>
+        <p class="woocommerce-FormRow form-row">
+            <button type="button" onclick="@TryRegister" class="woocommerce-Button button @(IsValid() ? "button-disabled" : "")" name="register" value="Register">Register</button>
+            <div style="display: inline-block; padding-left: 15px" class="red-text modal-close" onclick="@(() => ShowModal("login-modal"))">Have an account? Login</div>
+        </p>
+    </form>
+</div>
+
+@functions{
+    [Parameter]
+    private bool DuplicateEmail { get; set; }
+    [Parameter]
+    private bool DuplicateUsername { get; set; }
+    [Parameter]
+    private bool PasswordMode { get; set; } = true;
+    [Parameter]
+    private string Username { get; set; }
+    [Parameter]
+    private string Email { get; set; }
+    [Parameter]
+    private string Password { get; set; }
+    [Parameter]
+    private User CurrentUser { get; set; }
+    [Parameter]
+    private bool HasTypedUsername { get; set; }
+    [Parameter]
+    private bool HasTypedEmail { get; set; }
+    [Parameter]
+    private bool HasTypedPassword { get; set; }
+    [Parameter]
+    private bool GeneralError { get; set; }
+    [Parameter]
+    private Action<User> OnUpdateCurrentUser { get; set; }
+
+    private bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)
+            && !DuplicateEmail && !DuplicateUsername;
+    }
+
+    private void TogglePasswordMode()
+    {
+        PasswordMode = !PasswordMode;
+    }
+
+    private async void TryRegister()
+    {
+        if (!IsValid()) return;
+        DuplicateEmail = await IsDuplicateEmail(Email);
+        DuplicateUsername = await IsDuplicateUsername(Username);
+        StateHasChanged();
+        if (DuplicateEmail || DuplicateUsername)
+        {
+            return;
+        }
+        var result = await Http.PostJsonAsync<User>("/api/Identity/TryRegister/", Serialize(new
+        {
+            Username,
+            Email,
+            Password
+        }));
+        if (result != null)
+        {
+            GeneralError = false;
+            CurrentUser = result as User;
+            OnUpdateCurrentUser.Invoke(CurrentUser);
+            HideModal();
+        }
+        else
+        {
+            GeneralError = true;
+        }
+    }
+
+    private async void CheckUsername(string username)
+    {
+        HasTypedUsername = true;
+        Username = username;
+        DuplicateUsername = await IsDuplicateUsername(Username);
+        StateHasChanged();
+    }
+
+    private async Task<bool> IsDuplicateUsername(string username)
+    {
+        return await Http.PostJsonAsync<bool>("/api/Identity/CheckDuplicateUsername/", Serialize(new
+        {
+            Username
+        }));
+    }
+
+    private async void CheckEmail(string email)
+    {
+        HasTypedEmail = true;
+        Email = email;
+        DuplicateEmail = await IsDuplicateEmail(Email);
+        StateHasChanged();
+    }
+
+    private async Task<bool> IsDuplicateEmail(string email)
+    {
+        return await Http.PostJsonAsync<bool>("/api/Identity/CheckDuplicateEmail/", Serialize(new
+        {
+            Email
+        }));
+
+    }
+
+    private string Serialize(object obj)
+    {
+        return JsonConvert.SerializeObject(obj);
+    }
+
+    private void ShowModal(string id)
+    {
+        HideModal();
+        RegisteredFunction.Invoke<bool>("showModal", id);
+    }
+
+    private void HideModal()
+    {
+        RegisteredFunction.Invoke<bool>("hideModal");
+    }
+}

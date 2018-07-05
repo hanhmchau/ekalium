@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27705.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Server", "Kalium.Server\Kalium.Server.csproj", "{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Client", "Kalium.Client\Kalium.Client.csproj", "{C34AE985-A088-4237-9C23-6BB91953D4E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Shared", "Kalium.Shared\Kalium.Shared.csproj", "{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C34AE985-A088-4237-9C23-6BB91953D4E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C34AE985-A088-4237-9C23-6BB91953D4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C34AE985-A088-4237-9C23-6BB91953D4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C34AE985-A088-4237-9C23-6BB91953D4E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B0655A59-7BC6-4A36-95CE-9AB93E57C577}
+	EndGlobalSection
+EndGlobal

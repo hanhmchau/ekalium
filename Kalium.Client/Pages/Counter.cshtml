@@ -1,0 +1,52 @@
+﻿@page "/counter"
+@inject HttpClient Http
+<<<<<<< HEAD
+@using Kalium.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Browser.Http
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+=======
+>>>>>>> parent of d637f74... SignalR prep
+
+<h1>Counter</h1>
+
+<button class="btn btn-primary" onclick="@IncrementCount">Click me</button>
+
+@functions {
+
+    async void IncrementCount()
+    {
+        await Http.GetJsonAsync<string>("/api/Seed/Index/");
+    }
+
+    protected override async Task OnInitAsync()
+    {
+        bool lulz = RegisteredFunction.Invoke<bool>("initializeSignalR");
+        //        Connection = new HubConnectionBuilder()
+        ////            .WithMessageHandler(new BrowserHttpMessageHandler())
+        //            .WithUrl("http://localhost:54653/productHubber")
+        //            .Build();
+        //
+        //        try
+        //        {
+        //            await Connection.StartAsync();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine(e.StackTrace);
+        //            Console.WriteLine(e.Source);
+        //            Console.WriteLine(e.Message);
+        //        }
+    }
+
+    async void SendThingy()
+    {
+        string lulz = await Http.GetJsonAsync<string>("/api/Seed/Announce/");
+        Console.WriteLine(lulz);
+        //        var newProduct = new Product
+        //        {
+        //            Name = "My Little Rose"
+        //        };
+        //        await Connection.InvokeAsync("AnnounceAdd", newProduct);
+    }
+}

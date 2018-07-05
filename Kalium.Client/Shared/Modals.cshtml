@@ -1,0 +1,32 @@
+﻿@inject HttpClient Http
+
+<form class="woocommerce-form woocommerce-form-login login" id="login-modal" method="post">
+    <h2>Login</h2>
+
+    <style id="labeled-input-row--width-group-1">
+        .labeled-input-row--width-group-1 .labeled-input-row--label {
+            min-width: 174px
+        }
+    </style><p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--equal-width labeled-input-row--width-group-1">
+        <div class="labeled-input-row--label"><label for="username">Username or email address&nbsp;<span class="required">*</span></label></div>
+        <input class="woocommerce-Input woocommerce-Input--text input-text" name="username" id="username" autocomplete="username" value="" type="text">
+    </p>
+    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
+        <div class="labeled-input-row--label"><label for="password">Password&nbsp;<span class="required">*</span></label></div>
+        <input class="woocommerce-Input woocommerce-Input--text input-text" name="password" id="password" autocomplete="current-password" type="password">
+    </p>
+
+    <p class="form-row">
+        <input id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="676d340593" type="hidden"><input name="_wp_http_referer" value="/shop/my-account/" type="hidden">				<button type="submit" class="woocommerce-Button button" name="login" value="Log in">Log in</button>
+        <label class="woocommerce-form__label woocommerce-form__label-for-checkbox inline">
+            <input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" id="rememberme" value="forever" type="checkbox"> <span>Remember me</span>
+        </label>
+    </p>
+    <p class="woocommerce-LostPassword lost_password">
+        <a href="https://demo.kaliumtheme.com/shop/my-account/lost-password/" class="">Lost your password?</a>
+    </p>
+
+</form>
+
+@functions {
+}

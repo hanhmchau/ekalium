@@ -1,0 +1,485 @@
+﻿@inherits BlazorLayoutComponent
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@inject HttpClient Http
+@using Kalium.Shared.Models
+@using Newtonsoft.Json
+
+<div class="mobile-menu-wrapper mobile-menu-slide">
+
+    <div class="mobile-menu-container">
+
+        <ul id="menu-main-menu" class="menu">
+            <li onclick=@(() => ShowContextMenu("sub-menu-item-1")) class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-352">
+                <a>Shop</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-342"><a href="shop/index.html">Full Width Shop</a></li>
+                    <li id="menu-item-563" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-563"><a href="shop/index2354.html?shop-sidebar=left">Sidebar Left</a></li>
+                    <li id="menu-item-564" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-564"><a href="shop/index2633.html?shop-sidebar=right">Sidebar Right</a></li>
+                    <li id="menu-item-609" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-609"><a href="shop-carousel/index.html">Shop Carousel</a></li>
+                    <li id="menu-item-570" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-570"><a href="shop/index0c9c.html?shop-catalog-mode=yes">Catalog Mode (No prices)</a></li>
+                    <li id="menu-item-583" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-583">
+                        <a href="#">Columns</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-565" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-565"><a href="shop/index3886.html?shop-columns=two&amp;shop-sidebar=right">Two Columns</a></li>
+                            <li id="menu-item-566" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-566"><a href="shop/index0a13.html?shop-columns=three">Three Columns</a></li>
+                            <li id="menu-item-567" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-567"><a href="shop/index9bef.html?shop-columns=four">Four Columns</a></li>
+                        </ul>
+                    </li>
+                    <li id="menu-item-366" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-366">
+                        <a href="categories/index.html">Categories</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-548" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-548"><a href="product-category/accessories/index.html">Accessories</a></li>
+                            <li id="menu-item-358" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-358"><a href="product-category/children/index.html">Children</a></li>
+                            <li id="menu-item-359" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-359"><a href="product-category/accessories/home/index.html">Home</a></li>
+                            <li id="menu-item-360" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-360"><a href="product-category/magazines/index.html">Magazines</a></li>
+                            <li id="menu-item-361" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-361"><a href="product-category/office/index.html">Office</a></li>
+                            <li id="menu-item-362" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-362"><a href="product-category/outdoor/index.html">Outdoor</a></li>
+                        </ul>
+                    </li>
+                    <li id="menu-item-588" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-588">
+                        <a href="#">Pagination</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-591" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-591"><a href="shop/index0087.html?shop-pagination-type=endless-reveal">Endless &#8211; Reveal</a></li>
+                            <li id="menu-item-589" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-589"><a href="shop/indexc5bd.html?shop-pagination-type=normal">Normal</a></li>
+                            <li id="menu-item-590" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-590"><a href="shop/indexf91e.html?shop-pagination-type=endless">Endless</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li id="menu-item-367" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-367">
+                <a href="#">Grid Types</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-368" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-368"><a href="shop/index8fc5.html?shop-catalog-layout=default">Default</a></li>
+                    <li id="menu-item-369" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-369"><a href="shop/index8fc9.html?shop-catalog-layout=full-bg">Full Background</a></li>
+                    <li id="menu-item-370" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-370"><a href="shop/index54d8.html?shop-catalog-layout=distanced-centered">Distanced</a></li>
+                    <li id="menu-item-371" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-371"><a href="shop/index39cc.html?shop-catalog-layout=transparent-bg">Minimal</a></li>
+                </ul>
+            </li>
+            <li id="menu-item-353" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-353">
+                <a href="#">Product</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-357" class="menu-item menu-item-type-post_type menu-item-object-product menu-item-357"><a href="product/hasami-mug/index.html">Simple Product</a></li>
+                    <li id="menu-item-356" class="menu-item menu-item-type-post_type menu-item-object-product menu-item-356"><a href="product/oak-tray/index.html">Variable Product</a></li>
+                    <li id="menu-item-355" class="menu-item menu-item-type-post_type menu-item-object-product menu-item-355"><a href="product/cast-iron-animals/index.html">Grouped Product</a></li>
+                    <li id="menu-item-354" class="menu-item menu-item-type-post_type menu-item-object-product menu-item-354"><a href="product/charley-colors/index.html">External Product</a></li>
+                    <li id="menu-item-576" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-576">
+                        <a href="#">Product Layout</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-577" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-577"><a href="product/bridge-backpack/indexb29f.html?shop-single-image-layout=default">Default</a></li>
+                            <li id="menu-item-578" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-578"><a href="product/bridge-backpack/indexe0e1.html?shop-single-image-layout=plain">Plain</a></li>
+                            <li id="menu-item-579" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-579"><a href="product/bridge-backpack/index48a6.html?shop-single-image-layout=plain-sticky">Plain Sticky</a></li>
+                            <li id="menu-item-568" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-568"><a href="product/boskke-cube/index123f.html?shop-single-image-align=left">Product Image Left</a></li>
+                            <li id="menu-item-569" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-569"><a href="product/boskke-cube/index85ea.html?shop-single-image-align=right">Product Image Right</a></li>
+                        </ul>
+                    </li>
+                    <li id="menu-item-575" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-575">
+                        <a target="_blank" href="#">Image Sizes</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-571" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-571"><a href="product/hasami-mug/indexddbb.html?shop-single-image-size=small">Product Image &#8211; Small</a></li>
+                            <li id="menu-item-573" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-573"><a href="product/hasami-mug/index4097.html?shop-single-image-size=large">Product Image &#8211; Large</a></li>
+                            <li id="menu-item-572" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-572"><a href="product/hasami-mug/indexc4af.html?shop-single-image-size=medium">Product Image &#8211; Medium</a></li>
+                            <li id="menu-item-574" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-574"><a href="product/hasami-mug/indexd819.html?shop-single-image-size=xlarge">Product Image &#8211; X Large</a></li>
+                        </ul>
+                    </li>
+                    <li id="menu-item-584" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-584">
+                        <a href="#">Rating Type</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-587" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-587"><a href="product/hanging-vessel/indexa221.html?shop-rating-style=circles">Circles</a></li>
+                            <li id="menu-item-586" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-586"><a href="product/hanging-vessel/index8ea3.html?shop-rating-style=stars">Stars</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li id="menu-item-488" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-488">
+                <a href="#">Woo Pages</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-171" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="cart/index.html">Cart</a></li>
+                    <li id="menu-item-172" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="checkout/index.html">Checkout</a></li>
+                    <li id="menu-item-173" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="my-account/index.html">My Account</a></li>
+                    <li id="menu-item-481" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-481"><a href="order-tracking/index.html">Order Tracking</a></li>
+                </ul>
+            </li>
+            <li id="menu-item-542" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-542"><a target="_blank" href="https://themeforest.net/item/kalium-creative-theme-for-professionals/10860525?ref=Laborator">Buy!</a></li>
+        </ul>		<div class="cart-icon-link-mobile-container">
+            <a href="cart/index.html" class="cart-icon-link-mobile icon-type-ecommerce-basket">
+                <i class="icon icon-ecommerce-basket"></i>
+
+                Cart
+                <span class="items-count hide-notification cart-items-0">&hellip;</span>
+            </a>
+        </div>
+
+        <form role="search" method="get" class="search-form" action="https://demo.kaliumtheme.com/shop/">
+            <input type="search" class="search-field" placeholder="Search site..." value="" name="s" id="search_mobile_inp" />
+
+            <label for="search_mobile_inp">
+                <i class="fa fa-search"></i>
+            </label>
+
+            <input type="submit" class="search-submit" value="Go" />
+        </form>
+
+
+    </div>
+
+</div>
+
+<div class="mobile-menu-overlay"></div>
+<div class="wrapper" id="main-wrapper">
+
+    <header class="site-header main-header menu-type-standard-menu">
+
+        <div class="container">
+
+            <div class="logo-and-menu-container">
+                <div itemscope itemtype="http://schema.org/Organization" class="logo-column">
+
+                    <style>
+                        .header-logo.logo-image {
+                            width: 230px;
+                            height: 37.5px;
+                        }
+                    </style><a itemprop="url" href="https://demo.kaliumtheme.com/shop" class="header-logo logo-image">
+                        <img itemprop="logo" src="demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/kaliumstore1.png" width="460" height="75" class="main-logo" alt="kalium-shop" />
+                    </a>
+                </div>
+                <div class="menu-column">
+                    <div class="menu-items-blocks standard-menu-container menu-skin-dark reveal-from-right">
+
+                        <nav>
+                            <ul id="menu-main-menu-1" class="menu">
+                                <li onclick=@(() => ShowContextMenu("sub-menu-item-1")) id="menu-item-300" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-377 current_page_item menu-item-has-children menu-item-378">
+                                    <a><span>Home Py</span></a>
+                                    <ul class="sub-menu" id="sub-menu-item-1">
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-580"><a href="indexcbd2.html?shop-minicart-icon=1"><span>Minicart Icon &#8211; Cart</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-it  em-object-custom menu-item-581"><a href="index58bc.html?shop-minicart-icon=2"><span>Minicart Icon &#8211; Bag</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>Minicart Icon &#8211; Basket</span></a></li>
+                                        <li onclick="@(() => ShowModal("register-modal"))" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Register</span></a></li>
+                                        <li onclick="@(() => ShowModal("login-modal"))" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Login</span></a></li>
+                                        <li onclick="@LogOut" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Log Out</span></a></li>
+                                        @if (CurrentUser != null)
+                                        {
+                                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>@CurrentUser.UserName</span></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>Hihi Not Logged In!</span></a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-352">
+                                    <a href="shop/index.html"><span>Shop</span></a>
+                                    <ul class="sub-menu">
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-342"><a href="shop/index.html"><span>Full Width Shop</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-563"><a href="shop/index2354.html?shop-sidebar=left"><span>Sidebar Left</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-564"><a href="shop/index2633.html?shop-sidebar=right"><span>Sidebar Right</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-609"><a href="shop-carousel/index.html"><span>Shop Carousel</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-570"><a href="shop/index0c9c.html?shop-catalog-mode=yes"><span>Catalog Mode (No prices)</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-583">
+                                            <a href="#"><span>Columns</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-565"><a href="shop/index3886.html?shop-columns=two&amp;shop-sidebar=right"><span>Two Columns</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-566"><a href="shop/index0a13.html?shop-columns=three"><span>Three Columns</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-567"><a href="shop/index9bef.html?shop-columns=four"><span>Four Columns</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-366">
+                                            <a href="categories/index.html"><span>Categories</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-548"><a href="product-category/accessories/index.html"><span>Accessories</span></a></li>
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-358"><a href="product-category/children/index.html"><span>Children</span></a></li>
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-359"><a href="product-category/accessories/home/index.html"><span>Home</span></a></li>
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-360"><a href="product-category/magazines/index.html"><span>Magazines</span></a></li>
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-361"><a href="product-category/office/index.html"><span>Office</span></a></li>
+                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-362"><a href="product-category/outdoor/index.html"><span>Outdoor</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-588">
+                                            <a href="#"><span>Pagination</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-591"><a href="shop/index0087.html?shop-pagination-type=endless-reveal"><span>Endless &#8211; Reveal</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-589"><a href="shop/indexc5bd.html?shop-pagination-type=normal"><span>Normal</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-590"><a href="shop/indexf91e.html?shop-pagination-type=endless"><span>Endless</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-367">
+                                    <a href="#"><span>Grid Types</span></a>
+                                    <ul class="sub-menu">
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-368"><a href="shop/index8fc5.html?shop-catalog-layout=default"><span>Default</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-369"><a href="shop/index8fc9.html?shop-catalog-layout=full-bg"><span>Full Background</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-370"><a href="shop/index54d8.html?shop-catalog-layout=distanced-centered"><span>Distanced</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-371"><a href="shop/index39cc.html?shop-catalog-layout=transparent-bg"><span>Minimal</span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-353">
+                                    <a href="#"><span>Product</span></a>
+                                    <ul class="sub-menu">
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-357"><a href="product/hasami-mug/index.html"><span>Simple Product</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-356"><a href="product/oak-tray/index.html"><span>Variable Product</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-355"><a href="product/cast-iron-animals/index.html"><span>Grouped Product</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-354"><a href="product/charley-colors/index.html"><span>External Product</span></a></li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-576">
+                                            <a href="#"><span>Product Layout</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-577"><a href="product/bridge-backpack/indexb29f.html?shop-single-image-layout=default"><span>Default</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-578"><a href="product/bridge-backpack/indexe0e1.html?shop-single-image-layout=plain"><span>Plain</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-579"><a href="product/bridge-backpack/index48a6.html?shop-single-image-layout=plain-sticky"><span>Plain Sticky</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-568"><a href="product/boskke-cube/index123f.html?shop-single-image-align=left"><span>Product Image Left</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-569"><a href="product/boskke-cube/index85ea.html?shop-single-image-align=right"><span>Product Image Right</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-575">
+                                            <a target="_blank" href="#"><span>Image Sizes</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-571"><a href="product/hasami-mug/indexddbb.html?shop-single-image-size=small"><span>Product Image &#8211; Small</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-573"><a href="product/hasami-mug/index4097.html?shop-single-image-size=large"><span>Product Image &#8211; Large</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-572"><a href="product/hasami-mug/indexc4af.html?shop-single-image-size=medium"><span>Product Image &#8211; Medium</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-574"><a href="product/hasami-mug/indexd819.html?shop-single-image-size=xlarge"><span>Product Image &#8211; X Large</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-584">
+                                            <a href="#"><span>Rating Type</span></a>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-587"><a href="product/hanging-vessel/indexa221.html?shop-rating-style=circles"><span>Circles</span></a></li>
+                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-586"><a href="product/hanging-vessel/index8ea3.html?shop-rating-style=stars"><span>Stars</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-488">
+                                    <a href="#"><span>Woo Pages</span></a>
+                                    <ul class="sub-menu">
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="cart/index.html"><span>Cart</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="checkout/index.html"><span>Checkout</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="my-account/index.html"><span>My Account</span></a></li>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-481"><a href="order-tracking/index.html"><span>Order Tracking</span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-542"><a target="_blank" href="https://themeforest.net/item/kalium-creative-theme-for-professionals/10860525?ref=Laborator"><span>Buy!</span></a></li>
+                            </ul>
+                        </nav>
+
+
+                        <div class="header-search-input menu-skin-dark">
+                            <form role="search" method="get" action="https://demo.kaliumtheme.com/shop">
+
+                                <div class="search-field">
+                                    <span>Search site...</span>
+                                    <input type="search" value="" autocomplete="off" name="s" />
+                                </div>
+
+                                <div class="search-icon">
+                                    <a href="#" data-animation="scale">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 1417.3 1417.3" style="enable-background:new 0 0 1417.3 1417.3;" xml:space="preserve">
+<style type="text/css">
+    .st0 {
+        display: none;
+    }
+
+    .st1 {
+        display: inline;
+    }
+</style>
+<g id="search-svg">
+<path d="M976.2,925.2c90.6-98.1,147.1-229.4,147.1-374.1C1123.4,247.7,876.5,0,572.2,0S21.1,247.7,21.1,551.1
+		s246.9,551.1,551.1,551.1c123.9,0,237.7-40.7,330-109.7l409.8,409.8c10,10,22.4,15,34.9,15s25.8-5,34.9-15
+		c19.1-19.1,19.1-50.7,0-70.7L976.2,925.2z M120.8,551.1c0-248.6,202-451.4,451.4-451.4c248.6,0,451.4,202,451.4,451.4
+		s-202,451.4-451.4,451.4S120.8,799.7,120.8,551.1z" />
+
+</g>
+</svg>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="menu-cart-icon-container menu-skin-dark">
+
+                            <a href="cart/index.html" class="cart-icon-link icon-type-ecommerce-basket">
+                                <i class="icon-ecommerce-basket"></i>
+
+                                <span class="items-count hide-notification cart-items-0">&hellip;</span>
+                            </a>
+
+
+                            <div class="lab-wc-mini-cart-contents">
+                                <div class="empty-loading-cart-contents">
+                                    Loading cart contents...
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="menu-bar menu-skin-dark menu-bar-hidden-desktop" href="#">
+                            <span class="ham"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </header>
+
+    @Body
+</div>
+<footer style="position: relative;" id="footer" role="contentinfo" class="site-footer main-footer footer-bottom-vertical fixed-footer site-footer-inverted main-footer-inverted">
+
+    <div class="container">
+
+        <div class="footer-widgets footer-collapsed-mobile">
+
+            <a href="#" class="footer-collapse-link">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+            </a>
+
+            <div class="footer--widgets widget-area widgets--columned-layout widgets--columns-6" role="complementary">
+
+                <div id="nav_menu-10" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Home</h2>
+                    <div class="menu-footer-home-container">
+                        <ul id="menu-footer-home" class="menu">
+                            <li id="menu-item-386" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-386"><a href="#">Decor</a></li>
+                            <li id="menu-item-387" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-387"><a href="#">Lamps</a></li>
+                            <li id="menu-item-388" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-388"><a href="#">Blinds</a></li>
+                            <li id="menu-item-389" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-389"><a href="#">Wall Art</a></li>
+                        </ul>
+                    </div>
+                </div><div id="nav_menu-11" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Office</h2>
+                    <div class="menu-footer-office-container">
+                        <ul id="menu-footer-office" class="menu">
+                            <li id="menu-item-392" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-392"><a href="#">Desks</a></li>
+                            <li id="menu-item-390" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-390"><a href="#">Chairs</a></li>
+                            <li id="menu-item-391" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-391"><a href="#">Furniture</a></li>
+                            <li id="menu-item-393" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-393"><a href="#">Accessories</a></li>
+                        </ul>
+                    </div>
+                </div><div id="nav_menu-12" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Magazine</h2>
+                    <div class="menu-footer-magazines-container">
+                        <ul id="menu-footer-magazines" class="menu">
+                            <li id="menu-item-397" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-397"><a href="#">Architecture</a></li>
+                            <li id="menu-item-396" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-396"><a href="#">Design</a></li>
+                            <li id="menu-item-395" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-395"><a href="#">Fashion</a></li>
+                            <li id="menu-item-394" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-394"><a href="#">Science</a></li>
+                        </ul>
+                    </div>
+                </div><div id="nav_menu-13" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Children</h2>
+                    <div class="menu-footer-children-container">
+                        <ul id="menu-footer-children" class="menu">
+                            <li id="menu-item-400" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-400"><a href="#">Costumes</a></li>
+                            <li id="menu-item-401" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-401"><a href="#">Girls</a></li>
+                            <li id="menu-item-398" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-398"><a href="#">School</a></li>
+                            <li id="menu-item-399" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-399"><a href="#">Toys</a></li>
+                        </ul>
+                    </div>
+                </div><div id="nav_menu-14" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Wall</h2>
+                    <div class="menu-footer-wall-container">
+                        <ul id="menu-footer-wall" class="menu">
+                            <li id="menu-item-408" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-408"><a href="#">Clocks</a></li>
+                            <li id="menu-item-406" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-406"><a href="#">Frames</a></li>
+                            <li id="menu-item-409" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-409"><a href="#">Lighting</a></li>
+                            <li id="menu-item-407" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-407"><a href="#">Mirrors</a></li>
+                        </ul>
+                    </div>
+                </div><div id="nav_menu-15" class="widget widget_nav_menu">
+                    <h2 class="widgettitle">Outdoor</h2>
+                    <div class="menu-footer-outdoor-container">
+                        <ul id="menu-footer-outdoor" class="menu">
+                            <li id="menu-item-405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-405"><a href="#">Balcony</a></li>
+                            <li id="menu-item-404" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-404"><a href="#">Gardening</a></li>
+                            <li id="menu-item-402" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-402"><a href="#">Umbrellas</a></li>
+                            <li id="menu-item-403" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-403"><a href="#">Solar Lights</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <div class="footer-bottom-content">
+
+
+                <div class="footer-content-right">
+                    <ul class="social-networks rounded colored-hover"><li><a href="https://www.facebook.com/laboratorcreative" target="_blank" class="facebook" title="Facebook"><i class="fa fa-facebook"></i><span class="name">Facebook</span></a></li><li><a href="https://twitter.com/thelaborator" target="_blank" class="twitter" title="Twitter"><i class="fa fa-twitter"></i><span class="name">Twitter</span></a></li><li><a href="https://www.instagram.com/laboratorcreative" target="_blank" class="instagram" title="Instagram"><i class="fa fa-instagram"></i><span class="name">Instagram</span></a></li><li><a href="https://www.youtube.com/user/LaboratorCreative/" target="_blank" class="youtube" title="YouTube"><i class="fa fa-youtube-play"></i><span class="name">YouTube</span></a></li><li><a href="#" target="_blank" class="custom" title=""><i class="fa fa-plus"></i><span class="name"></span></a></li></ul>
+                </div>
+
+
+
+                <div class="footer-content-left">
+
+                    <div class="copyrights site-info">
+
+                        <p>© Copyright 2018. All Rights Reserved</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</footer>
+
+<RegisterModal OnUpdateCurrentUser=@((Action<User>) UpdateCurrentUser) />
+
+<LoginModal OnUpdateCurrentUser=@((Action<User>) UpdateCurrentUser) />
+
+@functions {
+private User CurrentUser { get; set; }
+private bool IsLoggedIn { get; set; }
+
+    private async void LogOut()
+    {
+        await Http.GetJsonAsync<bool>("/api/Identity/LogOut/");
+        CurrentUser = null;
+        IsLoggedIn = false;
+    }
+
+private void UpdateCurrentUser(User user)
+{
+    CurrentUser = user;
+    StateHasChanged();
+}
+
+protected override async Task OnInitAsync()
+{
+    CurrentUser = await Http.GetJsonAsync<User>("/api/Identity/GetCurrentUser/");
+    IsLoggedIn = await Http.GetJsonAsync<bool>("/api/Identity/IsLoggedIn/");
+}
+
+private void ShowContextMenu(string id)
+{
+    RegisteredFunction.Invoke<bool>("showContextMenu", id);
+}
+
+private void ShowModal(string id)
+{
+    RegisteredFunction.Invoke<bool>("showModal", id);
+}
+
+private string Serialize(object obj)
+{
+    return JsonConvert.SerializeObject(obj);
+}
+}

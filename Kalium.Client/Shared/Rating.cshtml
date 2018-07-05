@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Blazor.Components
+<div class="star-rating">
+    <div class="star-rating-icons" data-toggle="tooltip" data-placement="right">
+        @foreach (var width in widths)
+        {
+            <span class="circle rounded">
+                <i style="width: @width%"></i>
+            </span>
+        }
+    </div>
+</div>
+
+
+@functions {
+    [Parameter]
+    double rating { get; set; }
+
+    private int[] widths { get; set; } = new int[5];
+
+    protected override async Task OnInitAsync()
+    {
+        for (int i = 1; i <= widths.Length; i++)
+        {
+            if (rating > i)
+            {
+                widths[i-1] = 100;
+            } else if (rating < i)
+            {
+                widths[i-1] = 0;
+            }
+            else
+            {
+                widths[i-1] = (int) (rating - i) * 100;
+            }
+        }
+    }
+}

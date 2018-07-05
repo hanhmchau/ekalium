@@ -1,0 +1,45 @@
+﻿@using Kalium.Shared.Models
+@page "/fetchdata"
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the Kalium server.</p>
+
+<p><em>@name</em></p>
+@if (users == null)
+{
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    IEnumerable<User> users;
+    string name = "Uh...";
+
+    protected override async Task OnInitAsync()
+    {
+        // users = await Http.GetJsonAsync<IEnumerable<User>>("/api/SampleData/GetUsers/");
+        name = await Http.GetJsonAsync<string>("/api/SampleData/GetName/");
+    }
+}

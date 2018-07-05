@@ -1,0 +1,127 @@
+﻿@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using System.Net
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Newtonsoft.Json
+@using Kalium.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Components
+
+<div class="u-column1 col-1 my-modal woocommerce-account" id="login-modal">
+    <form class="woocommerce-form woocommerce-form-login login" method="post">
+        <h2>Login</h2>
+        
+        @if (GeneralError)
+        {
+        <div class="background-red text-white" style="text-align: center; padding: 10px;">
+            Invalid ID or password. Please try again.
+        </div>
+        }
+        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--equal-width labeled-input-row--width-group-1">
+            <div class="labeled-input-row--label"><label for="username">Username <span class="required">*</span></label></div>
+            <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@((username) => { HasTypedUsername = true; Username = username.Value as string; })"
+                   name="username" id="username" value="" type="text" />
+        </p>
+        @if (!IsValidUsername())
+        {
+            <div class="text-red">Please enter username.</div>
+        }
+
+        <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
+            <div class="labeled-input-row--label"><label for="password">Password <span class="required">*</span></label></div>
+            <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@((password) => { HasTypedPassword = true; Password = password.Value as string; })"
+                   name="password" id="password" type="password" />
+        </p>
+        @if (!IsValidPassword())
+        {
+            <div class="text-red">Please enter password.</div>
+        }
+
+        <div class="form-row form-row--remember-me" style="padding: 10px 0">
+            <label class="woocommerce-form__label woocommerce-form__label-for-checkbox inline alternate-checkbox">
+                <input class="woocommerce-form__input woocommerce-form__input-checkbox" bind="@RememberMe"
+                       name="rememberme" id="rememberme" value="forever" type="checkbox" /> <span>Remember me</span>
+            </label>
+        </div>
+
+        <p class="woocommerce-LostPassword lost_password">
+            <a href="lost-password/index.html">Lost your password?</a>
+        </p>
+        <p class="form-row">
+            <input id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="e20b5a1b57" type="hidden"><input name="_wp_http_referer" value="/shop/my-account/" type="hidden">				
+            <input type="button" class="woocommerce-Button button" name="login" value="Login" onclick="@TryLogin" />
+        </p>
+
+    </form>
+
+</div>
+
+@functions{
+    [Parameter]
+    private string Username { get; set; }
+    [Parameter]
+    private string Password { get; set; }
+    [Parameter]
+    private bool RememberMe { get; set; }
+    [Parameter]
+    private User CurrentUser { get; set; }
+    [Parameter]
+    private bool HasTypedUsername { get; set; }
+    [Parameter]
+    private bool HasTypedPassword { get; set; }
+    [Parameter]
+    private bool GeneralError { get; set; }
+    [Parameter]
+    private Action<User> OnUpdateCurrentUser { get; set; }
+
+    private bool IsValidUsername()
+    {
+        return !(HasTypedUsername && string.IsNullOrWhiteSpace(Username));
+    }
+
+    private bool IsValidPassword()
+    {
+        return !(HasTypedPassword && string.IsNullOrWhiteSpace(Password));
+    }
+
+    private async void TryLogin()
+    {
+        StateHasChanged();
+        if (!string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Username))
+        {
+            try
+            {
+                var result = await Http.PostJsonAsync<User>("/api/Identity/TryLogin/", Serialize(new
+                {
+                    Username,
+                    Password,
+                    RememberMe
+                }));
+                GeneralError = false;
+                CurrentUser = result as User;
+                OnUpdateCurrentUser.Invoke(CurrentUser);
+                HideModal();
+            }
+            catch (Exception)
+            {
+                GeneralError = true;
+            }
+        }
+        StateHasChanged();
+    }
+
+    private string Serialize(object obj)
+    {
+        return JsonConvert.SerializeObject(obj);
+    }
+
+    private void ShowModal(string id)
+    {
+        HideModal();
+        RegisteredFunction.Invoke<bool>("showModal", id);
+    }
+
+    private void HideModal()
+    {
+        RegisteredFunction.Invoke<bool>("hideModal");
+    }
+}
