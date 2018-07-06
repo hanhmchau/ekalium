@@ -57,5 +57,18 @@ namespace Kalium.Shared.Consts
             Date,
             Quantity
         }
+
+        public enum CachePrefix
+        {
+            ProductUrl,
+            ProductId,
+            CategoryId,
+            CategoryUrl
+        }
+
+        public static string GetCachePrefix(CachePrefix prefix, object id)
+        {
+            return prefix + "-" + id;
+        }
     }
 }

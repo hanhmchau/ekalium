@@ -1,20 +1,12 @@
-﻿using System;
-using Kalium.Server.Context;
-using Kalium.Server.Utils;
+﻿using Kalium.Server.Utils;
 using Kalium.Shared.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Shared.Consts;
+using Microsoft.Extensions.Caching.Memory;
 using MoreLinq;
 
 namespace Kalium.Server.Controllers
@@ -78,8 +70,15 @@ namespace Kalium.Server.Controllers
         public async Task<Product> GetProductByUrl([FromQuery] string url)
         {
             var product = await _iProductRepository.FindProductByUrl(url);
-            product.Category.Products.Clear();
-            product.Extras.ForEach(ext => { ext.Product = null; ext.Options.ForEach(opt => opt.Extra = null); });
+            if (product != null)
+            {
+                product.Category.Products.Clear();
+                product.Extras.ForEach(ext =>
+                {
+                    ext.Product = null;
+                    ext.Options.ForEach(opt => opt.Extra = null); 
+                });
+            }
             return product;
         }
     }

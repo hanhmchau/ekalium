@@ -561,18 +561,20 @@
                 }
             });
             var bigCart = {
-                cart: [],
-                coupons: []
+                // Cart and Coupon in propercase not conforming to convention to make it work between C# code and Javascript code
+                Cart: [],
+                Coupons: []
             };
             var cartJson = localStorage.getItem('CART');
             if (cartJson) {
                 bigCart = JSON.parse(cartJson);
             }
-            var product = bigCart.cart.find(el => el.id === obj.id && equalChoices(el.choices, choices));
+            var cart = bigCart.Cart;
+            var product = cart.find(el => el.id === obj.id && equalChoices(el.choices, choices));
             if (product) {
                 product.quantity += obj.quantity;
             } else {
-                bigCart.cart.push({
+                cart.push({
                     guid: obj.guid,
                     id: obj.id,
                     quantity: obj.quantity,

@@ -28,6 +28,7 @@ namespace Kalium.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(@"Server=CHAUNHMSE63147\SQLEXPRESS;Database=KaliumApp;Trusted_Connection=True;MultipleActiveResultSets=true"),
                 ServiceLifetime.Scoped);

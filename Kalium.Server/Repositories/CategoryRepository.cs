@@ -7,6 +7,7 @@ using Kalium.Server.Context;
 using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using MoreLinq;
 
 namespace Kalium.Server.Repositories
@@ -53,18 +54,28 @@ namespace Kalium.Server.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public CategoryRepository(ApplicationDbContext ctx)
+        public CategoryRepository(ApplicationDbContext ctx, IMemoryCache cache)
         {
             _context = ctx;
+            _cache = cache;
         }
 
         public async Task<Category> FindCategoryById(int id)
         {
+            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.CategoryId, id), out var category))
+            {
+                return category as Category;
+            }
             return await _context.Category.FindAsync(id);
         }
         public async Task<Category> FindCategoryByName(string name)
         {
+            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.CategoryUrl, name), out var category))
+            {
+                return category as Category;
+            }
             return await _context.Category.FirstOrDefaultAsync(cat => cat.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
         }
         public async Task<ICollection<Category>> SearchCategories()

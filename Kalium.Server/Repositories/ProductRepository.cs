@@ -7,6 +7,7 @@ using Kalium.Server.Context;
 using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Kalium.Server.Repositories
 {
@@ -160,19 +161,29 @@ namespace Kalium.Server.Repositories
     public class ProductRepository: IProductRepository
     {
         private readonly ApplicationDbContext _context;
+        private IMemoryCache _cache;
 
-        public ProductRepository(ApplicationDbContext ctx)
+        public ProductRepository(ApplicationDbContext ctx, IMemoryCache cache)
         {
             _context = ctx;
+            _cache = cache;
         }
 
         public async Task<Product> FindProductById(int id)
         {
+            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.ProductId, id), out var product))
+            {
+                return product as Product;
+            }
             return await _context.Products.FindAsync(id);
         }
 
         public async Task<Product> FindProductByUrl(string url)
         {
+            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.ProductUrl, url), out var product))
+            {
+                return product as Product;
+            }
             return await _context.Products
                 .Where(p => p.Status == (int) Consts.Status.Public)
                 .Include(p => p.Category)
