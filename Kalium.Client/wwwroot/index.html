@@ -512,6 +512,17 @@
             "hideMethod": "fadeOut"
         };
 
+        $(document).on('input',
+            'input.input-integer-only',
+            function(e) {
+                var val = $(this).val();
+                try {
+                    var number = parseInt(val);
+                } catch (e) {
+                    e.preventDefault();
+                } 
+            });
+
         Blazor.registerFunction('toastr', (mode, message) => {
             toastr[mode](message);
             return true;
@@ -535,7 +546,7 @@
             connection.start().catch(err => console.error(err.toString()));
             return true;
         });
-
+        
         var equalOneChoice = (a, b) => a.option === b.option;
 
         var equalChoices = (a, b) => {
@@ -549,23 +560,26 @@
                     option: ((el.value != null) ? el.value.id : null)
                 }
             });
-            var cart = [];
+            var bigCart = {
+                cart: [],
+                coupons: []
+            };
             var cartJson = localStorage.getItem('CART');
             if (cartJson) {
-                cart = JSON.parse(cartJson);
+                bigCart = JSON.parse(cartJson);
             }
-            var product = cart.find(el => el.id === obj.id && equalChoices(el.choices, choices));
+            var product = bigCart.cart.find(el => el.id === obj.id && equalChoices(el.choices, choices));
             if (product) {
                 product.quantity += obj.quantity;
             } else {
-                cart.push({
+                bigCart.cart.push({
                     guid: obj.guid,
                     id: obj.id,
                     quantity: obj.quantity,
                     choices
                 });
             }
-            localStorage.setItem('CART', JSON.stringify(cart));
+            localStorage.setItem('CART', JSON.stringify(bigCart));
             return true;
         });
 

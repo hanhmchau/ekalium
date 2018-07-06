@@ -145,7 +145,7 @@
                                         <div class="quantity buttons_added">
                                             <input value="-" class="minus" type="button">
                                             <label class="screen-reader-text" for="quantity_5b3b1ff5d0b61">Quantity</label>
-                                            <input id="product-quantity" class="input-text qty text" step="1" min="1"
+                                            <input id="product-quantity" class="input-text qty text input-integer-only" step="1" min="1"
                                                    max="@Product.Quantity" name="quantity" value="1" title="Qty" size="4" pattern="[0-9]*"
                                                    inputmode="numeric" aria-labelledby="" type="number" />
                                             <input value="+" class="plus" type="button">
@@ -535,120 +535,120 @@
 
 @functions {
 
-[Parameter]
-private string ProductUrl { get; set; }
+    [Parameter]
+    private string ProductUrl { get; set; }
 
-[Parameter]
-private Product Product { get; set; }
-private double TotalPrice { get; set; }
-private Image BigImage { get; set; }
-private int Quantity { get; set; }
-private Dictionary<Extra, Option> extraChoices = new Dictionary<Extra, Option>();
+    [Parameter]
+    private Product Product { get; set; }
+    private double TotalPrice { get; set; }
+    private Image BigImage { get; set; }
+    private int Quantity { get; set; }
+    private Dictionary<Extra, Option> extraChoices = new Dictionary<Extra, Option>();
 
-//    private HubConnection Connection { get; set; }
+    //    private HubConnection Connection { get; set; }
 
-private async void AddToCart()
-{
-    if (extraChoices.Any(entry => !entry.Key.Optional && entry.Value == null))
+    private async void AddToCart()
     {
-        Toastr(Consts.Toastr.Warning, "Please select all mandatory options.");
-        return;
-    }
-    Quantity = RegisteredFunction.Invoke<int>("getInput", "#product-quantity");
-    AppendCartStorage(Product.Id, Quantity, extraChoices);
-    Toastr(Consts.Toastr.Success, "Added to cart.");
-}
-
-private void UpdateBigImage(Image newBig)
-{
-    BigImage = newBig;
-    StateHasChanged();
-}
-
-private void SelectOption(object val, Extra extra)
-{
-    var chosenOption = int.Parse(val.ToString());
-    extraChoices[extra] = extra.Options.FirstOrDefault(opt => opt.Id == chosenOption);
-    TotalPrice = extraChoices.Where(key => key.Value != null).Sum(key => key.Value.Price) + Product.DiscountedPrice;
-    StateHasChanged();
-}
-
-private Option GetOption(Extra extra)
-{
-    if (extraChoices.TryGetValue(extra, out var option))
-    {
-        return option;
-    }
-    return null;
-}
-
-protected override async Task OnInitAsync()
-{
-    Product = await Http.GetJsonAsync<Product>($"/api/Product/GetProductByUrl?url={ProductUrl}");
-    if (Product != null)
-    {
-        TotalPrice = Product.DiscountedPrice;
-        BigImage = Product.MainImage;
-        Product.Extras.ForEach(extra =>
+        if (extraChoices.Any(entry => !entry.Key.Optional && entry.Value == null))
         {
-            extraChoices.Add(extra, null);
-        });
+            DirectToastr(Consts.Toastr.Warning.ToString().ToLower(), "Please select all mandatory options.");
+            return;
+        }
+        Quantity = RegisteredFunction.Invoke<int>("getInput", "#product-quantity");
+        AppendCartStorage(Product.Id, Quantity, extraChoices);
+        DirectToastr(Consts.Toastr.Success.ToString().ToLower(), "Added to cart.");
+    }
+
+    private void UpdateBigImage(Image newBig)
+    {
+        BigImage = newBig;
         StateHasChanged();
     }
-    RegisteredFunction.Invoke<bool>("tabs");
-    RegisteredFunction.Invoke<bool>("slick");
 
-    //        Connection = new HubConnectionBuilder()
-    //            .Build();
-    //
-    //        Connection.On<string>(Consts.ProductHubActivity.Add, (productJson) =>
-    //        {
-    //            var prop = JsonConvert.DeserializeObject<Product>(productJson);
-    //            Console.WriteLine(prop.Name);
-    //        });
-    //
-    //        try
-    //        {
-    //            await Connection.StartAsync();
-    //        }
-    //        catch (Exception e) { Console.WriteLine(e); }
-}
-
-private async Task<JObject> Fetch(string url)
-{
-    // controller returns: return JsonConvert.SerializeObject(result);
-    var json = await Http.GetJsonAsync<object>(url);
-
-    return JsonConvert.DeserializeObject(json.ToString()) as JObject;
-}
-
-private async Task<JObject> Fetch(string url, object body)
-{
-    // controller returns: return JsonConvert.SerializeObject(result);
-    var json = await Http.PostJsonAsync<object>(url, JsonConvert.SerializeObject(body));
-
-    return JsonConvert.DeserializeObject(json.ToString()) as JObject;
-}
-
-private void Toastr(string mode, string message)
-{
-    RegisteredFunction.Invoke<bool>("toastr", mode, message);
-}
-
-private T GetStorage<T>(string key)
-{
-    var json = RegisteredFunction.Invoke<string>("getStorage", key);
-    return JsonConvert.DeserializeObject<T>(json);
-}
-
-private void AppendCartStorage(int productId, int quantity, Dictionary<Extra, Option> extraChoices)
-{
-    RegisteredFunction.Invoke<bool>("appendCartStorage", new
+    private void SelectOption(object val, Extra extra)
     {
-        guid = Guid.NewGuid().ToString(),
-        id = productId,
-        quantity,
-        extraChoices
-    });
-}
+        var chosenOption = int.Parse(val.ToString());
+        extraChoices[extra] = extra.Options.FirstOrDefault(opt => opt.Id == chosenOption);
+        TotalPrice = extraChoices.Where(key => key.Value != null).Sum(key => key.Value.Price) + Product.DiscountedPrice;
+        StateHasChanged();
+    }
+
+    private Option GetOption(Extra extra)
+    {
+        if (extraChoices.TryGetValue(extra, out var option))
+        {
+            return option;
+        }
+        return null;
+    }
+
+    protected override async Task OnInitAsync()
+    {
+        Product = await Http.GetJsonAsync<Product>($"/api/Product/GetProductByUrl?url={ProductUrl}");
+        if (Product != null)
+        {
+            TotalPrice = Product.DiscountedPrice;
+            BigImage = Product.MainImage;
+            Product.Extras.ForEach(extra =>
+            {
+                extraChoices.Add(extra, null);
+            });
+            StateHasChanged();
+        }
+        RegisteredFunction.Invoke<bool>("tabs");
+        RegisteredFunction.Invoke<bool>("slick");
+
+        //        Connection = new HubConnectionBuilder()
+        //            .Build();
+        //
+        //        Connection.On<string>(Consts.ProductHubActivity.Add, (productJson) =>
+        //        {
+        //            var prop = JsonConvert.DeserializeObject<Product>(productJson);
+        //            Console.WriteLine(prop.Name);
+        //        });
+        //
+        //        try
+        //        {
+        //            await Connection.StartAsync();
+        //        }
+        //        catch (Exception e) { Console.WriteLine(e); }
+    }
+
+    private async Task<JObject> Fetch(string url)
+    {
+        // controller returns: return JsonConvert.SerializeObject(result);
+        var json = await Http.GetJsonAsync<object>(url);
+
+        return JsonConvert.DeserializeObject(json.ToString()) as JObject;
+    }
+
+    private async Task<JObject> Fetch(string url, object body)
+    {
+        // controller returns: return JsonConvert.SerializeObject(result);
+        var json = await Http.PostJsonAsync<object>(url, JsonConvert.SerializeObject(body));
+
+        return JsonConvert.DeserializeObject(json.ToString()) as JObject;
+    }
+
+    private void DirectToastr(string mode, string message)
+    {
+        RegisteredFunction.Invoke<bool>("toastr", mode, message);
+    }
+
+    private T GetStorage<T>(string key)
+    {
+        var json = RegisteredFunction.Invoke<string>("getStorage", key);
+        return JsonConvert.DeserializeObject<T>(json);
+    }
+
+    private void AppendCartStorage(int productId, int quantity, Dictionary<Extra, Option> extraChoices)
+    {
+        RegisteredFunction.Invoke<bool>("appendCartStorage", new
+        {
+            guid = Guid.NewGuid().ToString(),
+            id = productId,
+            quantity,
+            extraChoices
+        });
+    }
 }

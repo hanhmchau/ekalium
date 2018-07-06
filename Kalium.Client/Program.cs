@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+using Kalium.Client.Extensions;
 using Kalium.Shared.Services;
 
 namespace Kalium.Client
@@ -16,6 +17,7 @@ namespace Kalium.Client
                 // Add any custom services here
                 services.AddTransient<IFetcher, Fetcher>();
                 services.AddStorage();
+                services.AddToastr();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

@@ -18,4 +18,20 @@ namespace Kalium.Shared.Models
             return role.ToString();
         }
     }
+
+    public enum EClaim
+    {
+        ProductManager,
+        UserManager,
+        SocialManager,
+        Checkout,
+        Auction
+    }
+    public static class ClaimExtensions
+    {
+        public static string GetClaimName(this EClaim eClaim) // convenience method
+        {
+            return eClaim.ToString();
+        }
+    }
 }

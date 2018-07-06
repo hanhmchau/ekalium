@@ -29,15 +29,10 @@ namespace Kalium.Server.Controllers
             this._iProductRepository = productRepository;
         }
 
-        [HttpPost("[action]")]
-        public async Task<string> Get([FromBody] string json)
+        private async Task<ECart> FromPseudo(PseudoCart pseudoCart)
         {
-            var pseudoCart = JsonConvert.DeserializeObject<List<PseudoCartItem>>(json, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Include
-            });
             var cart = new ECart();
-            foreach (var item in pseudoCart)
+            foreach (var item in pseudoCart.Cart)
             {
                 var cartItem = new ECartItem
                 {
@@ -56,9 +51,25 @@ namespace Kalium.Server.Controllers
                 cart.Contents.Add(cartItem);
             }
 
+            cart.Coupons = cart.Contents.SelectMany(item => item.Product.Coupons)
+                .Where(c => pseudoCart.Coupons.Contains(c.Id)).Distinct().ToList();
+
+            return cart;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<string> Get([FromBody] string json)
+        {
+            var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            });
+
+            var realCart = await FromPseudo(pseudoCart);
+
             object result = new
             {
-                ECart = cart
+                ECart = realCart
             };
 
             return JsonConvert.SerializeObject(result, new JsonSerializerSettings

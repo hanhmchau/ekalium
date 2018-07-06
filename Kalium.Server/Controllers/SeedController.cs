@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Kalium.Server.Context;
 using Kalium.Server.HubR;
@@ -64,7 +65,8 @@ namespace Kalium.Server.Controllers
                     ReviewStatus = (int) Consts.ReviewStatus.Enabled,
                     Description = @"Framed up by a ring of gently bending flowers, we left plenty of
                     blank space in the middle of our Wildflower memo pad. “Don’t
-                    forget to put your laundry away!” will never look more cheerful.".Replace("\n", "")
+                    forget to put your laundry away!” will never look more cheerful.".Replace("\n", ""),
+                    DateCreated = DateTime.Now
                 },
                 new Product
                 {
@@ -103,7 +105,8 @@ namespace Kalium.Server.Controllers
                     Metallic Gold Accents
                     3 Sticker Pages
                     Pocket Folder with Ruler
-                    Sections for celebrations, notes, and important contacts".Replace("\n", "")
+                    Sections for celebrations, notes, and important contacts".Replace("\n", ""),
+                    DateCreated = DateTime.Now
                 },
                 new Product
                 {
@@ -132,7 +135,8 @@ namespace Kalium.Server.Controllers
                                     Black erasers
                                     Pre-sharpened".Replace("\n", ""),
                     Description = @"Our folk writing pencil set includes a total of 12 pencils, 3
-                                of each design. These come pre-sharpened and ready to use.".Replace("\n", "")
+                                of each design. These come pre-sharpened and ready to use.".Replace("\n", ""),
+                    DateCreated = DateTime.Now
                 },
                 new Product
                 {
@@ -159,7 +163,8 @@ namespace Kalium.Server.Controllers
                     Description = @"Let your friends and family know that you’re thinking about them this
 Valentine’s Day! These postcards feature a hand-painted illustration 
 on the front and space for a message and recipient address on the
-back. Requires less postage than a standard card in the United States.".Replace("\n", "")
+back. Requires less postage than a standard card in the United States.".Replace("\n", ""),
+                    DateCreated = DateTime.Now
                 },
                 new Product
                 {
@@ -203,7 +208,8 @@ back. Requires less postage than a standard card in the United States.".Replace(
                                 }
                             }
                         }
-                    }
+                    },
+                    DateCreated = DateTime.Now
                 }
             };
 
@@ -237,6 +243,23 @@ back. Requires less postage than a standard card in the United States.".Replace(
                         return StatusCode(StatusCodes.Status500InternalServerError);
                 }
             }
+
+            var adminRole = await _roleManager.FindByNameAsync(Role.Admin.GetRoleName());
+            var moderatorRole = await _roleManager.FindByNameAsync(Role.Moderator.GetRoleName());
+            var memberRole = await _roleManager.FindByNameAsync(Role.Member.GetRoleName());
+
+            await _roleManager.AddClaimAsync(adminRole,
+                new Claim(ClaimTypes.Name, EClaim.ProductManager.GetClaimName()));
+            await _roleManager.AddClaimAsync(adminRole,
+                new Claim(ClaimTypes.Name, EClaim.SocialManager.GetClaimName()));
+            await _roleManager.AddClaimAsync(adminRole,
+                new Claim(ClaimTypes.Name, EClaim.UserManager.GetClaimName()));
+            await _roleManager.AddClaimAsync(moderatorRole,
+                new Claim(ClaimTypes.Name, EClaim.SocialManager.GetClaimName()));
+            await _roleManager.AddClaimAsync(memberRole,
+                new Claim(ClaimTypes.Name, EClaim.Auction.GetClaimName()));
+            await _roleManager.AddClaimAsync(memberRole,
+                new Claim(ClaimTypes.Name, EClaim.UserManager.GetClaimName()));
 
             // Our default user
             User user = new User

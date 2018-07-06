@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @using Kalium.Shared.Models
 @using Kalium.Shared.Services
+@using Kalium.Client.Extensions
 @using Microsoft.AspNetCore.Blazor.Browser.Http
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
@@ -10,12 +11,20 @@
 @inject IFetcher Fetcher
 @inject LocalStorage Storage
 @inject HttpClient Http
+@inject Toastr Toastr
 
 <div class="container default-margin woocommerce-cart">
     @if (ECart == null || !ECart.Contents.Any())
     {
-        <div>Your cart is empty!</div>
-        <button class="button" name="update_cart" value="Update cart">Update cart</button>
+        if (Loaded)
+        {
+            <div>Your cart is empty!</div>
+            <a href="/shop" class="pointer button wc-backward" style="margin: 20px 0;">Return to shopping</a>
+        }
+        else
+        {
+            <div>Loading...</div>
+        }
     }
     else
     {
@@ -39,33 +48,43 @@
                             <tr class="woocommerce-cart-form__cart-item cart_item">
 
                                 <td onclick="@(() => RemoveFromCart(item))" class="pointer product-remove">
-                                    <a
-                                       class="remove" aria-label="Remove this item">
+                                    <a class="remove" aria-label="Remove this item">
                                         <i class="flaticon-cross37"></i>
                                     </a>
                                 </td>
 
                                 <td class="product-thumbnail">
                                     <a href="/product/@item.Product.NameUrl">
-                                        <img width="550" height="700" src="@item.Product.MainImage.Url" 
+                                        <img width="550" height="700" src="@item.Product.MainImage.Url"
                                              class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" alt="">
                                     </a>
                                 </td>
 
                                 <td class="product-name" data-title="Product">
                                     <a href="/product/@item.Product.NameUrl">@item.Product.Name</a>
+                                    <ul style="font-size: 14px; margin: 10px 0px 0px 10px;">
+                                        @foreach (var choice in @item.Choices)
+                                        {
+                                            @if (choice.Value != null)
+                                            {
+                                                <li style="list-style-type: circle; padding-top: 5px;">
+                                                    <span>@choice.Key.Name: </span><span>@choice.Value.Name (£@choice.Value.Price)</span>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
                                 </td>
 
                                 <td class="product-price" data-title="Price">
-                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@item.Product.DiscountedPrice</span>
+                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@item.SingleTotal()</span>
                                 </td>
 
                                 <td class="product-quantity" data-title="Quantity">
                                     <div class="quantity buttons_added">
                                         <input type="button" value="-" class="minus" onclick="@(() => UpdateCartQuantity(item))" />
                                         <label class="screen-reader-text" for="quantity_@item.Guid">Quantity</label>
-                                        <input class="input-text qty text" id="quantity_@item.Guid"
-                                               inputmode="numeric" min="0" onclick="@(() => UpdateCartQuantity(item))"
+                                        <input class="input-text qty text input-integer-only" id="quantity_@item.Guid"
+                                               inputmode="numeric" min="0" onchange="@(() => UpdateCartQuantity(item))"
                                                pattern="[0-9]*" size="4" step="1" title="Qty" type="number"
                                                value="@item.Quantity" />
                                         <input type="button" value="+" class="plus" onclick="@(() => UpdateCartQuantity(item))" />
@@ -80,7 +99,10 @@
                         <tr>
                             <td colspan="6" class="actions">
                                 <div class="coupon">
-                                    <label for="coupon_code">Coupon:</label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="Coupon code"> <button type="submit" class="button" name="apply_coupon" value="Apply coupon">Apply coupon</button>
+                                    <label for="coupon_code">Coupon:</label>
+                                    <input type="text" name="coupon_code" class="input-text" id="coupon_code"
+                                           value="" placeholder="Coupon code" bind="@CouponName" />
+                                    <button type="button" onclick="@ApplyCoupon" class="button" name="apply_coupon" value="Apply coupon">Apply coupon</button>
                                 </div>
                                 @* <button type="submit" class="button" name="update_cart" value="Update cart" disabled="">Update cart</button> *@
 
@@ -88,7 +110,7 @@
                                 <input type="hidden" id="woocommerce-cart-nonce" name="woocommerce-cart-nonce" value="67a447d7d1"><input type="hidden" name="_wp_http_referer" value="/shop/cart/">
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
             </form>
@@ -98,11 +120,34 @@
                     <h2>Cart totals</h2>
                     <table cellspacing="0" class="shop_table shop_table_responsive">
                         <tbody>
-                            <tr class="cart-subtotal">
-                                <th>Subtotal</th>
-                                <td data-title="Subtotal"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@ECart.PreCouponTotal()</span></td>
-                            </tr>
-                            <tr class="shipping">
+                            @if (ECart.Coupons.Any())
+                            {
+                                <tr class="cart-subtotal">
+                                    <th>Subtotal</th>
+                                    <td data-title="Subtotal"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@ECart.PreCouponTotal()</span></td>
+                                </tr>
+                                <tr class="shipping">
+                                    <th>Shipping</th>
+                                    <td data-title="Shipping">
+                                        <ul id="shipping_method">
+                                            @foreach (var coupon in ECart.Coupons)
+                                            {
+                                                <li>
+                                                    <label for="shipping_method_0_legacy_flat_rate">
+                                                        @coupon.Key: 
+                                                        <span class="woocommerce-Price-amount amount">
+                                                            <span class="woocommerce-Price-currencySymbol">£</span>
+                                                            -@coupon.Reduction
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </td>
+                                </tr>
+
+                            }
+                            <tr class="shipping hide">
                                 <th>Shipping</th>
                                 <td data-title="Shipping">
                                     <ul id="shipping_method">
@@ -135,7 +180,7 @@
                                 Proceed to checkout
                             </a>
                         </div>
-                        <form class="woocommerce-shipping-calculator" action="https://demo.kaliumtheme.com/shop/cart/" method="post">
+                        <form class="woocommerce-shipping-calculator hide" action="https://demo.kaliumtheme.com/shop/cart/" method="post">
 
                             <p><a href="#" class="shipping-calculator-button">Calculate shipping</a></p>
 
@@ -431,42 +476,80 @@
     [Parameter]
     private string CouponName { get; set; }
 
+    private bool Loaded = false;
+
     protected override async Task OnInitAsync()
     {
         RegisteredFunction.Invoke<bool>("initializeSignalR");
         var cartJson = Storage["CART"];
         if (cartJson != null)
         {
-            var pseudoCart = JsonConvert.DeserializeObject<List<PseudoCartItem>>(cartJson, new JsonSerializerSettings
+            var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(cartJson, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Include
             });
-            if (pseudoCart.Any())
+            if (pseudoCart.Cart.Any())
             {
                 var ecartJson = await Fetcher.Fetch("/api/Cart/Get/", pseudoCart);
                 ECart = ecartJson["ECart"].ToObject<ECart>();
             }
         }
+        Loaded = true;
     }
 
-    private async void CheckOut()
+    private void CheckOut()
     {
 
     }
 
-    private async void RemoveFromCart(ECartItem item)
+    private void UpdateCartStorage()
     {
-        Console.WriteLine(item.Product.Name);
+        var pseudoCart = ECart.ToPseudo();
+        var pseudoStr = JsonConvert.SerializeObject(pseudoCart, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Include
+        });
+        Console.WriteLine(pseudoCart.Coupons.Count);
+        Console.WriteLine(pseudoStr);
+        Storage["CART"] = pseudoStr;
     }
 
-    private async void UpdateCartQuantity(ECartItem item)
+    private void RemoveFromCart(ECartItem item)
     {
-        var quantity = RegisteredFunction.Invoke<int>($"#quantity_{item.Guid}");
-
+        ECart.Contents.Remove(item);
+        ECart.Coupons = ECart.Coupons.Intersect(ECart.AvailableCoupons).ToList();
+        StateHasChanged();
+        UpdateCartStorage();
+    }
+    
+    private void UpdateCartQuantity(ECartItem item)
+    {
+        var quantity = RegisteredFunction.Invoke<int>("getInput", $"#quantity_{item.Guid}");
+        item.Quantity = quantity;
+        StateHasChanged();
+        UpdateCartStorage();
     }
 
-    private async void ApplyCoupon()
+    private void ApplyCoupon()
     {
-        Console.WriteLine(CouponName);
+        var coupon = ECart.AvailableCoupons.FirstOrDefault(c => c.Key.Equals(CouponName, StringComparison.CurrentCultureIgnoreCase));
+        if (coupon != null)
+        {
+            if (ECart.Coupons.Any(c => c.Id == coupon.Id)) // this coupon has already been added before
+            {
+                Toastr.Warning("This coupon has already been added.");
+            }
+            else
+            {
+                Toastr.Success("Coupon added.");
+                ECart.Coupons.Add(coupon);
+                StateHasChanged();
+                UpdateCartStorage();
+            }
+        }
+        else
+        {
+            Toastr.Warning("This coupon does not exist, or has already expired.");
+        }
     }
 }

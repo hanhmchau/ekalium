@@ -44,12 +44,18 @@ namespace Kalium.Shared.Consts
             public const string Update = "UPDATE";
             public const string Delete = "Delete";
         }
-        public class Toastr
+        public enum Toastr
         {
-            public const string Success = "success";
-            public const string Info = "info";
-            public const string Warning = "warning";
-            public const string Error = "error";
+            Success,
+            Info,
+            Warning,
+            Error
+        }
+
+        public enum CouponType
+        {
+            Date,
+            Quantity
         }
     }
 }

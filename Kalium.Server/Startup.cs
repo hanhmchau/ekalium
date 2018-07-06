@@ -71,9 +71,18 @@ namespace Kalium.Server
                 builder =>
                 {
                     builder.AllowAnyMethod().AllowAnyHeader()
-                        .WithOrigins("http://localhost:54653")
+                        .AllowAnyOrigin()
                         .AllowCredentials();
                 }));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ManageProducts", policy => policy.RequireClaim("ProductManager"));
+                options.AddPolicy("ManageSocial", policy => policy.RequireClaim("SocialManager"));
+                options.AddPolicy("ManageUser", policy => policy.RequireClaim("UserManager"));
+                options.AddPolicy("Checkout", policy => policy.RequireAuthenticatedUser());
+                options.AddPolicy("Auction", policy => policy.RequireAuthenticatedUser());
+            });
 
             services.AddResponseCompression(options =>
             {
@@ -122,19 +131,19 @@ namespace Kalium.Server
 
             app.UseResponseCaching();
 
-//            app.Use(async (context, next) =>
-//            {
-//                context.Response.GetTypedHeaders().CacheControl =
-//                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue
-//                    {
-//                        Public = true,
-//                        MaxAge = TimeSpan.FromSeconds(20)
-//                    };
-//                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-//                    new[] { "Accept-Encoding" };
-//
-//                await next();
-//            });
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(20)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new[] { "Accept-Encoding" };
+
+                await next();
+            });
 
             app.UseMvc(routes =>
             {
