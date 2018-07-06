@@ -81,7 +81,8 @@
     <link rel='stylesheet' id='custom-skin-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/custom-skin6269.css?ver=7520a15ef57078c7eb9c724cdd2109e6' type='text/css' media='all' />
     <link rel='stylesheet' id='typolab-facfb629ec7edae42cdc8d1f3cc8dbc6-css' href='https://fonts.googleapis.com/css?family=Dosis%3A300%2Cregular&amp;subset=latin&amp;ver=02d7a2f95f721c1f5360b45fd5e2b659' type='text/css' media='all' />
     <link rel='stylesheet' id='js_composer_front-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/js_composer/assets/css/js_composer.min8b06.css?ver=5.4.7' type='text/css' media='all' />
-    <script type="text/javascript">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css' type='text/css' media='all' /> 
+<script type="text/javascript">
         var ajaxurl = ajaxurl || 'https://demo.kaliumtheme.com/shop/wp-admin/admin-ajax.php';
     </script>
     <style id="typolab-font-variants">
@@ -482,21 +483,17 @@
         </div>
     </noscript>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-<<<<<<< HEAD
     <script type='text/javascript' src='/jqueryui/jquery-ui.js'></script>
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/js/slick/slick.min.js'></script>
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js'></script>
     <script type='text/javascript' src='/lib/signalr.js'></script>
-=======
 <script type='text/javascript' src='/jqueryui/jquery-ui.js'></script>
 <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/js/slick/slick.min.js'></script>
->>>>>>> parent of d637f74... SignalR prep
     <script>
         let $ = jQuery;
         $(document).ready(() => {
         });
 
-<<<<<<< HEAD
         toastr.options = {
             "closeButton": false,
             "debug": false,
@@ -562,6 +559,7 @@
                 product.quantity += obj.quantity;
             } else {
                 cart.push({
+                    guid: obj.guid,
                     id: obj.id,
                     quantity: obj.quantity,
                     choices
@@ -571,8 +569,6 @@
             return true;
         });
 
-=======
->>>>>>> parent of d637f74... SignalR prep
         Blazor.registerFunction('tabs', () => {
             setTimeout(function () {
                 $('.tab-content').addClass('hide');
@@ -592,6 +588,11 @@
             }, 200);
             return true;
         });
+
+        
+        Blazor.registerFunction('getInput', (selector) => {
+            return $(selector).val();
+        }); 
 
         Blazor.registerFunction('slick', () => {
             setTimeout(function () {

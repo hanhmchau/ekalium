@@ -12,8 +12,9 @@ namespace Kalium.Server.Repositories
 {
     internal class ProductSearchHelper : SearchHelper<Product>
     {
-        public ProductSearchHelper(IQueryable<Product> collection, ApplicationDbContext context) : base(collection, context)
+        public ProductSearchHelper(ApplicationDbContext context) : base(context)
         {
+            Collection = context.Products;
         }
         public ProductSearchHelper IncludeImages()
         {
@@ -43,6 +44,19 @@ namespace Kalium.Server.Repositories
         public ProductSearchHelper IncludeOrderItems()
         {
             Collection = Collection.Include(p => p.OrderItems);
+            return this;
+        }
+        public ProductSearchHelper IncludeExtras()
+        {
+            Collection = Collection
+                .Include(p => p.Extras)
+                .ThenInclude(extra => extra.Options);
+            return this;
+        }
+        public ProductSearchHelper IncludeCoupons()
+        {
+            Collection = Collection
+                .Include(p => p.Coupons);
             return this;
         }
         public ProductSearchHelper HasOrigin(ICollection<string> origins)
@@ -122,6 +136,10 @@ namespace Kalium.Server.Repositories
             return this;
         }
 
+        public async Task<Product> WithId(int id)
+        {
+            return await Collection.SingleOrDefaultAsync(pro => pro.Id == id);
+        }
     }
 
     public interface IProductRepository
@@ -136,6 +154,7 @@ namespace Kalium.Server.Repositories
         Task<int> CountProducts(string category, double minPrice, double maxPrice, int status, ICollection<string> origins, ICollection<string> materials);
         Task<ICollection<string>> GetOrigins(int top);
         Task<ICollection<string>> GetMaterials(int top);
+        Task<Product> FindProductByIdForCart(int id);
     }
 
     public class ProductRepository: IProductRepository
@@ -169,7 +188,7 @@ namespace Kalium.Server.Repositories
         public async Task<ICollection<Product>> SearchProducts(int page, int pageSize, string category, double minPrice,
             double maxPrice, int status, ICollection<string> origins, ICollection<string> materials, int sortType)
         {
-            var searcher = new ProductSearchHelper(_context.Products, _context);
+            var searcher = new ProductSearchHelper(_context);
             return await searcher
                 .FromCategory(category)
                 .FromPrice(minPrice)
@@ -196,7 +215,7 @@ namespace Kalium.Server.Repositories
         public async Task<int> CountProducts(string category, double minPrice, double maxPrice, int status, 
             ICollection<string> origins, ICollection<string> materials)
         {
-            var searcher = new ProductSearchHelper(_context.Products, _context);
+            var searcher = new ProductSearchHelper(_context);
             return await searcher
                 .FromCategory(category)
                 .FromPrice(minPrice)
@@ -213,6 +232,16 @@ namespace Kalium.Server.Repositories
         {
             return await _context.Products.Select(pro => pro.Material.Trim()).Distinct()
                 .OrderByDescending(attr => _context.Products.Count(pro => pro.Material.Equals(attr))).Take(top).ToListAsync();
+        }
+
+        public async Task<Product> FindProductByIdForCart(int id)
+        {
+            var helper = new ProductSearchHelper(_context);
+            return await helper
+                .IncludeImages()
+                .IncludeExtras()
+                .IncludeCoupons()
+                .WithId(id);
         }
     }
 }

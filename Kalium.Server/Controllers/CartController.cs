@@ -30,45 +30,42 @@ namespace Kalium.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<string> AddToCart([FromBody] string json)
+        public async Task<string> Get([FromBody] string json)
         {
-            var parser = new Parser(json);
-            int productId = parser.AsInt("ProductId");
-            int quantity = parser.AsInt("Quantity");
+            var pseudoCart = JsonConvert.DeserializeObject<List<PseudoCartItem>>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            });
+            var cart = new ECart();
+            foreach (var item in pseudoCart)
+            {
+                var cartItem = new ECartItem
+                {
+                    Product = await _iProductRepository.FindProductByIdForCart(item.Id),
+                    Quantity = item.Quantity,
+                    Guid = item.Guid
+                };
+
+                item.Choices.ForEach(choice =>
+                {
+                    var extra = cartItem.Product.Extras.First(ext => ext.Id == choice.Extra);
+                    var option = extra.Options.FirstOrDefault(opt => opt.Id == choice.Option.GetValueOrDefault(-1));
+                    cartItem.Choices.Add(extra, option);
+                });
+
+                cart.Contents.Add(cartItem);
+            }
+
             object result = new
             {
+                ECart = cart
             };
+
             return JsonConvert.SerializeObject(result, new JsonSerializerSettings
             {
+                NullValueHandling = NullValueHandling.Include,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
-        }
-
-        [HttpGet("[action]")]
-        public async Task<string> LoadAttributes()
-        {
-            int top = Consts.AttributeTop;
-
-            var origins = await _iProductRepository.GetOrigins(top);
-            var materials = await _iProductRepository.GetMaterials(top);
-            object result = new
-            {
-                Origins = origins,
-                Materials = materials
-            };
-            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-        }
-
-        [HttpGet("[action]")]
-        public async Task<Product> GetProductByUrl([FromQuery] string url)
-        {
-            var product = await _iProductRepository.FindProductByUrl(url);
-            product.Category.Products.Clear();
-            product.Extras.ForEach(ext => { ext.Product = null; ext.Options.ForEach(opt => opt.Extra = null); });
-            return product;
         }
     }
 }

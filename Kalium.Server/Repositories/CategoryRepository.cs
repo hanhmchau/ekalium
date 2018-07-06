@@ -14,8 +14,9 @@ namespace Kalium.Server.Repositories
 
     internal class CategorySearchHelper : SearchHelper<Category>
     {
-        public CategorySearchHelper(IQueryable<Category> collection, ApplicationDbContext context) : base(collection, context)
+        public CategorySearchHelper(ApplicationDbContext context) : base(context)
         {
+            Collection = context.Category;
         }
         public CategorySearchHelper IncludeCount()
         {
@@ -68,7 +69,7 @@ namespace Kalium.Server.Repositories
         }
         public async Task<ICollection<Category>> SearchCategories()
         {
-            var searcher = new CategorySearchHelper(_context.Category, _context);
+            var searcher = new CategorySearchHelper(_context);
             return await searcher
                 .Active()
                 .IncludeCount()

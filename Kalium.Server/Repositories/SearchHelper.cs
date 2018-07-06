@@ -11,9 +11,8 @@ namespace Kalium.Server.Repositories
     {
         protected IQueryable<T> Collection;
         protected ApplicationDbContext Context;
-        public SearchHelper(IQueryable<T> collection, ApplicationDbContext context)
+        public SearchHelper(ApplicationDbContext context)
         {
-            Collection = collection;
             Context = context;
         }
         public async Task<ICollection<T>> Get() => await Collection.ToListAsync();

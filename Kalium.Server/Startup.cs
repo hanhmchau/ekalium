@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Linq;
 using System.Net;
@@ -19,9 +18,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Server.HubR;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Kalium.Shared.Services;
 
 namespace Kalium.Server
 {
@@ -89,8 +86,13 @@ namespace Kalium.Server
             services.AddTransient<IIdentityRepository, IdentityRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+
             services.AddTransient<IProductHub, ProductHub>();
+            services.AddTransient<IFetcher, Fetcher>();
+
             services.AddSignalR(options => { options.EnableDetailedErrors = true; });
+
+            services.AddResponseCaching();
         }
 
         static Func<RedirectContext<CookieAuthenticationOptions>, Task> ReplaceRedirectorWithStatusCode(HttpStatusCode statusCode) => context =>
@@ -117,7 +119,23 @@ namespace Kalium.Server
             app.UseSignalR(routes => {
                 routes.MapHub<ProductHub>("/productHubber");
             });
-            
+
+            app.UseResponseCaching();
+
+//            app.Use(async (context, next) =>
+//            {
+//                context.Response.GetTypedHeaders().CacheControl =
+//                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue
+//                    {
+//                        Public = true,
+//                        MaxAge = TimeSpan.FromSeconds(20)
+//                    };
+//                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+//                    new[] { "Accept-Encoding" };
+//
+//                await next();
+//            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
