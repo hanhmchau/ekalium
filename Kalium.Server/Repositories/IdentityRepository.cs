@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kalium.Server.Context;
+using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Kalium.Server.Repositories
 {
@@ -29,18 +31,30 @@ namespace Kalium.Server.Repositories
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private IMemoryCache _cache;
 
         public IdentityRepository(ApplicationDbContext ctx, UserManager<User> userManager,
-            SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
+            SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor, IMemoryCache cache)
         {
             _context = ctx;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
         }
 
-        public async Task<User> GetCurrentUserAsync() => await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+        public async Task<User> GetCurrentUserAsync()
+        {
+            var cachePrefix = Consts.GetCachePrefix(Consts.CachePrefix.CurrentUser, 0);
+            if (_cache.TryGetValue(cachePrefix, out var user))
+            {
+                return user as User;
+            }
+            var newUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+            _cache.Set(cachePrefix, newUser);
+            return newUser;
+        }
         public async Task<bool> IsUsernameUsed(string username) => await _userManager.FindByNameAsync(username) != null;
         public async Task<bool> IsEmailUsed(string email) => await _userManager.FindByEmailAsync(email) != null;
 

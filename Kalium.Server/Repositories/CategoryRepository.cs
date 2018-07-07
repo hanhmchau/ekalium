@@ -64,19 +64,27 @@ namespace Kalium.Server.Repositories
 
         public async Task<Category> FindCategoryById(int id)
         {
-            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.CategoryId, id), out var category))
+            var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.CategoryId, id);
+            if (_cache.TryGetValue(cacheKey, out var cat))
             {
-                return category as Category;
+                return cat as Category;
             }
-            return await _context.Category.FindAsync(id);
+
+            var newCat = await _context.Category.FindAsync(id);
+            _cache.Set(cacheKey, newCat);
+            return newCat;
         }
         public async Task<Category> FindCategoryByName(string name)
         {
-            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.CategoryUrl, name), out var category))
+            var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.CategoryUrl, name);
+            if (_cache.TryGetValue(cacheKey, out var c))
             {
-                return category as Category;
+                return c as Category;
             }
-            return await _context.Category.FirstOrDefaultAsync(cat => cat.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+
+            var newProduct = await _context.Category.FirstOrDefaultAsync(cat => cat.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+            _cache.Set(cacheKey, newProduct);
+            return newProduct;
         }
         public async Task<ICollection<Category>> SearchCategories()
         {

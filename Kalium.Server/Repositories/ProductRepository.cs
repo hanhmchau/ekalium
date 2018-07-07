@@ -161,7 +161,7 @@ namespace Kalium.Server.Repositories
     public class ProductRepository: IProductRepository
     {
         private readonly ApplicationDbContext _context;
-        private IMemoryCache _cache;
+        private readonly IMemoryCache _cache;
 
         public ProductRepository(ApplicationDbContext ctx, IMemoryCache cache)
         {
@@ -171,28 +171,40 @@ namespace Kalium.Server.Repositories
 
         public async Task<Product> FindProductById(int id)
         {
-            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.ProductId, id), out var product))
+            var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.ProductId, id);
+            if (_cache.TryGetValue(cacheKey, out var product))
             {
                 return product as Product;
             }
-            return await _context.Products.FindAsync(id);
+            else
+            {
+                var newProduct = await _context.Products.FindAsync(id);
+                _cache.Set(cacheKey, newProduct);
+                return newProduct;
+            }
         }
 
         public async Task<Product> FindProductByUrl(string url)
         {
-            if (_cache.TryGetValue(Consts.GetCachePrefix(Consts.CachePrefix.ProductUrl, url), out var product))
+            var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.ProductUrl, url);
+            if (_cache.TryGetValue(cacheKey, out var product))
             {
                 return product as Product;
             }
-            return await _context.Products
-                .Where(p => p.Status == (int) Consts.Status.Public)
-                .Include(p => p.Category)
-                .Include(p => p.Images)
-                .Include(p => p.Reviews)
-                .Include(p => p.Discussions)
-                .Include(p => p.Extras)
-                .ThenInclude(extra => extra.Options)
-                .FirstOrDefaultAsync(p => p.NameUrl.Equals(url, StringComparison.CurrentCultureIgnoreCase));
+            else
+            {
+                var newProduct = await _context.Products
+                    .Where(p => p.Status == (int)Consts.Status.Public)
+                    .Include(p => p.Category)
+                    .Include(p => p.Images)
+                    .Include(p => p.Reviews)
+                    .Include(p => p.Discussions)
+                    .Include(p => p.Extras)
+                    .ThenInclude(extra => extra.Options)
+                    .FirstOrDefaultAsync(p => p.NameUrl.Equals(url, StringComparison.CurrentCultureIgnoreCase));
+                _cache.Set(cacheKey, newProduct);
+                return newProduct;
+            }
         }
 
         public async Task<ICollection<Product>> SearchProducts() => await _context.Products.ToListAsync();
