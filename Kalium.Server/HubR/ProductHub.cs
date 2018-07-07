@@ -26,37 +26,32 @@ namespace Kalium.Server.HubR
             _context = context;
         }
 
-        public override Task OnConnectedAsync()
+        private async Task Send(Consts.HubActivity method)
         {
-            return base.OnConnectedAsync();
+            await _context.Clients.All.SendAsync(method.ToString().ToLower(), "");
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            return base.OnDisconnectedAsync(exception);
-        }
-
-        private async Task Send(string method, Product product)
+        private async Task Send(Consts.HubActivity method, Product product)
         {
             var productJson = JsonConvert.SerializeObject(product, new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
-            await _context.Clients.All.SendAsync(method, productJson);
+            await _context.Clients.All.SendAsync(method.ToString().ToLower(), productJson);
         }
 
         public async Task AnnounceAdd(Product product)
         {
-            await Send(Consts.ProductHubActivity.Add, product);
+            await Send(Consts.HubActivity.AddProduct, product);
         }
 
         public async Task AnnounceUpdate(Product product)
         {
-            await Send(Consts.ProductHubActivity.Update, product);
+            await Send(Consts.HubActivity.UpdateProduct, product);
         }
         public async Task AnnounceDelete(Product product)
         {
-            await Send(Consts.ProductHubActivity.Delete, product);
+            await Send(Consts.HubActivity.RemoveProduct, product);
         }
 
         public async Task SendMessage(string user, string message)
@@ -71,6 +66,11 @@ namespace Kalium.Server.HubR
                 Console.WriteLine(e.Message);
                 throw;
             }
+        }
+
+        public async Task AnnounceRefreshCart()
+        {
+            await Send(Consts.HubActivity.RefreshCart);
         }
     }
 }

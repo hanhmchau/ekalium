@@ -38,11 +38,12 @@ namespace Kalium.Shared.Consts
             Disabled
         }
 
-        public class ProductHubActivity
+        public enum HubActivity
         {
-            public const string Add = "ADD";
-            public const string Update = "UPDATE";
-            public const string Delete = "Delete";
+            RefreshCart,
+            AddProduct,
+            UpdateProduct,
+            RemoveProduct
         }
         public enum Toastr
         {

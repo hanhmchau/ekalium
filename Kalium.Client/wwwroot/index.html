@@ -532,8 +532,10 @@
             return localStorage.getItem('CART');
         });
 
+        var connection;
+
         Blazor.registerFunction('initializeSignalR', () => {
-            const connection = new signalR.HubConnectionBuilder()
+            connection = new signalR.HubConnectionBuilder()
                 .withUrl("/productHubber")
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
@@ -541,6 +543,11 @@
             connection.on("ReceiveMessage",
                 (user, message) => {
                     console.log(user, message);
+                });
+
+            connection.on("RefreshCart",
+                () => {
+                    $('#refresh-cart').click();
                 });
 
             connection.start().catch(err => console.error(err.toString()));
@@ -582,6 +589,9 @@
                 });
             }
             localStorage.setItem('CART', JSON.stringify(bigCart));
+            if (connection) {
+                connection.invoke("AnnounceRefreshCart").catch(err => console.error(err.toString()));
+            }
             return true;
         });
 
@@ -702,6 +712,11 @@
 
         Blazor.registerFunction('fadeOut', (selector) => {
             $(selector).fadeOut();
+            return true;
+        });
+
+        Blazor.registerFunction('refreshCart', () => {
+            $('#refresh-cart').click();
             return true;
         });
     </script>

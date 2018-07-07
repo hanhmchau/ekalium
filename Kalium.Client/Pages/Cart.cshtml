@@ -1,17 +1,20 @@
 ﻿@page "/cart"
-@inject HttpClient Http
 @using Kalium.Shared.Models
 @using Kalium.Shared.Services
 @using Kalium.Client.Extensions
+@using Kalium.Client.Pages
 @using Microsoft.AspNetCore.Blazor.Browser.Http
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 @using Newtonsoft.Json
+@inject HttpClient Http
 @inject IFetcher Fetcher
 @inject LocalStorage Storage
 @inject HttpClient Http
 @inject Toastr Toastr
+
+@inherits CartModel
 
 <div class="container default-margin woocommerce-cart">
     @if (ECart == null || !ECart.Contents.Any())
@@ -28,6 +31,7 @@
     }
     else
     {
+        <button type="button" style="visibility: hidden;" id="refresh-cart" onclick="@RefreshCart"></button>
         <div class="woocommerce">
             <form class="woocommerce-cart-form" method="post">
                 <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
@@ -134,7 +138,7 @@
                                             {
                                                 <li>
                                                     <label for="shipping_method_0_legacy_flat_rate">
-                                                        @coupon.Key: 
+                                                        @coupon.Key:
                                                         <span class="woocommerce-Price-amount amount">
                                                             <span class="woocommerce-Price-currencySymbol">£</span>
                                                             -@coupon.Reduction
@@ -475,13 +479,21 @@
     private ECart ECart { get; set; }
     [Parameter]
     private string CouponName { get; set; }
-
-    private bool Loaded = false;
+    private string PseudoCartJson { get; set; }
+    private bool Loaded { get; set; } = false;
 
     protected override async Task OnInitAsync()
     {
         RegisteredFunction.Invoke<bool>("initializeSignalR");
+        RefreshCart();
+        Loaded = true;
+        StateHasChanged();
+    }
+
+    private async void RefreshCart()
+    {
         var cartJson = Storage["CART"];
+        Console.WriteLine(cartJson);
         if (cartJson != null)
         {
             var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(cartJson, new JsonSerializerSettings
@@ -494,7 +506,7 @@
                 ECart = ecartJson["ECart"].ToObject<ECart>();
             }
         }
-        Loaded = true;
+        StateHasChanged();
     }
 
     private void CheckOut()
@@ -509,8 +521,7 @@
         {
             NullValueHandling = NullValueHandling.Include
         });
-        Console.WriteLine(pseudoCart.Coupons.Count);
-        Console.WriteLine(pseudoStr);
+        PseudoCartJson = pseudoStr;
         Storage["CART"] = pseudoStr;
     }
 
@@ -521,7 +532,7 @@
         StateHasChanged();
         UpdateCartStorage();
     }
-    
+
     private void UpdateCartQuantity(ECartItem item)
     {
         var quantity = RegisteredFunction.Invoke<int>("getInput", $"#quantity_{item.Guid}");
@@ -549,7 +560,7 @@
         }
         else
         {
-            Toastr.Warning("This coupon does not exist, or has already expired.");
+            Toastr.Warning("This coupon is not applicable to your products or has already expired.");
         }
     }
 }

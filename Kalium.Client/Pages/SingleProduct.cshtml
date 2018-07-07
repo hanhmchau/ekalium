@@ -584,6 +584,7 @@
 
     protected override async Task OnInitAsync()
     {
+        RegisteredFunction.Invoke<bool>("initializeSignalR");
         Product = await Http.GetJsonAsync<Product>($"/api/Product/GetProductByUrl?url={ProductUrl}");
         if (Product != null)
         {
