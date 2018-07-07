@@ -18,6 +18,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Server.HubR;
+using Kalium.Shared.Consts;
 using Kalium.Shared.Services;
 
 namespace Kalium.Server
@@ -30,8 +31,7 @@ namespace Kalium.Server
         {
             services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(@"Server=CHAUNHMSE63147\SQLEXPRESS;Database=KaliumApp;Trusted_Connection=True;MultipleActiveResultSets=true"),
-                ServiceLifetime.Scoped);
+                options => options.UseSqlServer(@"Server=CHAUNHMSE63147\SQLEXPRESS;Database=KaliumApp;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddIdentity<User, IdentityRole>(options =>
                 {
                     options.Lockout.AllowedForNewUsers = true;
@@ -78,11 +78,11 @@ namespace Kalium.Server
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ManageProducts", policy => policy.RequireClaim("ProductManager"));
-                options.AddPolicy("ManageSocial", policy => policy.RequireClaim("SocialManager"));
-                options.AddPolicy("ManageUser", policy => policy.RequireClaim("UserManager"));
-                options.AddPolicy("Checkout", policy => policy.RequireAuthenticatedUser());
-                options.AddPolicy("Auction", policy => policy.RequireAuthenticatedUser());
+                options.AddPolicy(Consts.Policy.ManageProducts.Name(), policy => policy.RequireClaim("ProductManager"));
+                options.AddPolicy(Consts.Policy.ManageSocial.Name(), policy => policy.RequireClaim("SocialManager"));
+                options.AddPolicy(Consts.Policy.ManageUser.Name(), policy => policy.RequireClaim("UserManager"));
+                options.AddPolicy(Consts.Policy.Checkout.Name(), policy => policy.RequireAuthenticatedUser());
+                options.AddPolicy(Consts.Policy.Auction.Name(), policy => policy.RequireAuthenticatedUser());
             });
 
             services.AddResponseCompression(options =>

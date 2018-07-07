@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Shared.Consts;
+using Microsoft.AspNetCore.Authorization;
 using MoreLinq;
 
 namespace Kalium.Server.Controllers
@@ -59,6 +60,29 @@ namespace Kalium.Server.Controllers
 
         [HttpPost("[action]")]
         public async Task<string> Get([FromBody] string json)
+        {
+            var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(json, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            });
+
+            var realCart = await FromPseudo(pseudoCart);
+
+            object result = new
+            {
+                ECart = realCart
+            };
+
+            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [HttpPost("[action]")]
+        [AuthorizePolicies(Consts.Policy.Checkout)]
+        public async Task<string> CheckOut([FromBody] string json)
         {
             var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(json, new JsonSerializerSettings
             {

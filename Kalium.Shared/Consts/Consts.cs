@@ -1,14 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Kalium.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kalium.Shared.Consts
 {
+    public static class EnumExtensions
+    {
+        public static string Name(this Enum en) => en.ToString();
+    }
+
+    public class AuthorizePolicies : AuthorizeAttribute
+    {
+        public AuthorizePolicies(params Consts.Policy[] policies)
+        {
+            var allowedPoliciesAsStrings = policies.Select(x => Enum.GetName(typeof(Consts.Policy), x));
+            Policy = string.Join(",", allowedPoliciesAsStrings);
+        }
+    }
+
     public class Consts
     {
         public const int PageSize = 9;
         public const int AttributeTop = 3;
+
+        public enum Policy
+        {
+            ManageProducts,
+            ManageSocial,
+            ManageUser,
+            Checkout,
+            Auction
+        }
 
         public enum SortType
         {

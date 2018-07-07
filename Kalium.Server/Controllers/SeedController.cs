@@ -254,8 +254,10 @@ back. Requires less postage than a standard card in the United States.".Replace(
                 new Claim(ClaimTypes.Name, EClaim.SocialManager.GetClaimName()));
             await _roleManager.AddClaimAsync(adminRole,
                 new Claim(ClaimTypes.Name, EClaim.UserManager.GetClaimName()));
+
             await _roleManager.AddClaimAsync(moderatorRole,
                 new Claim(ClaimTypes.Name, EClaim.SocialManager.GetClaimName()));
+
             await _roleManager.AddClaimAsync(memberRole,
                 new Claim(ClaimTypes.Name, EClaim.Auction.GetClaimName()));
             await _roleManager.AddClaimAsync(memberRole,
