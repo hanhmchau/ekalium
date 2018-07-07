@@ -18,9 +18,10 @@ namespace Kalium.Client
                 services.AddTransient<IFetcher, Fetcher>();
                 services.AddStorage();
                 services.AddToastr();
-                services.AddUtility();
+                services.AddSingleton<IUtil, Util>();
                 services.AddTransient<IHttpApiClientRequestBuilder, HttpApiClientRequestBuilder>();
                 services.AddTransient<IHttpApiClientRequestBuilderFactory, HttpApiClientRequestBuilderFactory>();
+                services.AddSingleton<IAccountService, AccountService>();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

@@ -52,7 +52,13 @@ namespace Kalium.Server.Repositories
                 return user as User;
             }
             var newUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-            _cache.Set(cachePrefix, newUser);
+            if (newUser != null)
+            {
+                _cache.Set(cachePrefix, newUser, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10)
+                });
+            }
             return newUser;
         }
         public async Task<bool> IsUsernameUsed(string username) => await _userManager.FindByNameAsync(username) != null;

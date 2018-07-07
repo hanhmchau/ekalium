@@ -23,20 +23,20 @@ namespace Kalium.Client.Extensions
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly Toastr _toastr;
-        private readonly IUtility _utility;
+        private readonly IUtil _util;
 
-        public HttpApiClientRequestBuilderFactory(HttpClient httpClient, IUriHelper uriHelper, ILogger logger, Toastr toastr, IUtility utility)
+        public HttpApiClientRequestBuilderFactory(HttpClient httpClient, IUriHelper uriHelper, ILogger logger, Toastr toastr, IUtil util)
         {
             _uriHelper = uriHelper;
             _httpClient = httpClient;
             _logger = logger;
             _toastr = toastr;
-            _utility = utility;
+            _util = util;
         }
 
         public IHttpApiClientRequestBuilder Create(string url)
         {
-            return new HttpApiClientRequestBuilder(url, _httpClient, _uriHelper, _logger, _toastr, _utility);
+            return new HttpApiClientRequestBuilder(url, _httpClient, _uriHelper, _logger, _toastr, _util);
         }
     }
 
@@ -57,17 +57,17 @@ namespace Kalium.Client.Extensions
         private readonly IUriHelper _uriHelper;
         private readonly ILogger _logger;
         private readonly Toastr _toastr;
-        private readonly IUtility _utility;
+        private readonly IUtil _util;
 
         public HttpApiClientRequestBuilder(string url, HttpClient httpClient, IUriHelper uriHelper, ILogger logger,
-            Toastr toastr, IUtility utility)
+            Toastr toastr, IUtil util)
         {
             _url = url;
             _httpClient = httpClient;
             _uriHelper = uriHelper;
             _logger = logger;
             _toastr = toastr;
-            _utility = utility;
+            _util = util;
         }
 
         private async Task ExecuteQuery(Func<Task<HttpResponseMessage>> httpCall)
@@ -94,7 +94,7 @@ namespace Kalium.Client.Extensions
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.Unauthorized:
-                        _utility.ShowLoginModal();
+                        _util.ShowLoginModal();
                         break;
                     case HttpStatusCode.Forbidden:
                         _uriHelper.NavigateTo("/403");

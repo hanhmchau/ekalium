@@ -12,10 +12,5 @@ namespace Kalium.Client.Extensions
         {
             col.AddSingleton<Toastr>();
         }
-
-        public static void AddUtility(this IServiceCollection col)
-        {
-            col.AddSingleton<Utility>();
-        }
     }
 }

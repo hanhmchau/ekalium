@@ -89,7 +89,8 @@ namespace Kalium.Shared.Consts
             ProductUrl,
             ProductId,
             CategoryId,
-            CategoryUrl
+            CategoryUrl,
+            CurrentUser
         }
 
         public static string GetCachePrefix(CachePrefix prefix, object id)
