@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Newtonsoft.Json;
@@ -33,7 +34,6 @@ namespace Kalium.Shared.Services
         {
             // controller returns: return JsonConvert.SerializeObject(result);
             var json = await _http.PostJsonAsync<object>(url, JsonConvert.SerializeObject(body));
-
             return JsonConvert.DeserializeObject(json.ToString()) as JObject;
         }
 

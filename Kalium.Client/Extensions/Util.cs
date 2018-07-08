@@ -16,6 +16,7 @@ namespace Kalium.Client.Extensions
         void ShowRegisterModal();
         void Return();
         void Checkpoint(string checkpoint);
+        void InitComponents();
     }
 
     public class Util : IUtil
@@ -57,6 +58,11 @@ namespace Kalium.Client.Extensions
         public void Checkpoint(string checkpoint)
         {
             _storage["LAST_VISITED"] = checkpoint;
+        }
+
+        public void InitComponents()
+        {
+            RegisteredFunction.Invoke<bool>("components");
         }
     }
 }

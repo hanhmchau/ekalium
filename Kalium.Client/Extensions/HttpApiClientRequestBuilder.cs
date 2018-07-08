@@ -21,11 +21,11 @@ namespace Kalium.Client.Extensions
     {
         private readonly IUriHelper _uriHelper;
         private readonly HttpClient _httpClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<HttpApiClientRequestBuilder> _logger;
         private readonly Toastr _toastr;
         private readonly IUtil _util;
 
-        public HttpApiClientRequestBuilderFactory(HttpClient httpClient, IUriHelper uriHelper, ILogger logger, Toastr toastr, IUtil util)
+        public HttpApiClientRequestBuilderFactory(HttpClient httpClient, IUriHelper uriHelper, ILogger<HttpApiClientRequestBuilder> logger, Toastr toastr, IUtil util)
         {
             _uriHelper = uriHelper;
             _httpClient = httpClient;
@@ -55,11 +55,11 @@ namespace Kalium.Client.Extensions
         private readonly string _url;
         private readonly HttpClient _httpClient;
         private readonly IUriHelper _uriHelper;
-        private readonly ILogger _logger;
+        private readonly ILogger<HttpApiClientRequestBuilder> _logger;
         private readonly Toastr _toastr;
         private readonly IUtil _util;
 
-        public HttpApiClientRequestBuilder(string url, HttpClient httpClient, IUriHelper uriHelper, ILogger logger,
+        public HttpApiClientRequestBuilder(string url, HttpClient httpClient, IUriHelper uriHelper, ILogger<HttpApiClientRequestBuilder> logger,
             Toastr toastr, IUtil util)
         {
             _url = url;
