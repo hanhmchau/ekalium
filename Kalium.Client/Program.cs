@@ -5,6 +5,7 @@ using System;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Kalium.Client.Extensions;
 using Kalium.Shared.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Kalium.Client
 {
@@ -20,8 +21,10 @@ namespace Kalium.Client
                 services.AddToastr();
                 services.AddSingleton<IUtil, Util>();
                 services.AddTransient<IHttpApiClientRequestBuilder, HttpApiClientRequestBuilder>();
+                services.AddLogging();
                 services.AddTransient<IHttpApiClientRequestBuilderFactory, HttpApiClientRequestBuilderFactory>();
                 services.AddSingleton<IAccountService, AccountService>();
+                services.AddSingleton<IMegaService, MegaService>();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

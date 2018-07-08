@@ -23,10 +23,24 @@ namespace Kalium.Server.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<IdentityUser>().ToTable("User");
             modelBuilder.Entity<IdentityRole>().ToTable("Role");
-//            modelBuilder.Entity<Product>().HasIndex(p => p.NameUrl);
-//            modelBuilder.Entity<IdentityUser>().HasIndex(u => u.UserName);
-//            modelBuilder.Entity<Category>().HasIndex(c => c.Name);
-//            modelBuilder.Entity<Category>().HasIndex(c => c.Name);
+
+            modelBuilder.Entity<OrderItemOption>()
+                .HasKey(c => new
+                {
+                    c.OptionId,
+                    c.OrderItemId
+                });
+
+            modelBuilder.Entity<OrderCoupon>()
+                .HasKey(c => new
+                {
+                    c.CouponId,
+                    c.OrderId
+                });
+            //            modelBuilder.Entity<Product>().HasIndex(p => p.NameUrl);
+            //            modelBuilder.Entity<IdentityUser>().HasIndex(u => u.UserName);
+            //            modelBuilder.Entity<Category>().HasIndex(c => c.Name);
+            //            modelBuilder.Entity<Category>().HasIndex(c => c.Name);
 
             /*
             modelBuilder.Ignore<IdentityUserClaim<string>>();

@@ -8,6 +8,7 @@ using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using MoreLinq;
 
 namespace Kalium.Server.Repositories
 {
@@ -168,6 +169,7 @@ namespace Kalium.Server.Repositories
         Task<ICollection<string>> GetMaterials(int top);
         Task<Product> FindProductByIdForCart(int id);
         Task<ICollection<Brand>> GetBrands();
+        Task<Product> FindProductByIdForCartNoFreshen(int id);
     }
 
     public class ProductRepository: IProductRepository
@@ -186,14 +188,25 @@ namespace Kalium.Server.Repositories
             var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.ProductId, id);
             if (_cache.TryGetValue(cacheKey, out var product))
             {
-                return product as Product;
+                return FreshenProduct(product as Product);
             }
             else
             {
-                var newProduct = await _context.Products.FindAsync(id);
+                var newProduct = FreshenProduct(await _context.Products.FindAsync(id));
                 _cache.Set(cacheKey, newProduct);
                 return newProduct;
             }
+        }
+
+        private Product FreshenProduct(Product newProduct)
+        {
+            newProduct.Extras = newProduct.Extras?.Where(p => !p.Deleted).ToList();
+            newProduct.Extras?.ForEach(ext => { ext.Options = ext.Options.Where(opt => !opt.Deleted).ToList(); });
+            newProduct.Coupons = newProduct.Coupons?.Where(c => !c.Deleted).ToList();
+            newProduct.Reviews = newProduct.Reviews?.Where(r => !r.Deleted).ToList();
+            newProduct.Reviews = newProduct.Reviews?.Where(r => !r.Deleted).ToList();
+            newProduct.Auctions = newProduct.Auctions?.Where(a => a.Status == (int) Consts.Status.Public).ToList();
+            return newProduct;
         }
 
         public async Task<Product> FindProductByUrl(string url)
@@ -201,7 +214,7 @@ namespace Kalium.Server.Repositories
             var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.ProductUrl, url);
             if (_cache.TryGetValue(cacheKey, out var product))
             {
-                return product as Product;
+                return FreshenProduct(product as Product);
             }
             else
             {
@@ -214,6 +227,7 @@ namespace Kalium.Server.Repositories
                     .Include(p => p.Extras)
                     .ThenInclude(extra => extra.Options)
                     .FirstOrDefaultAsync(p => p.NameUrl.Equals(url, StringComparison.CurrentCultureIgnoreCase));
+                newProduct = FreshenProduct(newProduct);
                 _cache.Set(cacheKey, newProduct);
                 return newProduct;
             }
@@ -277,11 +291,23 @@ namespace Kalium.Server.Repositories
         public async Task<Product> FindProductByIdForCart(int id)
         {
             var helper = new ProductSearchHelper(_context);
-            return await helper
+            var p = await helper
                 .IncludeImages()
                 .IncludeExtras()
                 .IncludeCoupons()
                 .WithId(id);
+            return FreshenProduct(p);
+        }
+
+        public async Task<Product> FindProductByIdForCartNoFreshen(int id)
+        {
+            var helper = new ProductSearchHelper(_context);
+            var p = await helper
+                .IncludeImages()
+                .IncludeExtras()
+                .IncludeCoupons()
+                .WithId(id);
+            return p;
         }
 
         public async Task<ICollection<Brand>> GetBrands()
