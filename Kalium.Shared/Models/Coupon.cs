@@ -17,5 +17,7 @@ namespace Kalium.Shared.Models
         [NotMapped]
         public bool IsValid =>
             Type == (int) Consts.Consts.CouponType.Date ? DateTime.Now < DateExpired : Quantity > 0;
+
+        public bool Deleted { get; set; }
     }
 }

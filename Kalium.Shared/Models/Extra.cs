@@ -12,5 +12,6 @@ namespace Kalium.Shared.Models
         public string Description { get; set; }
         public ICollection<Option> Options { get; set; }
         public bool Optional { get; set; }
+        public bool Deleted { get; set; }
     }
 }

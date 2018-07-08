@@ -13,5 +13,6 @@ namespace Kalium.Shared.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool Deleted { get; set; }
     }
 }

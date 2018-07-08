@@ -13,5 +13,6 @@ namespace Kalium.Shared.Models
         public string Image { get; set; }
         public Extra Extra { get; set; }
         public ICollection<OrderItemOption> OrderItemOptions { get; set; }
+        public bool Deleted { get; set; }
     }
 }

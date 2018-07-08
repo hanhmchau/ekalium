@@ -17,6 +17,8 @@ namespace Kalium.Shared.Models
         public Refund Refund { get; set; }
         public ICollection<OrderItemOption> OrderItemOptions { get; set; }
         [NotMapped]
-        public double ActualPrice => Price + ((OrderItemOptions as List<OrderItemOption>)?.Select(oio => oio.Option).Sum(option => option.Price) ?? 0);
+        public double ActualPrice => Price + (OrderItemOptions?.Select(oio => oio.Option).Sum(option => option.Price) ?? 0);
+        [NotMapped]
+        public ICollection<Option> Options => OrderItemOptions.Select(oio => oio.Option).ToList();
     }
 }

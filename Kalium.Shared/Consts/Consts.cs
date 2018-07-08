@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Kalium.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Kalium.Shared.Consts
 {
+    public static class ValidatorUtils
+    {
+        public static bool IsValidEmail(string email) => Regex.IsMatch(email,
+            @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
+            RegexOptions.IgnoreCase);
+
+        public static bool IsValidPhone(string phone) => Regex.IsMatch(phone, @"^(\+[0-9]{8-14})$");
+    }
     public static class EnumExtensions
     {
         public static string Name(this Enum en) => en.ToString();
@@ -50,6 +60,13 @@ namespace Kalium.Shared.Consts
             Deleted
         }
 
+        public enum OrderStatus
+        {
+            Processing,
+            Delivering,
+            Delivered,
+            Cancelled
+        }
         public const int NoPreference = -1;
 
         public static readonly Image DefaultImage = new Image
@@ -96,6 +113,12 @@ namespace Kalium.Shared.Consts
         public static string GetCachePrefix(CachePrefix prefix, object id)
         {
             return prefix + "-" + id;
+        }
+
+        public enum PaymentMethod
+        {
+            CashOnDelivery,
+            PayPal
         }
     }
 }
