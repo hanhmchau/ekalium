@@ -118,6 +118,8 @@ namespace Kalium.Server.Controllers
 
             var checkOutResult = await _iCheckoutRepository.CheckOut(pseudoCart, name, address, phone, sendToDifferentAddress, alternateName,
                 alternateAddress, alternatePhone, paymentMethod, note);
+            // the real cart is not necessary
+            checkOutResult.ECart = null;
             object result = new
             {
                 Result = checkOutResult

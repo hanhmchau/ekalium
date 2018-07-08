@@ -23,7 +23,6 @@ namespace Kalium.Shared.Models
         public string AlternateAddress { get; set; }
         public string AlternatePhone { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
-        [ForeignKey("CouponId")]
         public ICollection<OrderCoupon> OrderCoupons { get; set; }
         [NotMapped]
         public ICollection<Coupon> Coupons => OrderCoupons.Select(oc => oc.Coupon).ToList();

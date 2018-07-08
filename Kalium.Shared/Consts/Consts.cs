@@ -11,11 +11,11 @@ namespace Kalium.Shared.Consts
 {
     public static class ValidatorUtils
     {
-        public static bool IsValidEmail(string email) => Regex.IsMatch(email,
+        public static bool IsValidEmail(string email) => email != null && Regex.IsMatch(email,
             @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
             RegexOptions.IgnoreCase);
 
-        public static bool IsValidPhone(string phone) => Regex.IsMatch(phone, @"^(\+[0-9]{8-14})$");
+        public static bool IsValidPhone(string phone) => phone != null && Regex.IsMatch(phone, @"^(\+[0-9]{8-14})$");
     }
     public static class EnumExtensions
     {

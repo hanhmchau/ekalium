@@ -23,7 +23,7 @@ namespace Kalium.Client.Pages
         protected string AlternatePhone { get; set; }
         protected string Note { get; set; }
         protected ECart ECart { get; set; }
-        protected ICollection<string> Messages { get; set; }
+        protected ICollection<string> Messages { get; set; } = new List<string>();
         protected bool SendToDifferentAddress { get; set; }
         protected Consts.PaymentMethod PaymentMethod { get; set; }
 
@@ -48,7 +48,7 @@ namespace Kalium.Client.Pages
 
         protected void ValidateInfo()
         {
-            Messages.Clear();
+            Messages = new List<string>();
             if (string.IsNullOrEmpty(Name) || Name.Length < 4)
             {
                 Messages.Add("Name cannot be empty.");
@@ -110,7 +110,9 @@ namespace Kalium.Client.Pages
                 Note
             });
 
-            var checkoutResult = JsonConvert.DeserializeObject<CheckOutResult>(resultObj.ToString());
+            var jsonToStr = resultObj.ToString();
+            var checkoutResult = resultObj["Result"].ToObject<CheckOutResult>();
+            Console.WriteLine(checkoutResult.Succeeded);
             if (checkoutResult.Succeeded)
             {
                 var orderId = checkoutResult.OrderId;
@@ -119,6 +121,7 @@ namespace Kalium.Client.Pages
             else
             {
                 Messages = checkoutResult.Messages;
+                Console.WriteLine(Messages);
                 StateHasChanged();
             }
         }
