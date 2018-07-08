@@ -21,6 +21,7 @@ namespace Kalium.Shared.Models
         public string Features { get; set; }
         public int PageCount { get; set; }
         public string Origin { get; set; }
+        public Brand Brand { get; set; }
         public int Status { get; set; }
         public int ReviewStatus { get; set; }
         public string Type { get; set; }

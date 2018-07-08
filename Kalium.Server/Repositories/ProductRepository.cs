@@ -141,6 +141,15 @@ namespace Kalium.Server.Repositories
         {
             return await Collection.SingleOrDefaultAsync(pro => pro.Id == id);
         }
+
+        public ProductSearchHelper HasBrand(ICollection<int> brands)
+        {
+            if (brands.Any())
+            {
+                Collection = Collection.Where(pro => brands.Contains(pro.Brand.Id));
+            }
+            return this;
+        }
     }
 
     public interface IProductRepository
@@ -148,14 +157,17 @@ namespace Kalium.Server.Repositories
         Task<Product> FindProductById(int id);
         Task<Product> FindProductByUrl(string url);
         Task<ICollection<Product>> SearchProducts(int page, int pageSize, string category, double minPrice,
-            double maxPrice, int status, ICollection<string> origins, ICollection<string> materials, int sortType);
+            double maxPrice, int status, ICollection<string> origins, ICollection<string> materials,
+            ICollection<int> brands, int sortType);
         Task<Product> AddProduct(Product product);
         Product UpdateProduct(Product product);
         Task<ICollection<Product>> SearchProducts();
-        Task<int> CountProducts(string category, double minPrice, double maxPrice, int status, ICollection<string> origins, ICollection<string> materials);
+        Task<int> CountProducts(string category, double minPrice, double maxPrice, int status,
+            ICollection<string> origins, ICollection<string> materials, ICollection<int> brands);
         Task<ICollection<string>> GetOrigins(int top);
         Task<ICollection<string>> GetMaterials(int top);
         Task<Product> FindProductByIdForCart(int id);
+        Task<ICollection<Brand>> GetBrands();
     }
 
     public class ProductRepository: IProductRepository
@@ -209,7 +221,8 @@ namespace Kalium.Server.Repositories
 
         public async Task<ICollection<Product>> SearchProducts() => await _context.Products.ToListAsync();
         public async Task<ICollection<Product>> SearchProducts(int page, int pageSize, string category, double minPrice,
-            double maxPrice, int status, ICollection<string> origins, ICollection<string> materials, int sortType)
+            double maxPrice, int status, ICollection<string> origins, ICollection<string> materials,
+            ICollection<int> brands, int sortType)
         {
             var searcher = new ProductSearchHelper(_context);
             return await searcher
@@ -219,6 +232,7 @@ namespace Kalium.Server.Repositories
                 .WithStatus(status)
                 .HasOrigin(origins)
                 .HasMaterial(materials)
+                .HasBrand(brands)
                 .SortBy((Consts.SortType) sortType)
                 .IncludeCategory()
                 .IncludeImages()
@@ -235,8 +249,8 @@ namespace Kalium.Server.Repositories
             var entityEntry = _context.Products.Update(product);
             return entityEntry.Entity;
         }
-        public async Task<int> CountProducts(string category, double minPrice, double maxPrice, int status, 
-            ICollection<string> origins, ICollection<string> materials)
+        public async Task<int> CountProducts(string category, double minPrice, double maxPrice, int status,
+            ICollection<string> origins, ICollection<string> materials, ICollection<int> brands)
         {
             var searcher = new ProductSearchHelper(_context);
             return await searcher
@@ -244,6 +258,9 @@ namespace Kalium.Server.Repositories
                 .FromPrice(minPrice)
                 .ToPrice(maxPrice)
                 .WithStatus(status)
+                .HasOrigin(origins)
+                .HasMaterial(materials)
+                .HasBrand(brands)
                 .Count();
         }
         public async Task<ICollection<string>> GetOrigins(int top)
@@ -265,6 +282,11 @@ namespace Kalium.Server.Repositories
                 .IncludeExtras()
                 .IncludeCoupons()
                 .WithId(id);
+        }
+
+        public async Task<ICollection<Brand>> GetBrands()
+        {
+            return await _context.Brand.OrderBy(brand => brand.Name).ToListAsync();
         }
     }
 }

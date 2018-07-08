@@ -34,9 +34,10 @@ namespace Kalium.Server.Controllers
             int status = (int) Consts.Status.Public;
             var origins = parser.AsObject<ICollection<string>>("ChosenOrigins");
             var materials = parser.AsObject<ICollection<string>>("ChosenMaterials");
+            var brands = parser.AsObject<ICollection<int>>("ChosenBrands");
 
-            var products = await _iProductRepository.SearchProducts(page, pageSize, category, minPrice, maxPrice, status, origins, materials, sortType);
-            var total = await _iProductRepository.CountProducts(category, minPrice, maxPrice, status, origins, materials);
+            var products = await _iProductRepository.SearchProducts(page, pageSize, category, minPrice, maxPrice, status, origins, materials, brands, sortType);
+            var total = await _iProductRepository.CountProducts(category, minPrice, maxPrice, status, origins, materials, brands);
             object result = new
             {
                 Products = products,
@@ -55,10 +56,12 @@ namespace Kalium.Server.Controllers
 
             var origins = await _iProductRepository.GetOrigins(top);
             var materials = await _iProductRepository.GetMaterials(top);
+            var brands = await _iProductRepository.GetBrands();
             object result = new
             {
                 Origins = origins,
-                Materials = materials
+                Materials = materials,
+                Brands = brands
             };
             return JsonConvert.SerializeObject(result, new JsonSerializerSettings
             {

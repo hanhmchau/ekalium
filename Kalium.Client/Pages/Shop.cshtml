@@ -195,15 +195,16 @@
                                 </div>
                             </div>
                         </form>
-                    </div><div id="woocommerce_product_categories-3" class="widget woocommerce widget_product_categories">
+                    </div>
+                    <div id="woocommerce_product_categories-3" class="widget woocommerce widget_product_categories">
                         <h2 class="widgettitle">Categories</h2>
                         <ul class="product-categories">
                             <li class="cat-item cat-item-17 pointer @(CategoryName == null ? "strong" : "")">
                                 <a onclick="@(() =>
-                                                   {
-                                                       CategoryName = null;
-                                                       ResetProduct();
-                                                   })">All categories</a>
+                                              {
+                                                  CategoryName = null;
+                                                  ResetProduct();
+                                              })">All categories</a>
                             </li>
                             @foreach (var cat in Categories)
                             {
@@ -211,11 +212,22 @@
                                     <a onclick="@(() =>
                                                   {
                                                       CategoryName = cat.Name;
-                                                       ResetProduct();
-                                                   })">@cat.Name</a>
-                                            </li>
-                                        }
+                                                      ResetProduct();
+                                                  })">@cat.Name</a>
+                                </li>
+                            }
                         </ul>
+                    </div>
+                    <div class="widget woocommerce widget_product_categories">
+                        <h2 class="widgettitle">Brands</h2>
+                        <div class="product-categories">
+                            <select id="brand-select" class="my-select2" multiple="multiple">
+                                @foreach (var brand in Brands)
+                                {
+                                    <option value="@brand.Id">@brand.Name</option>
+                                }
+                            </select>
+                        </div>
                     </div>
                     <div id="woocommerce_widget_cart-3" class="widget woocommerce widget_shopping_cart">
                         <h2 class="widgettitle">Origin</h2>
@@ -244,7 +256,7 @@
 
 
         </div>
-
+    <div class="hide" id="brand-notifier" onclick="@(() => LoadProducts(true))"></div>
     </main>
 </div>
 
@@ -264,6 +276,8 @@
     private ICollection<Product> Products { get; set; } = new List<Product>();
     [Parameter]
     private ICollection<Category> Categories { get; set; } = new List<Category>();
+    [Parameter]
+    private ICollection<Brand> Brands { get; set; } = new List<Brand>();
     [Parameter]
     private ICollection<string> Origins { get; set; } = new List<string>();
     [Parameter]
@@ -286,6 +300,8 @@
     private int Begin { get; set; }
     [Parameter]
     private int End { get; set; }
+
+    private bool Loaded = false;
 
     [Parameter]
     private string SortTypeStr { get; set; } = "Newest first";
@@ -363,8 +379,14 @@
         LoadProducts(false);
     }
 
-    private async void LoadProducts(bool newList)
+    private async Task LoadProducts(bool newList)
     {
+        ICollection<int> ChosenBrands = new List<int>();
+        if (Loaded)
+        {
+            ChosenBrands = RegisteredFunction.Invoke<ICollection<int>>("getSelect2Result", "#brand-select");
+            Console.WriteLine(ChosenBrands.Count);
+        }
         JObject data = await Fetch("/api/Product/LoadProducts/", new
         {
             Phrase,
@@ -375,7 +397,8 @@
             MinPrice,
             MaxPrice,
             ChosenOrigins,
-            ChosenMaterials
+            ChosenMaterials,
+            ChosenBrands
         });
 
         string productJson = data["Products"].ToString();
@@ -400,28 +423,32 @@
         FadeIn("#product-main-list");
     }
 
-    private async void LoadCategories()
+    private async Task LoadCategories()
     {
         JObject cateJObject = await Fetch("/api/category/LoadCategories/");
         string productJson = cateJObject["Categories"].ToString();
         Categories = JsonConvert.DeserializeObject<ICollection<Category>>(productJson);
     }
 
-    private async void LoadAttributes()
+    private async Task LoadAttributes()
     {
         JObject cateJObject = await Fetch("/api/product/LoadAttributes/");
         string originJson = cateJObject["Origins"].ToString();
         string materialJson = cateJObject["Materials"].ToString();
+        string brandJson = cateJObject["Brands"].ToString();
         Origins = JsonConvert.DeserializeObject<ICollection<string>>(originJson);
         Materials = JsonConvert.DeserializeObject<ICollection<string>>(materialJson);
+        Brands = JsonConvert.DeserializeObject<ICollection<Brand>>(brandJson);
     }
 
     protected override async Task OnInitAsync()
     {
+        RegisteredFunction.Invoke<bool>("shop-select2");
         LoadSlider();
-        LoadProducts(true);
-        LoadCategories();
-        LoadAttributes();
+        await LoadProducts(true);
+        await LoadCategories();
+        await LoadAttributes();
+        Loaded = true;
     }
 
     private async Task<JObject> Fetch(string url)

@@ -77,8 +77,9 @@
     <link rel='stylesheet' id='wcqi-css-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/woocommerce-quantity-increment/assets/css/wc-quantity-increment1845.css?ver=4.9.6' type='text/css' media='all' />
     <link rel='stylesheet' id='bootstrap-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/bootstrap.css' type='text/css' media='all' />
     <link rel='stylesheet' id='main-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/main7793.css?ver=2.4' type='text/css' media='all' />
-    <link rel='stylesheet' id='style-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/style7793.css?ver=2.4' type='text/css' media='all' />
-    <link rel='stylesheet' id='custom-skin-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/custom-skin6269.css?ver=7520a15ef57078c7eb9c724cdd2109e6' type='text/css' media='all' />
+<link rel='stylesheet' id='style-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/style7793.css?ver=2.4' type='text/css' media='all' />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<link rel='stylesheet' id='custom-skin-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/custom-skin6269.css?ver=7520a15ef57078c7eb9c724cdd2109e6' type='text/css' media='all' />
     <link rel='stylesheet' id='typolab-facfb629ec7edae42cdc8d1f3cc8dbc6-css' href='https://fonts.googleapis.com/css?family=Dosis%3A300%2Cregular&amp;subset=latin&amp;ver=02d7a2f95f721c1f5360b45fd5e2b659' type='text/css' media='all' />
     <link rel='stylesheet' id='js_composer_front-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/js_composer/assets/css/js_composer.min8b06.css?ver=5.4.7' type='text/css' media='all' />
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css' type='text/css' media='all' /> 
@@ -489,6 +490,7 @@
     <script type='text/javascript' src='/lib/signalr.js'></script>
 <script type='text/javascript' src='/jqueryui/jquery-ui.js'></script>
 <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/js/slick/slick.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script>
         let $ = jQuery;
         $(document).ready(() => {
@@ -522,6 +524,11 @@
                     e.preventDefault();
                 } 
             });
+
+        Blazor.registerFunction('getSelect2Result', (selector) => {
+            var result = $(selector).select2('data').map(el => el.id);
+            return result;
+        });
 
         Blazor.registerFunction('toastr', (mode, message) => {
             toastr[mode](message);
@@ -595,14 +602,15 @@
             return true;
         });
 
-        Blazor.registerFunction('tabs', () => {
-            setTimeout(function () {
-                $('.tab-content').addClass('hide');
-                $('.tab-control.active').each(function(i, el) {
-                    $(el).addClass('active');
-                    $($(el).attr('target')).removeClass('hide');
-                });
-                $(document).on('click', '.tab-control', function () {
+        var tabs = () => {
+            $('.tab-content').addClass('hide');
+            $('.tab-control.active').each(function (i, el) {
+                $(el).addClass('active');
+                $($(el).attr('target')).removeClass('hide');
+            });
+            $(document).on('click',
+                '.tab-control',
+                function () {
                     $(this).addClass('active');
                     $(this).siblings('.tab-control').each(function (i, el) {
                         $(el).removeClass('active');
@@ -611,7 +619,13 @@
                     var target = $(this).attr('target');
                     $(target).removeClass('hide');
                 });
-            }, 200);
+        };
+
+        Blazor.registerFunction('tabs', () => {
+            setTimeout(function () {
+                    tabs();
+                },
+                200);
             return true;
         });
 
@@ -650,6 +664,31 @@
                     ]
                 } );
             }, 200);
+            return true;
+        });
+
+        Blazor.registerFunction('components', () => {
+            setTimeout(function () {
+                $('.my-select2').select2();
+                tabs();
+            }, 400);
+            return true;
+        });
+
+        Blazor.registerFunction('shop-select2', () => {
+            setTimeout(function () {
+                var $brandSelect = $('#brand-select');
+                $brandSelect.select2()
+                    .on('select2:select',
+                    function (e) {
+                            $('#brand-notifier').click();
+                        })
+                    .on('select2:unselect',
+                    function (e) {
+                            $('#brand-notifier').click();
+                        });
+
+            }, 300);
             return true;
         });
 

@@ -15,11 +15,17 @@ namespace Kalium.Shared.Models
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime DateCreated { get; set; }
+        public int PaymentMethod { get; set; }
         public int Status { get; set; }
+        public bool ShipToDifferentAddress { get; set; }
+        public string AlternateName { get; set; }
+        public string AlternateAddress { get; set; }
+        public string AlternatePhone { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         [ForeignKey("CouponId")]
-        public Coupon Coupon { get; set; }
+        public ICollection<Coupon> Coupons { get; set; }
+        public string Note { get; set; }
         [NotMapped]
-        public double Total => (OrderItems as List<OrderItem>).Sum(orderItem => orderItem.ActualPrice * (1 - orderItem?.Refund.RefundRate ?? 0)) - (this?.Coupon.Reduction ?? 0);
+        public double Total => OrderItems.Sum(orderItem => orderItem.ActualPrice * (1 - orderItem.Refund?.RefundRate ?? 0)) - Coupons?.Sum(c => c.Reduction) ?? 0;
     }
 }

@@ -301,5 +301,18 @@ back. Requires less postage than a standard card in the United States.".Replace(
             await _productHub.SendMessage(@"Red", @"Don’t you hate it when someone answers their own questions? I do!");
             return "Lulz";
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Brand()
+        {
+            var brandNames = new[] {"Staedtler", "Faber-Castell", "Maped", "Schwan-Stabilo", "Muji", "Artline"};
+            var brands = brandNames.Select(name => new Brand
+            {
+                Name = name
+            }).ToList();
+            await _context.Brand.AddRangeAsync(brands);
+            await _context.SaveChangesAsync();
+            return Ok("Famously seeded...");
+        }
     }
 }
