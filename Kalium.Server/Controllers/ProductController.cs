@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Shared.Consts;
-using Microsoft.Extensions.Caching.Memory;
 using MoreLinq;
 
 namespace Kalium.Server.Controllers

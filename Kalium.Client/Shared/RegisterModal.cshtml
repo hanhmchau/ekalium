@@ -1,5 +1,6 @@
 ﻿@inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using Kalium.Shared.Consts
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Newtonsoft.Json
 @using Kalium.Shared.Models
@@ -40,6 +41,13 @@
         @if (HasTypedPassword && string.IsNullOrWhiteSpace(Email))
         {
             <div class="text-red">Email cannot be empty or contain only whitespaces.</div>
+        }
+        else
+        {
+            if (ValidatorUtils.IsValidEmail(Email))
+            {
+                <div class="text-red">Invalid email.</div>
+            }
         }
 
         <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--wrap">
@@ -89,7 +97,7 @@
 
     private bool IsValid()
     {
-        return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)
+        return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email) && ValidatorUtils.IsValidEmail(Email)
             && !DuplicateEmail && !DuplicateUsername;
     }
 

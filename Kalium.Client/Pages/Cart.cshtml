@@ -16,6 +16,8 @@
 @inject HttpClient Http
 @inject Toastr Toastr
 @inject IUriHelper UriHelper
+@inject IUtil Util
+@inject IAccountService Account
 
 @inherits CartModel
 
@@ -134,7 +136,7 @@
                                     <td data-title="Subtotal"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@ECart.PreCouponTotal()</span></td>
                                 </tr>
                                 <tr class="shipping">
-                                    <th>Shipping</th>
+                                    <th>Coupons</th>
                                     <td data-title="Shipping">
                                         <ul id="shipping_method">
                                             @foreach (var coupon in ECart.Coupons)
@@ -183,7 +185,7 @@
                     </table>
                     <div class="wc-proceed-to-checkout">
                         <div class="cart-buttons-update-checkout" onclick="@(() => CheckOut())">
-                            <a class="checkout-button button alt wc-forward">
+                            <a class="pointer checkout-button button alt wc-forward">
                                 Proceed to checkout
                             </a>
                         </div>
@@ -479,91 +481,99 @@
 </div>
 @functions {
 
-private ECart ECart { get; set; }
-[Parameter]
-private string CouponName { get; set; }
-private string PseudoCartJson { get; set; }
-private bool Loaded { get; set; } = false;
+    private ECart ECart { get; set; }
+    [Parameter]
+    private string CouponName { get; set; }
+    private string PseudoCartJson { get; set; }
+    private bool Loaded { get; set; } = false;
 
-protected override async Task OnInitAsync()
-{
-    RegisteredFunction.Invoke<bool>("initializeSignalR");
-    RefreshCart();
-    Loaded = true;
-    StateHasChanged();
-}
-
-private async void RefreshCart()
-{
-    var cartJson = Storage["CART"];
-    Console.WriteLine(cartJson);
-    if (cartJson != null)
+    protected override async Task OnInitAsync()
     {
-        var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(cartJson, new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Include
-        });
-        if (pseudoCart.Cart.Any())
-        {
-            var ecartJson = await Fetcher.Fetch("/api/Cart/Get/", pseudoCart);
-            ECart = ecartJson["ECart"].ToObject<ECart>();
-        }
+        RegisteredFunction.Invoke<bool>("initializeSignalR");
+        await RefreshCart();
+        Loaded = true;
+        StateHasChanged();
     }
-    StateHasChanged();
-}
 
-private async void CheckOut()
-{
-    UriHelper.NavigateTo("/checkout-confirmation");
-}
-
-private void UpdateCartStorage()
-{
-    var pseudoCart = ECart.ToPseudo();
-    var pseudoStr = JsonConvert.SerializeObject(pseudoCart, new JsonSerializerSettings
+    private async Task RefreshCart()
     {
-        NullValueHandling = NullValueHandling.Include
-    });
-    PseudoCartJson = pseudoStr;
-    Storage["CART"] = pseudoStr;
-}
-
-private void RemoveFromCart(ECartItem item)
-{
-    ECart.Contents.Remove(item);
-    ECart.Coupons = ECart.Coupons.Intersect(ECart.AvailableCoupons).ToList();
-    StateHasChanged();
-    UpdateCartStorage();
-}
-
-private void UpdateCartQuantity(ECartItem item)
-{
-    var quantity = RegisteredFunction.Invoke<int>("getInput", $"#quantity_{item.Guid}");
-    item.Quantity = quantity;
-    StateHasChanged();
-    UpdateCartStorage();
-}
-
-private void ApplyCoupon()
-{
-    var coupon = ECart.AvailableCoupons.FirstOrDefault(c => c.Key.Equals(CouponName, StringComparison.CurrentCultureIgnoreCase));
-    if (coupon != null)
-    {
-        if (ECart.Coupons.Any(c => c.Id == coupon.Id)) // this coupon has already been added before
+        var cartJson = Storage["CART"];
+        if (cartJson != null)
         {
-            Toastr.Warning("This coupon has already been added.");
+            var pseudoCart = JsonConvert.DeserializeObject<PseudoCart>(cartJson, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            });
+            if (pseudoCart.Cart.Any())
+            {
+                var ecartJson = await Fetcher.Fetch("/api/Cart/Get/", pseudoCart);
+                ECart = ecartJson["ECart"].ToObject<ECart>();
+            }
+        }
+        StateHasChanged();
+    }
+
+    private async void CheckOut()
+    {
+        Util.Checkpoint("/checkout");
+        if (await Account.GetCurrentUser() != null)
+        {
+            UriHelper.NavigateTo("/checkout");
         }
         else
         {
-            Toastr.Success("Coupon added.");
-            ECart.Coupons.Add(coupon);
-            StateHasChanged();
-            UpdateCartStorage();
+            UriHelper.NavigateTo("/login");
+//            Util.ShowLoginModal();
         }
     }
-    else
+
+    private void UpdateCartStorage()
     {
-        Toastr.Warning("This coupon is not applicable to your products or has already expired.");
+        var pseudoCart = ECart.ToPseudo();
+        var pseudoStr = JsonConvert.SerializeObject(pseudoCart, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Include
+        });
+        PseudoCartJson = pseudoStr;
+        Storage["CART"] = pseudoStr;
     }
-}
+
+    private void RemoveFromCart(ECartItem item)
+    {
+        ECart.Contents.Remove(item);
+        ECart.Coupons = ECart.Coupons.Intersect(ECart.AvailableCoupons).ToList();
+        StateHasChanged();
+        UpdateCartStorage();
+    }
+
+    private void UpdateCartQuantity(ECartItem item)
+    {
+        var quantity = RegisteredFunction.Invoke<int>("getInput", $"#quantity_{item.Guid}");
+        item.Quantity = quantity;
+        StateHasChanged();
+        UpdateCartStorage();
+    }
+
+    private void ApplyCoupon()
+    {
+        var coupon = ECart.AvailableCoupons.FirstOrDefault(c => c.Key.Equals(CouponName, StringComparison.CurrentCultureIgnoreCase));
+        if (coupon != null)
+        {
+            if (ECart.Coupons.Any(c => c.Id == coupon.Id)) // this coupon has already been added before
+            {
+                Toastr.Warning("This coupon has already been added.");
+            }
+            else
+            {
+                Toastr.Success("Coupon added.");
+                ECart.Coupons.Add(coupon);
+                StateHasChanged();
+                UpdateCartStorage();
+            }
+        }
+        else
+        {
+            Toastr.Warning("This coupon is not applicable to your products or has already expired.");
+        }
+    }
 }
