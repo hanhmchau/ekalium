@@ -1,0 +1,23 @@
+﻿@using Kalium.Client.Shared
+@using System.Net
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Newtonsoft.Json
+@using Kalium.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Components
+
+@inherits ConfirmModalModel
+
+<div class="u-column1 col-1 my-modal woocommerce-account" id="@Id">
+    <form class="woocommerce-form woocommerce-form-login login" method="post">
+        <h2>@Title</h2>
+
+        <div>
+            @Message
+        </div>
+
+        <p class="form-row">
+            <input type="button" class="woocommerce-Button button" value="Yes" onclick="@OnClickYes" />
+            <input type="button" class="woocommerce-Button button button-secondary" value="No" onclick="@OnClickNo" />
+        </p>
+    </form>
+</div>
