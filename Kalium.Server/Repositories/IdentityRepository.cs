@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Kalium.Server.Context;
 using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;

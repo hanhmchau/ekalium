@@ -72,9 +72,9 @@
                                 <td class="product-name" data-title="Product">
                                     <a href="/product/@item.Product.NameUrl">@item.Product.Name</a>
                                     <ul style="font-size: 14px; margin: 10px 0px 0px 10px;">
-                                        @foreach (var choice in @item.Choices)
+                                        @foreach (var choice in item.Choices)
                                         {
-                                            @if (choice.Value != null)
+                                            if (choice.Value != null)
                                             {
                                                 <li style="list-style-type: circle; padding-top: 5px;">
                                                     <span>@choice.Key.Name: </span><span>@choice.Value.Name (£@choice.Value.Price)</span>

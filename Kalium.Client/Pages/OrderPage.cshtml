@@ -1,0 +1,100 @@
+﻿@page "/order/{OrderId}"
+@using Kalium.Shared.Consts
+
+@inherits Kalium.Client.Pages.OrderModel
+
+@if (Order != null)
+{
+
+    <div class="container default-margin post-formatting">
+        <div class="woocommerce">
+            <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> and is currently <mark class="order-status">@(((Consts.OrderStatus) Order.Status).Name())</mark>.</p>
+
+            <section class="woocommerce-order-details">
+
+                <h2 class="woocommerce-order-details__title">Order details</h2>
+                <table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
+                    <thead>
+                        <tr>
+                            <th class="woocommerce-table__product-name product-name">Product</th>
+                            <th class="woocommerce-table__product-table product-total">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Order.OrderItems)
+                    {
+                        <tr class="woocommerce-table__line-item order_item">
+                            <td class="woocommerce-table__product-name product-name">
+                                <a href="/product/@item.ProductNameUrl" class="">@item.ProductName</a>
+                                <strong class="product-quantity">× @item.Quantity</strong>
+                                @if (item.Choices != null && item.Choices.Any())
+                                {
+                                    <ul>
+                                        @foreach (var choice in item.Choices)
+                                        {
+                                            <li>@choice.ExtraName: @choice.OptionName</li>
+                                        }
+                                    </ul>
+                                }
+                            </td>
+                            <td class="woocommerce-table__product-total product-total">
+                                <span class="woocommerce-Price-amount amount">
+                                    <span class="woocommerce-Price-currencySymbol">£</span>@item.ActualPrice
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tfoot>
+                    @if (Order.Coupons != null && Order.Coupons.Any())
+                    {
+                        
+                        <tr>
+                            <th scope="row">Subtotal:</th>
+                            <td>
+                                <span class="woocommerce-Price-amount amount">
+                                    <span class="woocommerce-Price-currencySymbol">£</span>
+                                    @Order.PreCouponTotal
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Coupons:</th>
+                            <td>
+                                @foreach (var coupon in Order.Coupons)
+                                {
+                                    <div>
+                                        <span class="woocommerce-Price-amount amount">
+                                            <span class="woocommerce-Price-currencySymbol">£</span>-@coupon.Reduction
+                                        </span>
+                                        <small class="shipped_via">via @coupon.Key</small>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th scope="row">Payment method:</th>
+                        <td>
+                            @if (Order.PaymentMethod == (int) Consts.PaymentMethod.CashOnDelivery)
+                            {
+                            <span>Cash on Delivery</span>
+                            } else if (Order.PaymentMethod == (int) Consts.PaymentMethod.PayPal)
+                            {
+                            <span>PayPal</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total:</th>
+                        <td><span class="woocommerce-Price-amount amount">
+                            <span class="woocommerce-Price-currencySymbol">£</span>
+                            @Order.PostCouponTotal
+                        </span></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </section>
+        </div>
+    </div>
+}

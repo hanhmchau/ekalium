@@ -97,6 +97,7 @@ namespace Kalium.Server
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICheckoutRepository, CheckoutRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             services.AddTransient<IProductHub, ProductHub>();
             services.AddTransient<IFetcher, Fetcher>();
