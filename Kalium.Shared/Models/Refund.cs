@@ -8,8 +8,8 @@ namespace Kalium.Shared.Models
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("OrderItemId")]
-        public OrderItem OrderItem { get; set; }
+        [ForeignKey("OrderId")]
+        public Order Order { get; set; }
         public DateTime DateRefunded { get; set; }
         public double RefundRate { get; set; }
     }

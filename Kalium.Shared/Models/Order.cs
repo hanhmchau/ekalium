@@ -22,12 +22,15 @@ namespace Kalium.Shared.Models
         public string AlternateName { get; set; }
         public string AlternateAddress { get; set; }
         public string AlternatePhone { get; set; }
+        public Refund Refund { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<OrderCoupon> OrderCoupons { get; set; }
         [NotMapped]
         public ICollection<Coupon> Coupons => OrderCoupons.Select(oc => oc.Coupon).ToList();
         public string Note { get; set; }
         [NotMapped]
-        public double Total => OrderItems.Sum(orderItem => orderItem.ActualPrice * (1 - orderItem.Refund?.RefundRate ?? 0)) - Coupons?.Sum(c => c.Reduction) ?? 0;
+        public double PreCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice);
+        [NotMapped]
+        public double PostCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice) - Coupons?.Sum(c => c?.Reduction) ?? 0;
     }
 }

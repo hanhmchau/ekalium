@@ -42,11 +42,11 @@ namespace Kalium.Shared.Models
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<Auction> Auctions { get; set; }
         [NotMapped]
-        public double AverageRating => ((List<OrderItem>) OrderItems)?.Sum(oi => oi.Refund == null ? oi.Quantity : 0) ?? 0;
+        public double AverageRating => Reviews?.Where(rev => !rev.Deleted).Average(rev => rev.Rating) ?? 0;
         [NotMapped]
-        public int QuantitySold => ((List<OrderItem>) OrderItems)?.Sum(oi => oi.Refund == null ? oi.Quantity : 0) ?? 0;
+        public int QuantitySold => OrderItems?.Where(oi => oi.Order.Refund == null).Sum(oi => oi.Quantity) ?? 0;
         [NotMapped]
-        public double TotalEarning => ((List<OrderItem>) OrderItems)?.Sum(oi => oi.Refund == null ? oi.ActualPrice : 0) ?? 0;
+        public double TotalEarning => OrderItems?.Sum(oi => oi.PriceAfterRefund) ?? 0;
         [NotMapped]
         public bool IsOnSale => DiscountedPrice.CompareTo(Price) != 0;
         [NotMapped] public Image MainImage => Images?.DefaultIfEmpty(Consts.Consts.DefaultImage).FirstOrDefault();
