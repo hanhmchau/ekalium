@@ -39,9 +39,27 @@ namespace Kalium.Client.Pages
                 }
                 else
                 {
-                    Console.WriteLine(code);
                     MegaService.UriHelper.NavigateTo($"/{code}");
                 }
+            }
+        }
+
+        protected async Task CancelOrder()
+        {
+            Console.WriteLine("Helloooooo, Hellooooo?");
+            var result = await MegaService.Fetcher.Fetch($"/api/Order/Cancel?id={Order.Id}");
+            var code = result["Code"].ToObject<int>();
+            if (code == 200)
+            {
+                var refundDate = result["RefundDate"].ToObject<DateTime>();
+                var refundRate = result["RefundRate"].ToObject<double>();
+                Order.RefundDate = refundDate;
+                MegaService.Toastr.Success("Order cancelled.");
+                MegaService.Util.HideModal();
+            }
+            else
+            {
+                MegaService.Toastr.Error("Cannot cancel order.");
             }
         }
     }

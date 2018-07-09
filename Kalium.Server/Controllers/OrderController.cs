@@ -51,7 +51,7 @@ namespace Kalium.Server.Controllers
             }
 
             var isAuthorized =
-                await _authorizationService.AuthorizeAsync(HttpContext.User, Consts.Policy.ManageUser.Name());
+                await _authorizationService.AuthorizeAsync(HttpContext.User, Consts.Policy.ManageProducts.Name());
             if (!currentUser.Id.Equals(order.User.Id) && !isAuthorized.Succeeded)
             {
                 return SerializeObject(new
@@ -65,6 +65,41 @@ namespace Kalium.Server.Controllers
             {
                 Code = 200,
                 Order = simpleOrder
+            };
+            return SerializeObject(result);
+        }
+
+        [HttpGet("[action]")]
+        [AuthorizePolicies(Consts.Policy.Checkout)]
+        public async Task<string> Cancel([FromQuery] int id)
+        {
+            if (!await _orderRepository.HasOrderById(id))
+            {
+                return SerializeObject(new
+                {
+                    Code = 404
+                });
+            }
+            var order = await _orderRepository.FindOrderById(id);
+
+            var currentUser = await _identityRepository.GetCurrentUserAsync();
+            var isAuthorized =
+                await _authorizationService.AuthorizeAsync(HttpContext.User, Consts.Policy.ManageProducts.Name());
+            if (!currentUser.Id.Equals(order.User.Id) && !isAuthorized.Succeeded)
+            {
+                return SerializeObject(new
+                {
+                    Code = 403
+                });
+            }
+
+            var refund = await _orderRepository.CancelOrder(order);
+//            refund.Order = null;
+            var result = new
+            {
+                Code = 200,
+                RefundDate = refund.DateRefunded,
+                RefundRate = refund.RefundRate
             };
             return SerializeObject(result);
         }

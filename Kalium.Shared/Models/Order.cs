@@ -32,5 +32,9 @@ namespace Kalium.Shared.Models
         public double PreCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice);
         [NotMapped]
         public double PostCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice) - Coupons?.Sum(c => c?.Reduction) ?? 0;
+
+        [NotMapped]
+        public bool IsCancellable => (Status == (int) Consts.Consts.OrderStatus.Processing ||
+                                     Status == (int) Consts.Consts.OrderStatus.Delivering) && Refund == null;
     }
 }

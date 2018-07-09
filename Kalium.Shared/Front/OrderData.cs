@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using Kalium.Shared.Models;
 
 namespace Kalium.Shared.Front
 {
@@ -25,5 +26,7 @@ namespace Kalium.Shared.Front
         public ICollection<CouponData> Coupons { get; set; }
         public double PreCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice);
         public double PostCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice) - Coupons?.Sum(c => c?.Reduction) ?? 0;
+        public bool IsCancellable => (Status == (int)Consts.Consts.OrderStatus.Processing ||
+                                      Status == (int)Consts.Consts.OrderStatus.Delivering) && RefundDate == null;
     }
 }
