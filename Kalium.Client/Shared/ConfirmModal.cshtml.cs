@@ -18,11 +18,13 @@ namespace Kalium.Client.Shared
         [Parameter]
         protected string Message { get; set; }
         [Parameter]
-        protected Action YesEventHandler { get; set; }
-
-        protected void OnClickYes()
+        protected Func<Task> YesEventHandler { get; set; }
+        protected async Task OnClickYes()
         {
-            YesEventHandler();
+            if (YesEventHandler != null)
+            {
+                await YesEventHandler?.Invoke();
+            }
         }
 
         protected void OnClickNo()

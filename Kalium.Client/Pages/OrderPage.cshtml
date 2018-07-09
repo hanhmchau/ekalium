@@ -5,10 +5,21 @@
 
 @if (Order != null)
 {
-
     <div class="container default-margin post-formatting">
         <div class="woocommerce">
-            <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> and is currently <mark class="order-status">@(((Consts.OrderStatus) Order.Status).Name())</mark>.</p>
+                @if (Order.IsCancellable)
+                {
+                    <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> 
+                        and is currently <mark class="order-status">@(((Consts.OrderStatus)Order.Status).Name())</mark>.
+                        <mark class="button pointer" style="float: right;" onclick="@(() => MegaService.Util.ShowModal("cancel-order"))">Cancel</mark>
+                    </p>
+                }
+                @if (Order.Status == (int) Consts.OrderStatus.Cancelled)
+                {
+                    <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> 
+                        and was <mark class="order-status">@(((Consts.OrderStatus)Order.Status).Name())</mark> on <mark class="order-date">@Order.RefundDate.GetValueOrDefault().ToShortDateString()</mark>.
+                    </p>
+                }
 
             <section class="woocommerce-order-details">
 
@@ -109,30 +120,31 @@
                                 Shipping
                             </th>
                         }
-                        </tr>
+                    </tr>
                     <tbody>
-                    <tr>
-                        <td>
-                            <ul>
-                                <li>Name: @Order.BillingName</li>
-                                <li>Address: @Order.Address</li>
-                                <li>Phone: @Order.PhoneNumber</li>
-                            </ul>
-                        </td>
-                        @if (Order.ShipToDifferentAddress)
-                        {
+                        <tr>
                             <td>
                                 <ul>
-                                    <li>Name: @Order.AlternateName</li>
-                                    <li>Address: @Order.AlternateAddress</li>
-                                    <li>Phone: @Order.AlternatePhone</li>
+                                    <li>Name: @Order.BillingName</li>
+                                    <li>Address: @Order.Address</li>
+                                    <li>Phone: @Order.PhoneNumber</li>
                                 </ul>
                             </td>
-                        }
-                    </tr>
+                            @if (Order.ShipToDifferentAddress)
+                            {
+                                <td>
+                                    <ul>
+                                        <li>Name: @Order.AlternateName</li>
+                                        <li>Address: @Order.AlternateAddress</li>
+                                        <li>Phone: @Order.AlternatePhone</li>
+                                    </ul>
+                                </td>
+                            }
+                        </tr>
                     </tbody>
                 </table>
             </section>
         </div>
     </div>
+    <ConfirmModal Id="cancel-order" Title="Cancel" Message="Do you really want to cancel this order?" YesEventHandler=@((Func<Task>) CancelOrder) />
 }

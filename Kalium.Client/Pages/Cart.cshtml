@@ -481,7 +481,7 @@ else
     </div>
 }
 </div>
-<ConfirmModal Id="clear-cart" Title="Clear" Message="Do you really want to clear your cart?" YesEventHandler=@((Action) ClearCart) />
+<ConfirmModal Id="clear-cart" Title="Clear" Message="Do you really want to clear your cart?" YesEventHandler=@((Func<Task>) ClearCart) />
 @functions {
 
     private ECart ECart { get; set; }
@@ -503,7 +503,7 @@ else
         Util.ShowModal("clear-cart");
     }
 
-    private void ClearCart()
+    private async Task ClearCart()
     {
         ECart.Contents.Clear();
         ECart.Coupons.Clear();
