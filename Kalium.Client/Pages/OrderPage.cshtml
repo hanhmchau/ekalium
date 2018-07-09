@@ -21,78 +21,116 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Order.OrderItems)
-                    {
-                        <tr class="woocommerce-table__line-item order_item">
-                            <td class="woocommerce-table__product-name product-name">
-                                <a href="/product/@item.ProductNameUrl" class="">@item.ProductName</a>
-                                <strong class="product-quantity">× @item.Quantity</strong>
-                                @if (item.Choices != null && item.Choices.Any())
-                                {
-                                    <ul>
-                                        @foreach (var choice in item.Choices)
-                                        {
-                                            <li>@choice.ExtraName: @choice.OptionName</li>
-                                        }
-                                    </ul>
-                                }
-                            </td>
-                            <td class="woocommerce-table__product-total product-total">
-                                <span class="woocommerce-Price-amount amount">
-                                    <span class="woocommerce-Price-currencySymbol">£</span>@item.ActualPrice
-                                </span>
-                            </td>
-                        </tr>
-                    }
+                        @foreach (var item in Order.OrderItems)
+                        {
+                            <tr class="woocommerce-table__line-item order_item">
+                                <td class="woocommerce-table__product-name product-name">
+                                    <a href="/product/@item.ProductNameUrl" class="">@item.ProductName</a>
+                                    <strong class="product-quantity">× @item.Quantity</strong>
+                                    @if (item.Choices != null && item.Choices.Any())
+                                    {
+                                        <ul>
+                                            @foreach (var choice in item.Choices)
+                                            {
+                                                <li>@choice.ExtraName: @choice.OptionName</li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                                <td class="woocommerce-table__product-total product-total">
+                                    <span class="woocommerce-Price-amount amount">
+                                        <span class="woocommerce-Price-currencySymbol">£</span>@item.ActualPrice
+                                    </span>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                     <tfoot>
-                    @if (Order.Coupons != null && Order.Coupons.Any())
-                    {
-                        
+                        @if (Order.Coupons != null && Order.Coupons.Any())
+                        {
+
+                            <tr>
+                                <th scope="row">Subtotal:</th>
+                                <td>
+                                    <span class="woocommerce-Price-amount amount">
+                                        <span class="woocommerce-Price-currencySymbol">£</span>
+                                        @Order.PreCouponTotal
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Coupons:</th>
+                                <td>
+                                    @foreach (var coupon in Order.Coupons)
+                                    {
+                                        <div>
+                                            <span class="woocommerce-Price-amount amount">
+                                                <span class="woocommerce-Price-currencySymbol">£</span>-@coupon.Reduction
+                                            </span>
+                                            <small class="shipped_via">via @coupon.Key</small>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
                         <tr>
-                            <th scope="row">Subtotal:</th>
+                            <th scope="row">Payment method:</th>
+                            <td>
+                                @if (Order.PaymentMethod == (int)Consts.PaymentMethod.CashOnDelivery)
+                                {
+                                    <span>Cash on Delivery</span>
+                                }
+                                else if (Order.PaymentMethod == (int)Consts.PaymentMethod.PayPal)
+                                {
+                                    <span>PayPal</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Total:</th>
                             <td>
                                 <span class="woocommerce-Price-amount amount">
                                     <span class="woocommerce-Price-currencySymbol">£</span>
-                                    @Order.PreCouponTotal
+                                    @Order.PostCouponTotal
                                 </span>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">Coupons:</th>
-                            <td>
-                                @foreach (var coupon in Order.Coupons)
-                                {
-                                    <div>
-                                        <span class="woocommerce-Price-amount amount">
-                                            <span class="woocommerce-Price-currencySymbol">£</span>-@coupon.Reduction
-                                        </span>
-                                        <small class="shipped_via">via @coupon.Key</small>
-                                    </div>
-                                }
-                            </td>
-                        </tr>
-                    }
-                    <tr>
-                        <th scope="row">Payment method:</th>
-                        <td>
-                            @if (Order.PaymentMethod == (int) Consts.PaymentMethod.CashOnDelivery)
-                            {
-                            <span>Cash on Delivery</span>
-                            } else if (Order.PaymentMethod == (int) Consts.PaymentMethod.PayPal)
-                            {
-                            <span>PayPal</span>
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Total:</th>
-                        <td><span class="woocommerce-Price-amount amount">
-                            <span class="woocommerce-Price-currencySymbol">£</span>
-                            @Order.PostCouponTotal
-                        </span></td>
-                    </tr>
                     </tfoot>
+                </table>
+
+
+                <h2 class="woocommerce-order-details__title">Billing and shipping</h2>
+                <table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
+                    <tr>
+                        <th>Billing</th>
+                        @if (Order.ShipToDifferentAddress)
+                        {
+                            <th>
+                                Shipping
+                            </th>
+                        }
+                        </tr>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>Name: @Order.BillingName</li>
+                                <li>Address: @Order.Address</li>
+                                <li>Phone: @Order.PhoneNumber</li>
+                            </ul>
+                        </td>
+                        @if (Order.ShipToDifferentAddress)
+                        {
+                            <td>
+                                <ul>
+                                    <li>Name: @Order.AlternateName</li>
+                                    <li>Address: @Order.AlternateAddress</li>
+                                    <li>Phone: @Order.AlternatePhone</li>
+                                </ul>
+                            </td>
+                        }
+                    </tr>
+                    </tbody>
                 </table>
             </section>
         </div>

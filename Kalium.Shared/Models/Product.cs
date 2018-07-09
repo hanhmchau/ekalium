@@ -42,7 +42,7 @@ namespace Kalium.Shared.Models
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<Auction> Auctions { get; set; }
         [NotMapped]
-        public double AverageRating => Reviews?.Where(rev => !rev.Deleted).Average(rev => rev.Rating) ?? 0;
+        public double AverageRating => Reviews != null && Reviews.Any() ? Reviews.Where(rev => !rev.Deleted).Average(rev => rev.Rating) : 0;
         [NotMapped]
         public int QuantitySold => OrderItems?.Where(oi => oi.Order.Refund == null).Sum(oi => oi.Quantity) ?? 0;
         [NotMapped]

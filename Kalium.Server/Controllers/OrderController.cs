@@ -40,7 +40,6 @@ namespace Kalium.Server.Controllers
         public async Task<string> FindOrder([FromQuery] int id)
         {
             var order = await _orderRepository.FindOrderById(id);
-            var simpleOrder = order.Simplify();
             var currentUser = await _identityRepository.GetCurrentUserAsync();
 
             if (order == null)
@@ -61,6 +60,7 @@ namespace Kalium.Server.Controllers
                 });
             }
 
+            var simpleOrder = order.Simplify();
             var result = new
             {
                 Code = 200,

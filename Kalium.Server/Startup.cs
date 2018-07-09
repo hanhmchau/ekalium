@@ -134,19 +134,19 @@ namespace Kalium.Server
 
             app.UseResponseCaching();
 
-            app.Use(async (context, next) =>
-            {
-                context.Response.GetTypedHeaders().CacheControl =
-                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue
-                    {
-                        Public = true,
-                        MaxAge = TimeSpan.FromSeconds(20)
-                    };
-                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-                    new[] { "Accept-Encoding" };
-
-                await next();
-            });
+//            app.Use(async (context, next) =>
+//            {
+//                context.Response.GetTypedHeaders().CacheControl =
+//                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue
+//                    {
+//                        Public = true,
+//                        MaxAge = TimeSpan.FromSeconds(10)
+//                    };
+//                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+//                    new[] { "Accept-Encoding" };
+//
+//                await next();
+//            });
 
             app.UseMvc(routes =>
             {

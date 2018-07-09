@@ -110,18 +110,16 @@ namespace Kalium.Client.Pages
                 Note
             });
 
-            var jsonToStr = resultObj.ToString();
             var checkoutResult = resultObj["Result"].ToObject<CheckOutResult>();
-            Console.WriteLine(checkoutResult.Succeeded);
             if (checkoutResult.Succeeded)
             {
                 var orderId = checkoutResult.OrderId;
                 MegaService.UriHelper.NavigateTo($"/order/{orderId}");
+                MegaService.LocalStorage["CART"] = null;
             }
             else
             {
                 Messages = checkoutResult.Messages;
-                Console.WriteLine(Messages);
                 StateHasChanged();
             }
         }

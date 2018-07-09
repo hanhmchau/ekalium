@@ -37,6 +37,9 @@
     <Content Update="Pages\SingleProduct.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Shared\ConfirmModal.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Shared\Rating.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -39,6 +39,7 @@ namespace Kalium.Client.Pages
                 }
                 else
                 {
+                    Console.WriteLine(code);
                     MegaService.UriHelper.NavigateTo($"/{code}");
                 }
             }

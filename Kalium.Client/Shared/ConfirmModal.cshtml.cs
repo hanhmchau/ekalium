@@ -11,7 +11,6 @@ namespace Kalium.Client.Shared
     {
         [Inject]
         protected IMegaService MegaService { get; set; }
-
         [Parameter]
         protected string Id { get; set; }
         [Parameter]
