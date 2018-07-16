@@ -466,6 +466,7 @@ protected override async Task OnInitAsync()
 {
     CurrentUser = await Http.GetJsonAsync<User>("/api/Identity/GetCurrentUser/");
     IsLoggedIn = await Http.GetJsonAsync<bool>("/api/Identity/IsLoggedIn/");
+    RegisteredFunction.Invoke<bool>("removeCss", "metronic");
 }
 
 private void ShowContextMenu(string id)

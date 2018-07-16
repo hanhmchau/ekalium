@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27705.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Server", "Kalium.Server\Kalium.Server.csproj", "{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalium.Server", "Kalium.Server\Kalium.Server.csproj", "{CF63F317-D90E-4ADD-9CD2-C0ACBE19D8EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Client", "Kalium.Client\Kalium.Client.csproj", "{C34AE985-A088-4237-9C23-6BB91953D4E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalium.Client", "Kalium.Client\Kalium.Client.csproj", "{C34AE985-A088-4237-9C23-6BB91953D4E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalium.Shared", "Kalium.Shared\Kalium.Shared.csproj", "{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalium.Shared", "Kalium.Shared\Kalium.Shared.csproj", "{FDC5FD79-CE46-46C1-B8E3-3DD25A0163EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

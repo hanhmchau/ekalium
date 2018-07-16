@@ -44,7 +44,7 @@
         }
         else
         {
-            if (ValidatorUtils.IsValidEmail(Email))
+            if (!ValidatorUtils.IsValidEmail(Email))
             {
                 <div class="text-red">Invalid email.</div>
             }
