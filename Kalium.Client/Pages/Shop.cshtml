@@ -1,6 +1,9 @@
-﻿@using Microsoft.AspNetCore.Blazor.Browser.Interop
+﻿@using System.Net
+@using Kalium.Client.Extensions
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Kalium.Shared.Models
 @using Kalium.Shared.Consts
+@using Microsoft.AspNetCore.Blazor.Components
 @using Microsoft.EntityFrameworkCore
 @using MoreLinq
 @using Newtonsoft.Json
@@ -8,6 +11,7 @@
 @page "/shop/{CategoryName}"
 @page "/shop"
 @inject HttpClient Http
+@inject IUtil MyUtil
 
 <div id="primary" class="container content-area">
     <main id="main" class="site-main" role="main">
@@ -181,7 +185,7 @@
                                 <div class="price_slider_amount">
                                     <input id="min-price" style="visibility: hidden;" value="@MinPrice" onclick="@UpdatePriceRange" />
                                     <input id="max-price" style="visibility: hidden;" value="@MaxPrice" onclick="@UpdatePriceRange" />
-                                    <button type="submit" class="button" onclick="@ResetPriceRange">Reset</button>
+                                    <button type="button" class="button" onclick="@ResetPriceRange">Reset</button>
                                     <div class="price_label" style="">
                                         @if (MinPrice != -1 && MaxPrice != -1)
                                         {
@@ -398,7 +402,8 @@
             MaxPrice,
             ChosenOrigins,
             ChosenMaterials,
-            ChosenBrands
+            ChosenBrands,
+            IncludeHidden = false
         });
 
         string productJson = data["Products"].ToString();
@@ -449,6 +454,7 @@
         await LoadCategories();
         await LoadAttributes();
         Loaded = true;
+        MyUtil.InitializeSignalR();
     }
 
     private async Task<JObject> Fetch(string url)
