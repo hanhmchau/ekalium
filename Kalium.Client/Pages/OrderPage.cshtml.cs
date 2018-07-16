@@ -22,9 +22,10 @@ namespace Kalium.Client.Pages
 
         protected override async Task OnInitAsync()
         {
-            var user = MegaService.AccountService.GetCurrentUser();
+            var user = await MegaService.AccountService.GetCurrentUser();
             if (user == null)
             {
+                MegaService.Util.Checkpoint($"/order/{OrderId}");
                 MegaService.UriHelper.NavigateTo("/login");
                 return;
             }
@@ -36,6 +37,10 @@ namespace Kalium.Client.Pages
                 if (code == 200)
                 {
                     Order = orderJson["Order"].ToObject<OrderData>();
+                    if (!Order.UserId.Equals(user.Id))
+                    {
+                        MegaService.Util.NavigateToForbidden();
+                    }
                 }
                 else
                 {
