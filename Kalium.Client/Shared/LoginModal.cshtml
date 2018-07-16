@@ -97,10 +97,17 @@
                     Password,
                     RememberMe
                 }));
-                GeneralError = false;
-                CurrentUser = result as User;
-                OnUpdateCurrentUser.Invoke(CurrentUser);
-                HideModal();
+                if (result != null)
+                {
+                    GeneralError = false;
+                    CurrentUser = result as User;
+                    OnUpdateCurrentUser.Invoke(CurrentUser);
+                    HideModal();
+                }
+                else
+                {
+                    GeneralError = true;
+                }
             }
             catch (Exception)
             {
