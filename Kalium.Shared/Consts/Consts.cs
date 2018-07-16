@@ -12,7 +12,7 @@ namespace Kalium.Shared.Consts
     public static class ValidatorUtils
     {
         public static bool IsValidEmail(string email) => email != null && Regex.IsMatch(email,
-            @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
+            @"\A(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
             RegexOptions.IgnoreCase);
 
         public static bool IsValidPhone(string phone) => phone != null && Regex.IsMatch(phone, @"^(\+[0-9]{8-14})$");
@@ -33,6 +33,15 @@ namespace Kalium.Shared.Consts
 
     public class Consts
     {
+        public enum Prefix
+        {
+
+        }
+        public enum Folder
+        {
+            Product,
+            User
+        }
         public const int PageSize = 9;
         public const int AttributeTop = 3;
 
