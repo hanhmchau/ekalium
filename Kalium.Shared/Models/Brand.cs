@@ -18,6 +18,6 @@ namespace Kalium.Shared.Models
         [NotMapped]
         public double TotalEarning => Products?.Sum(p => p.TotalEarning) ?? 0;
         [NotMapped]
-        public double AverageRating => Products?.Average(p => p.AverageRating) ?? 0;
+        public double AverageRating => Products != null && Products.Any() ? Products.Average(p => p.AverageRating) : 0;
     }
 }
