@@ -25,6 +25,7 @@ namespace Kalium.Client
                 services.AddTransient<IHttpApiClientRequestBuilderFactory, HttpApiClientRequestBuilderFactory>();
                 services.AddSingleton<IAccountService, AccountService>();
                 services.AddSingleton<IMegaService, MegaService>();
+                services.AddSingleton<ISweetAlert, SweetAlert>();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");
