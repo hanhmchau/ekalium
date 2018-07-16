@@ -1,0 +1,507 @@
+﻿@page "/admin/product/{ProductUrl}"
+
+@using Kalium.Client.AdminWide
+@using Kalium.Shared.Consts
+@using Kalium.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@inherits UpdateProductModel
+
+<div class="container-fluid">
+    <div class="page-title">
+        <h4></h4>
+    </div>
+    @if (Product != null)
+    {
+    <form method="post" id="shipping-form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="row border bottom">
+                        <div class="col-md-6">
+                            <div class="card-heading">
+                                <h4 class="card-title">@Product.Name</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-heading float-right">
+                                <a href="/product/@Product.NameUrl">
+                                    View product
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block">
+                        <div class="tab-info">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item active">
+                                    <a data-target="#default-tab-info" class="cursor-pointer nav-link active" role="tab" data-toggle="tab">Info</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-target="#default-tab-image" class="cursor-pointer nav-link" role="tab" data-toggle="tab">Image</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-target="#default-tab-extra" class="cursor-pointer nav-link" role="tab" data-toggle="tab">Extra</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-target="#default-tab-coupon" class="cursor-pointer nav-link" role="tab" data-toggle="tab">Coupon</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="default-tab-info">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <div class="row">
+                                            <div class="col-md-10 ml-auto mr-auto">
+                                                <div class="row">
+                                                    <div class="col-md-10 mr-auto ml-auto">
+                                                        <div class="row mb-md-4">
+                                                            <div class="col-md-3">
+                                                                <div class="toggle-checkbox toggle-success checkbox-inline">
+                                                                    <input name="status" id="toggle4" bind="@IsPublic" type="checkbox" />
+                                                                    <label for="toggle4">
+                                                                    </label>
+                                                                    @if (IsPublic)
+                                                                    {
+                                                                        <span class="badge badge-success badge-in-checkbox">Public</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="badge badge-secondary badge-in-checkbox">Hidden</span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="toggle-checkbox toggle-warning checkbox-inline">
+                                                                    <input name="featured" id="toggl" bind="@Product.Featured" type="checkbox" />
+                                                                    <label for="toggl">
+                                                                    </label>
+                                                                    @if (Product.Featured)
+                                                                    {
+                                                                        <span class="badge badge-warning badge-in-checkbox">Featured</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="badge badge-secondary badge-in-checkbox">Not featured</span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-10 ml-auto mr-auto">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Name <small class="text-normal">*Minimum 5 characters</small></label>
+                                                                    <input class="form-control" bind="@Product.Name" name="name" placeholder="Enter the product's name" required="" data-rule-minlength="5" aria-required="true" type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    @if (Categories.Any())
+                                                                    {
+                                                                        <label>Category</label>
+                                                                        <select name="category_dropdown" class="selectize no-create" placeholder="Select a category..." id="selectize-category" bind="@Category">
+                                                                            @foreach (var category in Categories)
+                                                                            {
+                                                                                <option value="@category.Id">@category.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    @if (Brands.Any())
+                                                                    {
+                                                                        <label>Brand</label>
+                                                                        <select name="brand_dropdown" class="selectize no-create" placeholder="Select a brand..." id="selectize-brand" bind="@Brand">
+                                                                            @foreach (var brand in Brands)
+                                                                            {
+                                                                                <option value="@brand.Id">@brand.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Price</label>
+                                                                    <input id="real-price" bind="@Product.Price" class="form-control" name="price" placeholder="Insert a valid price" data-rule-number=""
+                                                                           data-rule-min="1" required="" aria-required="true" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Quantity</label>
+                                                                    <input id="quantity" bind="@Product.Quantity" class="form-control" name="quantity" placeholder="Insert a valid quantity" data-rule-number=""
+                                                                           data-rule-min="1" required="" aria-required="true" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Discount</label>
+                                                                    <div class="toggle-checkbox checkbox-inline" style="margin-left: 20px; transform: translateY(40%)">
+                                                                        <input name="toggle-discount" id="toggle-discount" type="checkbox" bind="@HasDiscount" />
+                                                                        <label for="toggle-discount"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @if (HasDiscount)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Discounted price</label>
+                                                                        <input id="discount-price" bind="@DiscountedPrice" class="form-control" name="discounted_price"
+                                                                               placeholder="Insert a valid price" data-rule-number="" data-rule-discounted="true" data-rule-min="1" required="" aria-required="true" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-10 mr-auto ml-auto">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Origin</label>
+                                                                    <input id="origin" bind="@Product.Origin" class="form-control error" name="origin"
+                                                                           aria-required="true" aria-invalid="true" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Material</label>
+                                                                    <input id="material" bind="@Product.Material" class="form-control error" name="material"
+                                                                           aria-required="true" type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Process</label>
+                                                                    <input id="process" bind="@Product.Process" class="form-control error" name="material"
+                                                                           aria-required="true" aria-invalid="true" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label>Format</label>
+                                                                    <input id="format" bind="@Product.Format" class="form-control error" name="format"
+                                                                           aria-required="true" type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Features</label>
+                                                                    <textarea name="features" class="form-control" bind="@Product.Features" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Descriptions</label>
+                                                                    <textarea name="description" class="form-control" bind="@Product.Description" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="default-tab-image">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <div class="row">
+                                            <div class="col-md-10 ml-auto mr-auto">
+                                                <div class="row mb-md-5" id="image-holder">
+                                                    @if (Product.Images != null && Product.Images.Any())
+                                                    {
+                                                        foreach (var image in Product.Images)
+                                                        {
+                                                            <div class="col-md-3">
+                                                                <a class="btn btn-default btn-icon btn-rounded d-block position-absolute" onclick="@(async () => await DeleteImage(image))"
+                                                                   style="right: 0; top: 0; transform: translateX(25%) translateY(-40%); padding: 10px 13px;">
+                                                                    <i class="ti-trash"></i>
+                                                                </a>
+                                                                <img src="@image.Url" class="img-thumbnail"/>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="row">
+                                                    <a class="cursor-pointer btn btn-default trigger-upload" data-target="#product-image">
+                                                        <i class="ti-image pdd-right-5"></i>
+                                                        <span>Upload</span>
+                                                    </a>
+                                                    <input id="product-image" data-id="@Product.Id" class="d-none" type="file" multiple="multiple" accept=".png,.jpg,.jpeg" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="default-tab-extra">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <div class="row">
+                                            <div class="col-md-8 mr-auto ml-auto">
+                                                @if (Product.Extras != null && Product.Extras.Any())
+                                                {
+                                                    foreach (var extra in Product.Extras)
+                                                    {
+                                                        if (!extra.Deleted)
+                                                        {
+
+                                                            <div id="extra_optional_@extra.Id" class="extra-row row mb-md-4">
+                                                                <div class="col-md-4">
+                                                                    <input class="extra-name form-control border-top-0 border-left-0 border-right-0 "
+                                                                           name="extra-name-@extra.Id" bind="@extra.Name" data-rule-options="2" required="" />
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="checkbox float-right">
+                                                                        <input class="input-sm" name="extra-optional-@extra.Id" id="extra-optional-@extra.Id" bind="@extra.Optional" type="checkbox" />
+                                                                        <label for="extra-optional-@extra.Id">Optional</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <a class="btn btn-default btn-icon cursor-pointer float-right" onclick="@(async () => { await SaveExtra(extra);})">
+                                                                        <i class="ti-save"></i>
+                                                                    </a>
+                                                                    <a class="btn btn-default btn-icon cursor-pointer float-right" onclick="@(async () => { await RemoveExtra(extra);})">
+                                                                        <i class="ti-trash"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="option-container row mb-md-5">
+                                                                <div class="col-md-10 offset-md-2">
+                                                                    @if (extra.Options != null)
+                                                                    {
+                                                                        foreach (var opt in extra.Options)
+                                                                        {
+                                                                            if (!opt.Deleted)
+                                                                            {
+                                                                                <div class="row option">
+                                                                                    <div class="col-md-1">
+                                                                                        @if (extra.Options.Count > 2) {
+                                                                                        <a class="btn btn-default btn-icon cursor-pointer border-0" onclick="@(() =>
+                                                                                                                                                           {
+                                                                                                                                                               opt.Deleted = true;
+                                                                                                                                                               StateHasChanged();
+                                                                                                                                                           })">
+                                                                                            <i class="ti-close"></i>
+                                                                                        </a>
+                                                                                        }
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <input class="form-control border-top-0 border-left-0 border-right-0" name="option-name-@opt.Id"
+                                                                                               bind="@opt.Name" placeholder="Option name" type="text" required />
+                                                                                    </div>
+                                                                                    <div class="col-md-2">
+                                                                                        <div class="">
+                                                                                            <div class="input-icon form-group">
+                                                                                                <i class="ti-money"></i>
+                                                                                                <input class="form-control m-b border-top-0 border-left-0 border-right-0" name="option-price-@opt.Id"
+                                                                                                       bind="@opt.Price" placeholder="Price" required="" data-rule-number="" data-rule-min="1" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    <div class="row">
+                                                                        <div class="col-md-3">
+                                                                            <a class="cursor-pointer btn btn-default" onclick="@(() => { extra.Options.Add(new Option()); })">
+                                                                                <i class="ti-plus pdd-right-5"></i>
+                                                                                <span>New</span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                                @if (Product.Extras == null || Product.Extras.All(e => e.Id != 0))
+                                                {
+                                                    <div class="row">
+                                                        <a class="cursor-pointer btn btn-default" onclick="@(() => AddExtra())">
+                                                            <i class="ti-plus pdd-right-5"></i>
+                                                            <span>New</span>
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="default-tab-coupon">
+                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                        <div class="row">
+                                            <div class="col-md-10 mr-auto ml-auto">
+                                                @if (Product.Coupons != null && Product.Coupons.Any(c => !c.Deleted) || NewCoupon != null)
+                                                {
+                                                <table class="table">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Reduction</th>
+                                                        <th>Quantity Remaining</th>
+                                                        <th>Expiration Date</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                    @foreach (var coupon in Product.Coupons ?? new List<Coupon>())
+                                                    {
+                                                        if (!coupon.Deleted)
+                                                         {
+                                                             <tr>
+                                                                 <td>
+                                                                     @coupon.Key
+                                                                 </td>
+                                                                 <td>
+                                                                     @coupon.Reduction
+                                                                 </td>
+                                                                 <td>
+                                                                     @if (coupon.Type == (int)Consts.CouponType.Quantity)
+                                                                     {
+                                                                         @coupon.Quantity
+                                                                     }
+                                                                 </td>
+                                                                 <td>
+                                                                     @if (coupon.Type == (int)Consts.CouponType.Date)
+                                                                     {
+                                                                         @coupon.DateExpired?.ToShortDateString()
+                                                                     }
+                                                                 </td>
+                                                                 <td>
+                                                                     <a class="cursor-pointer btn btn-default btn-icon btn-rounded" onclick="@(() => RemoveCoupons(coupon))">
+                                                                         <i class="ti-trash"></i>
+                                                                     </a>
+                                                                 </td>
+                                                             </tr>
+                                                         }
+                                                    }
+                                                    @if (NewCoupon != null)
+                                                    {
+                                                        <tr>
+                                                            <td class="pl-md-0">
+                                                                <input id="new-coupon-key" name="new-coupon-key" class="form-control input-lg border-top-0 border-left-0 border-right-0" placeholder="Key"
+                                                                       bind="@NewCoupon.Key" required />
+                                                            </td>
+                                                            <td>
+                                                                <input id="new-coupon-price" name="new-coupon-reduction" class="form-control input-lg border-top-0 border-left-0 border-right-0"
+                                                                       bind="@NewCoupon.Reduction" data-rule-number="" data-rule-max="@Product.DiscountedPrice" data-rule-min="1" 
+                                                                       placeholder="Reduction" required />
+                                                            </td>
+                                                            <td>
+                                                                <div class="radio">
+                                                                    <input name="new-coupon-type" type="radio" id="new-coupon-qty" onchange="@(e =>
+                                                                                                                                                       {NewCoupon.Type = (int) Consts.CouponType.Quantity;
+                                                                                                                                                       })" />
+                                                                    <label for="new-coupon-qty">Quantity</label>
+                                                                </div>
+                                                                @if (NewCoupon.Type == (int) Consts.CouponType.Quantity)
+                                                                {
+                                                                    <div class="input-icon form-group">
+                                                                        <i class="ti-agenda"></i>
+                                                                        <input id="new-coupon-quantity" name="new-coupon-key" class="input-lg form-control border-top-0 border-left-0 border-right-0"
+                                                                               bind="@NewCoupon.Quantity" data-rule-number="" data-rule-min="1" placeholder="Quantity" required />
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <div class="radio">
+                                                                    <input name="new-coupon-type" type="radio" checked id="new-coupon-type-date" onchange="@(e =>
+                                                                                                                                                {NewCoupon.Type = (int) Consts.CouponType.Date;
+                                                                                                                                                    RegisteredFunction.Invoke<bool>("initCouponDatepicker");
+                                                                                                                                                })" />
+                                                                    <label for="new-coupon-type-date">Date</label>
+                                                                </div>
+                                                                @if (NewCoupon.Type == (int) Consts.CouponType.Date)
+                                                                {
+                                                                    <div class="timepicker-input input-icon form-group">
+                                                                        <i class="ti-time"></i>
+                                                                        <input id="new-coupon-date" class="form-control input-lg border-top-0 border-left-0 border-right-0 coupon-datepicker"
+                                                                               placeholder="Expiring date" data-provide="datepicker" type="text" required />
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <a class="cursor-pointer btn btn-default btn-icon btn-rounded" onclick="@(() =>
+                                                                                                                                            {
+                                                                                                                                                NewCoupon = null;
+                                                                                                                                                StateHasChanged();
+                                                                                                                                            })" >
+                                                                    <i class="ti-trash"></i>
+                                                                </a>
+                                                                <a class="cursor-pointer btn btn-default btn-icon btn-rounded" onclick="@(() => AddNewCoupon())" >
+                                                                    <i class="ti-check"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                                }
+                                                @if (NewCoupon == null)
+                                                {
+                                                    <div class="row">
+                                                        <a class="cursor-pointer btn btn-default" onclick="@(() =>
+            {
+                NewCoupon = new Coupon();
+                RegisteredFunction.Invoke<bool>("initCouponDatepicker");
+                StateHasChanged();
+            })">
+                                                            <i class="ti-plus pdd-right-5"></i>
+                                                            <span>New</span>
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    }
+</div>
+
+<div class="modal fade" id="create-success">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <img class="img-responsive mrg-horizon-auto mrg-vertical-25" src="assets/images/others/img-1.jpg" alt="">
+                    <h3>Created</h3>
+                    <p>@Name</p>
+                </div>
+            </div>
+            <button data-dismiss="modal" class="btn btn-primary btn-block no-mrg no-border pdd-vertical-15 ng-scope">
+                <span class="text-uppercase">We'll be redirecting you...</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Save Button START -->
+<button class="theme-toggle btn btn-rounded btn-icon" onclick="@UpdateProduct">
+    <i class="ti-save"></i>
+</button>
+<!-- Save Button END -->
