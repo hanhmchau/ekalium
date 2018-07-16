@@ -1,0 +1,194 @@
+﻿@page "/admin/edit"
+@using Kalium.Client.Admin
+@layout AdminWideLayout
+@inherits CreateProductModel
+
+<div class="container-fluid">
+    <div class="page-title">
+        <h4>New product</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <div class="row relative">
+                        <form id="shipping-form" class="width-100" method="get">
+                            <div id="rootwizard" class="form-wizard col-md-10 ml-auto mr-auto">
+                                <ul class="nav nav-pills nav-fill">
+                                    <li class="nav-item">
+                                        <a href="#step1" data-toggle="tab">
+                                            <span class="step">1</span>
+                                            <span class="title">Basic Information</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#step2" data-toggle="tab">
+                                            <span class="step">2</span>
+                                            <span class="title">Descriptions</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div id="bar" class="progress progress-info" style="width: 75%">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                </div>
+                                <div class="tab-content">
+                                    <div id="step1" class="tab-pane fade in active create-tab">
+                                        <div class="row">
+                                            <div class="col-md-10 ml-auto mr-auto">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Name <small class="text-normal">*Minimum 5 characters</small></label>
+                                                            <input class="form-control" bind="@Name" name="name" placeholder="Enter your name" required="" data-rule-minlength="5" aria-required="true" type="text" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @if (Categories.Any())
+                                                            {
+                                                                <label>Category</label>
+                                                                <select name="category_dropdown" class="selectize no-create" placeholder="Select a category..." id="selectize-category" bind="@Category">
+                                                                    @* <option value="-1" disabled selected>Select a category...</option> *@
+                                                                    @foreach (var category in Categories)
+                                                                    {
+                                                                        <option value="@category.Id">@category.Name</option>
+                                                                    }
+                                                                </select>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @if (Brands.Any())
+                                                            {
+                                                                <label>Brand</label>
+                                                                <select name="brand_dropdown" class="selectize no-create" placeholder="Select a brand..." id="selectize-brand" bind="@Brand">
+                                                                    @* <option value="-1" disabled selected>Select a brand...</option> *@
+                                                                    @foreach (var brand in Brands)
+                                                                    {
+                                                                        <option value="@brand.Id">@brand.Name</option>
+                                                                    }
+                                                                </select>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Price</label>
+                                                            <input id="real-price" bind="@Price" class="form-control" name="price" placeholder="Insert a valid price" data-rule-number=""
+                                                                   data-rule-min="1" required="" aria-required="true" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Quantity</label>
+                                                            <input id="quantity" bind="@Quantity" class="form-control" name="quantity" placeholder="Insert a valid quantity" data-rule-number=""
+                                                                   data-rule-min="1" required="" aria-required="true" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Discount</label>
+                                                            <div class="toggle-checkbox checkbox-inline" style="margin-left: 20px; transform: translateY(40%)">
+                                                                <input name="toggle-discount" id="toggle-discount" type="checkbox" bind="@HasDiscount" />
+                                                                <label for="toggle-discount"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if (HasDiscount)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label>Discounted price</label>
+                                                                <input id="discount-price" bind="@DiscountedPrice" class="form-control" name="discounted_price"
+                                                                       placeholder="Insert a valid price" data-rule-number="" data-rule-discounted="true" data-rule-min="1" required="" aria-required="true" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                @* <button class="btn btn-primary">Submit</button> *@
+                                                @* <button class="btn btn-default">Clear</button> *@
+    </div>
+                                        </div>
+                                    </div>
+                                    <div id="step2" class="tab-pane fade create-tab">
+                                        <div class="row">
+                                            <div class="col-md-10 mr-auto ml-auto">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Origin</label>
+                                                            <input id="origin" bind="@Origin" class="form-control error" name="origin"
+                                                                   aria-required="true" aria-invalid="true" type="text" />
+                                                            <label id="firstName-error" class="error" for="origin">This field is required.</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Material</label>
+                                                            <input id="material" bind="@Material" class="form-control error" name="material"
+                                                                   aria-required="true" type="text" />
+                                                            <label id="lastName-error" class="error" for="material">This field is required.</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Features</label>
+                                                            <textarea name="features" class="form-control" bind="@Features" rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Descriptions</label>
+                                                            <textarea name="description" class="form-control" bind="@Description" rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wizard-pager wizard pager">
+                                        <div class="">
+                                            <button type="button" class="btn btn-default button-previous btn-rounded">Previous</button>
+                                            <button type="button" class="btn btn-primary button-next pull-right btn-rounded">Next</button>
+                                            <button type="button" class="btn btn-warning button-finish pull-right btn-rounded" onclick="@Create">Finish</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="create-success">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <img class="img-responsive mrg-horizon-auto mrg-vertical-25" src="assets/images/others/img-1.jpg" alt="">
+                    <h3>Created</h3>
+                    <p>@Name</p>
+                </div>
+            </div>
+            <button data-dismiss="modal" class="btn btn-primary btn-block no-mrg no-border pdd-vertical-15 ng-scope">
+                <span class="text-uppercase">We'll be redirecting you...</span>
+            </button>
+        </div>
+    </div>
+</div>
