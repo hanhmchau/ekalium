@@ -60,5 +60,6 @@ namespace Kalium.Server.Context
         public DbSet<Refund> Refund { get; set; }
         public DbSet<Review> Review { get; set; }
         public DbSet<Brand> Brand { get; set; }
+        public DbSet<Option> Option { get; set; }
     }
 }
