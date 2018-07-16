@@ -11,8 +11,8 @@ namespace Kalium.Server.HubR
 {
     public interface IProductHub
     {
-        Task AnnounceAdd(Product product);
-        Task AnnounceUpdate(Product product);
+        Task AnnounceAdd();
+        Task AnnounceUpdate(int id);
         Task AnnounceDelete(Product product);
         Task SendMessage(string user, string message);
     }
@@ -40,14 +40,19 @@ namespace Kalium.Server.HubR
             await _context.Clients.All.SendAsync(method.ToString().ToLower(), productJson);
         }
 
-        public async Task AnnounceAdd(Product product)
+        private async Task Send(Consts.HubActivity method, int productId)
         {
-            await Send(Consts.HubActivity.AddProduct, product);
+            await _context.Clients.All.SendAsync(method.ToString().ToLower(), productId);
         }
 
-        public async Task AnnounceUpdate(Product product)
+        public async Task AnnounceAdd()
         {
-            await Send(Consts.HubActivity.UpdateProduct, product);
+            await Send(Consts.HubActivity.AddProduct);
+        }
+
+        public async Task AnnounceUpdate(int id)
+        {
+            await Send(Consts.HubActivity.UpdateProduct, id);
         }
         public async Task AnnounceDelete(Product product)
         {
