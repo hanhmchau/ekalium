@@ -1,0 +1,27 @@
+﻿@using Kalium.Client.Shared
+@using System.Net
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Newtonsoft.Json
+@using Kalium.Shared.Models
+@using Microsoft.AspNetCore.Blazor.Components
+
+@inherits ConfirmModalModel
+
+<div class="modal fade" id="@Id" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>@Title</h4>
+            </div>
+            <div class="modal-body">
+                @Message
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" data-dismiss="modal" onclick="@OnClickYes">OK</button>
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" onclick="@OnClickNo">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
