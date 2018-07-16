@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
 using Kalium.Server.HubR;
@@ -78,9 +79,9 @@ namespace Kalium.Server
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(Consts.Policy.ManageProducts.Name(), policy => policy.RequireClaim("ProductManager"));
-                options.AddPolicy(Consts.Policy.ManageSocial.Name(), policy => policy.RequireClaim("SocialManager"));
-                options.AddPolicy(Consts.Policy.ManageUser.Name(), policy => policy.RequireClaim("UserManager"));
+                options.AddPolicy(Consts.Policy.ManageProducts.Name(), policy => policy.RequireClaim(ClaimTypes.Name, "ProductManager"));
+                options.AddPolicy(Consts.Policy.ManageSocial.Name(), policy => policy.RequireClaim(ClaimTypes.Name, "SocialManager"));
+                options.AddPolicy(Consts.Policy.ManageUser.Name(), policy => policy.RequireClaim(ClaimTypes.Name, "UserManager"));
                 options.AddPolicy(Consts.Policy.Checkout.Name(), policy => policy.RequireAuthenticatedUser());
                 options.AddPolicy(Consts.Policy.Auction.Name(), policy => policy.RequireAuthenticatedUser());
             });
@@ -98,6 +99,7 @@ namespace Kalium.Server
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICheckoutRepository, CheckoutRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
 
             services.AddTransient<IProductHub, ProductHub>();
             services.AddTransient<IFetcher, Fetcher>();
@@ -117,6 +119,7 @@ namespace Kalium.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseStaticFiles();
             app.UseResponseCompression();
 
             if (env.IsDevelopment())

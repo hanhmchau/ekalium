@@ -14,6 +14,8 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
+using Kalium.Shared.Consts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kalium.Server.Controllers
 {
@@ -21,10 +23,12 @@ namespace Kalium.Server.Controllers
     public class IdentityController : Controller
     {
         private readonly IIdentityRepository _identityRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public IdentityController(IIdentityRepository identityRepository)
+        public IdentityController(IIdentityRepository identityRepository, IAuthorizationService authorizationService)
         {
             this._identityRepository = identityRepository;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
@@ -79,6 +83,19 @@ namespace Kalium.Server.Controllers
         {
             var user = await _identityRepository.GetCurrentUserAsync();
             return Json(user);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<bool> IsUserAuthorized([FromQuery] int policy)
+        {
+            if (HttpContext.User == null)
+            {
+                return false;
+            }
+
+            var policyName = ((Consts.Policy) policy).Name();
+            var result = await _authorizationService.AuthorizeAsync(HttpContext.User, null, policyName);
+            return result.Succeeded;
         }
 
         [HttpGet("[action]")]
