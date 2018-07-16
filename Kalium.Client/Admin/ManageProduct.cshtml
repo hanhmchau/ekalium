@@ -1,0 +1,157 @@
+﻿@page "/admin/manage-product"
+@using Kalium.Client.Admin
+@using Kalium.Shared.Consts
+@inherits ManageProductModel
+
+<div class="container-fluid">
+    <div class="page-title">
+        <h4>Product</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block dataTables_wrapper">
+                    <div class="dataTables_length d-inline-block" id="dt-opt_length">
+                        <label>
+                            Category:
+                            <select name="dt-opt_length" aria-controls="dt-opt" onchange="@(async e =>
+                                                                                            {
+                                                                                                CategoryName = e.Value.ToString();
+                                                                                                await ResetProduct();
+                                                                                            })">
+                                <option selected value="-1">All</option>
+                                @foreach (var cat in Categories)
+                                {
+                                    <option value="@cat.Name">@cat.Name</option>
+                                }
+                            </select>
+                        </label>
+                    </div>
+                    <div class="dataTables_length d-inline-block">
+                        <label>
+                            Sort:
+                            <select name="dt-opt_length" aria-controls="dt-opt" onchange="@(async e =>
+                                                                                            {
+                                                                                                await ChangeSortType((Consts.SortType) int.Parse(e.Value.ToString()));
+                                                                                            })">
+                                <option value="@((int) Consts.SortType.Newness)"><a>Newest first</a></option>
+                                <option value="@((int) Consts.SortType.Popularity)"><a>Most popular first</a></option>
+                                <option value="@((int) Consts.SortType.Rating)"><a>Highest rating first</a></option>
+                                <option value="@((int) Consts.SortType.Price)"><a>Cheapest</a></option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="dt-opt_filter" class="dataTables_filter d-inline-block float-right">
+                        <label>
+                            Search:
+                            <input class="" placeholder="" aria-controls="dt-opt" type="search">
+                        </label>
+                    </div>
+                    @if (Products != null && Products.Any())
+                    {
+                        <div class="table-overflow">
+                            <table id="dt-opt" class="table table-lg table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Price</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Products)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="list-info mrg-top-10">
+                                                    <img class="thumb-img" src="@product.MainImage?.Url" alt="">
+                                                    <div class="info">
+                                                        <span class="title">@product.Name</span>
+                                                        <span class="sub-title">ID @product.Id</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="relative mrg-top-15">
+                                                    @if (product.Status == (int)Consts.Status.Public)
+                                                    {
+                                                        <span class="status online"> </span>
+                                                        <span class="pdd-left-20">Public</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="status away"> </span>
+                                                        <span class="pdd-left-20">Hidden</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mrg-top-15">
+                                                    <span class="text-info"><b>@product.Category.Name</b></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mrg-top-15">
+                                                    <span>@product.Brand.Name</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mrg-top-15">
+                                                    <b class="text-dark font-size-16">$@product.DiscountedPrice</b>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mrg-top-10 text-center">
+                                                    <a class="btn btn-icon btn-flat btn-rounded dropdown-toggle" href="/admin/product/@product.NameUrl">
+                                                        <i class="ti-pencil-alt"></i>
+                                                    </a>
+                                                    <button class="btn btn-icon btn-flat btn-rounded dropdown-toggle" data-toggle="modal" data-target="#delete-product" onclick="@(() => ToDelete = product)">
+                                                        <i class="ti-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="dataTables_info" id="dt-opt_info" role="status" aria-live="polite">Showing @Begin to @End of @Total entries</div>
+                            @if (TotalPage > 1)
+                            {
+                                <div class="dataTables_paginate paging_simple_numbers text-right" id="dt-opt_paginate">
+                                    <a class="paginate_button previous @(Page == 1 ? "disabled" : "")" onclick="@(async () => { await ChangePage(Page - 1);})"
+                                       aria-controls="dt-opt" data-dt-idx="0" tabindex="0" id="dt-opt_previous">
+                                        Previous
+                                    </a>
+                                    <span>
+                                        @foreach (var i in Enumerable.Range(1, TotalPage))
+                                        {
+                                            <a class="paginate_button @(i == Page ? "current" : "")" value="@i" onclick="@(async () =>
+                                                                                                                       {
+                                                                                                                           var currentIndex = i;
+                                                                                                                           await ChangePage(currentIndex);
+                                                                                                                       })"
+                                               aria-controls="dt-opt" data-dt-idx="1" tabindex="0">
+                                                @i
+                                            </a>
+                                        }
+                                    </span>
+                                    <a class="paginate_button next @(Page == TotalPage ? "disabled" : "")" onclick="@(async () => { await ChangePage(Page + 1);})"
+                                       aria-controls="dt-opt" data-dt-idx="3" tabindex="0" id="dt-opt_next">
+                                        Next
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="brand-modifier" class="d-none" onclick="@LoadProducts"></div>
+
+<AdminConfirmModal Id="delete-product" Title="Delete" Message="Do you really want to delete this product?" YesEventHandler=@((Func<Task>) Delete)></AdminConfirmModal>
