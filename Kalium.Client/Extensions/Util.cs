@@ -17,6 +17,13 @@ namespace Kalium.Client.Extensions
         void Return();
         void Checkpoint(string checkpoint);
         void InitComponents();
+        void InitAdminComponents();
+        T GetInput<T>(string selector);
+        void InitializeSignalR();
+        void NavigateToForbidden();
+        void NavigateToNotFound();
+        void RefreshShop();
+        void AnnounceUpdateProduct(int id);
     }
 
     public class Util : IUtil
@@ -63,6 +70,42 @@ namespace Kalium.Client.Extensions
         public void InitComponents()
         {
             RegisteredFunction.Invoke<bool>("components");
+        }
+
+        public void InitAdminComponents()
+        {
+            RegisteredFunction.Invoke<bool>("admin-components");
+        }
+
+        public T GetInput<T>(string selector)
+        {
+            var val = RegisteredFunction.Invoke<string>("getInput", selector);
+            return (T) Convert.ChangeType(val, typeof(T));
+        }
+
+        public void InitializeSignalR()
+        {
+            RegisteredFunction.Invoke<bool>("initializeSignalR");
+        }
+
+        public void NavigateToForbidden()
+        {
+            _uriHelper.NavigateTo("/403");
+        }
+
+        public void NavigateToNotFound()
+        {
+            _uriHelper.NavigateTo("/404");
+        }
+
+        public void RefreshShop()
+        {
+            RegisteredFunction.Invoke<bool>("refreshShopList");
+        }
+
+        public void AnnounceUpdateProduct(int id)
+        {
+            RegisteredFunction.Invoke<bool>("refreshProduct", id);
         }
     }
 }

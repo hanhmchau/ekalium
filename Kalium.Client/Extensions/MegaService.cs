@@ -19,13 +19,14 @@ namespace Kalium.Client.Extensions
         IUtil Util { get; }
         IFetcher Fetcher { get; }
         IUriHelper UriHelper { get; }
+        ISweetAlert SweetAlert { get; }
     }
 
     public class MegaService : IMegaService
     {
         public MegaService(IAccountService accountService,
             IHttpApiClientRequestBuilderFactory iHttpApiClientRequestBuilderFactory, Toastr toastr,
-            LocalStorage localStorage, HttpClient httpClient, IUtil util, IFetcher fetcher, IUriHelper uriHelper)
+            LocalStorage localStorage, HttpClient httpClient, IUtil util, IFetcher fetcher, IUriHelper uriHelper, ISweetAlert sweetAlert)
         {
             AccountService = accountService;
             HttpApiClientRequestBuilderFactory = iHttpApiClientRequestBuilderFactory;
@@ -35,6 +36,7 @@ namespace Kalium.Client.Extensions
             Util = util;
             Fetcher = fetcher;
             UriHelper = uriHelper;
+            SweetAlert = sweetAlert;
         }
 
         public IAccountService AccountService { get; }
@@ -52,5 +54,6 @@ namespace Kalium.Client.Extensions
         public IFetcher Fetcher { get; }
 
         public IUriHelper UriHelper { get; }
+        public ISweetAlert SweetAlert { get; }
     }
 }
