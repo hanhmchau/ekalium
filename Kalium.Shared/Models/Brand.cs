@@ -12,7 +12,6 @@ namespace Kalium.Shared.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool Deleted { get; set; }
         public ICollection<Product> Products { get; set; }
         [NotMapped]
         public int QuantitySold => Products?.Sum(p => p.QuantitySold) ?? 0;
@@ -20,13 +19,5 @@ namespace Kalium.Shared.Models
         public double TotalEarning => Products?.Sum(p => p.TotalEarning) ?? 0;
         [NotMapped]
         public double AverageRating => Products != null && Products.Any() ? Products.Average(p => p.AverageRating) : 0;
-        [NotMapped]
-        public int QuantitySoldBackup { get; set; }
-        [NotMapped]
-        public double TotalEarningBackup { get; set; }
-        [NotMapped]
-        public double AverageRatingBackup { get; set; }
-        [NotMapped]
-        public double ProductCount { get; set; }
     }
 }

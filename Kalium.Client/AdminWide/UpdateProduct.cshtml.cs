@@ -228,22 +228,5 @@ namespace Kalium.Client.AdminWide
                 StateHasChanged();
             }
         }
-
-        protected async Task Email()
-        {
-            JObject cateJObject = await MegaService.Fetcher.Fetch("/api/Product/EmailToSubscribers", new
-            {
-                ProductId = Product.Id
-            });
-            var count = cateJObject["Count"].ToObject<int>();
-            if (count > -1)
-            {
-                MegaService.Toastr.Success($"Email successfully sent to {count} user{(count > 1 ? "s" : "")}");
-            }
-            else
-            {
-                MegaService.Toastr.Warning("Could not send email. Please check your internet connection.");
-            }
-        }
     }
 }

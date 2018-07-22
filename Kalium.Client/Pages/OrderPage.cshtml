@@ -7,20 +7,17 @@
 {
     <div class="container default-margin post-formatting">
         <div class="woocommerce">
+                @if (Order.IsCancellable)
+                {
+                    <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> 
+                        and is currently <mark class="order-status">@(((Consts.OrderStatus)Order.Status).Name())</mark>.
+                        <mark class="button pointer" style="float: right;" onclick="@(() => MegaService.Util.ShowModal("cancel-order"))">Cancel</mark>
+                    </p>
+                }
                 @if (Order.Status == (int) Consts.OrderStatus.Cancelled)
                 {
                     <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> 
                         and was <mark class="order-status">@(((Consts.OrderStatus)Order.Status).Name())</mark> on <mark class="order-date">@Order.RefundDate.GetValueOrDefault().ToShortDateString()</mark>.
-                    </p>
-                }
-                else
-                {
-                    <p class="order-info">Order #<mark class="order-number">@Order.Id</mark> was placed on <mark class="order-date">@Order.DateCreated.ToShortDateString()</mark> 
-                        and is currently <mark class="order-status">@(((Consts.OrderStatus)Order.Status).ToString())</mark>.
-                        @if (Order.IsCancellable)
-                        {
-                            <mark class="button pointer" style="float: right;" onclick="@(() => MegaService.Util.ShowModal("cancel-order"))">Cancel</mark>
-                        }
                     </p>
                 }
 
@@ -84,12 +81,6 @@
                                             <small class="shipped_via">via @coupon.Key</small>
                                         </div>
                                     }
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Note:</th>
-                                <td>
-                                    @Order.Note
                                 </td>
                             </tr>
                         }

@@ -38,6 +38,7 @@ namespace Kalium.Shared.Models
         public ICollection<Coupon> Coupons { get; set; }
         public ICollection<Extra> Extras { get; set; }
         public ICollection<Discussion> Discussions { get; set; }
+        [NotMapped]
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<Auction> Auctions { get; set; }
         [NotMapped]
@@ -49,11 +50,5 @@ namespace Kalium.Shared.Models
         [NotMapped]
         public bool IsOnSale => DiscountedPrice.CompareTo(Price) != 0;
         [NotMapped] public Image MainImage => Images?.DefaultIfEmpty(Consts.Consts.DefaultImage).FirstOrDefault();
-        [NotMapped]
-        public double AverageRatingBackup { get; set; }
-        [NotMapped]
-        public double QuantitySoldBackup { get; set; }
-        [NotMapped]
-        public double TotalEarningBackup { get; set; }
     }
 }

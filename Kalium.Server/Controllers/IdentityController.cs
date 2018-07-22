@@ -14,7 +14,6 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalium.Server.Repositories;
-using Kalium.Shared;
 using Kalium.Shared.Consts;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,13 +24,11 @@ namespace Kalium.Server.Controllers
     {
         private readonly IIdentityRepository _identityRepository;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IImageRepository _imageRepository;
 
-        public IdentityController(IIdentityRepository identityRepository, IAuthorizationService authorizationService, IImageRepository imageRepository)
+        public IdentityController(IIdentityRepository identityRepository, IAuthorizationService authorizationService)
         {
             this._identityRepository = identityRepository;
             _authorizationService = authorizationService;
-            _imageRepository = imageRepository;
         }
 
         [HttpPost("[action]")]
@@ -88,34 +85,6 @@ namespace Kalium.Server.Controllers
             return Json(user);
         }
 
-        [HttpPost("[action]")]
-        public async Task<ICollection<Image>> UploadAvatar([FromForm] AvatarViewModel model)
-        {
-            ICollection<Image> images = new List<Image>();
-            var files = model.Files;
-            if (files != null && files.Any())
-            {
-                images = _imageRepository.Save(files, Consts.Folder.User.Name());
-                await _identityRepository.AddImages(model.Id, images.First());
-            }
-
-            return images;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<bool> UpdateUser([FromBody] string json)
-        {
-            var parser = new Parser(json);
-            string id = parser.AsString("Id");
-            string email = parser.AsString("Email");
-            string address = parser.AsString("Address");
-            string phone = parser.AsString("Phone");
-            string fullName = parser.AsString("FullName");
-            await _identityRepository.UpdateUser(id, email, address, phone, fullName);
-
-            return true;
-        }
-
         [HttpGet("[action]")]
         public async Task<bool> IsUserAuthorized([FromQuery] int policy)
         {
@@ -127,12 +96,6 @@ namespace Kalium.Server.Controllers
             var policyName = ((Consts.Policy) policy).Name();
             var result = await _authorizationService.AuthorizeAsync(HttpContext.User, null, policyName);
             return result.Succeeded;
-        }
-
-        [HttpGet("[action]")]
-        public async Task<User> GetUser([FromQuery] string username)
-        {
-            return await _identityRepository.FindUserByUsername(username);
         }
 
         [HttpGet("[action]")]
@@ -159,47 +122,6 @@ namespace Kalium.Server.Controllers
             {
                 return Json(null);
             }
-        }
-
-        [HttpPost("[action]")]
-        public async Task<bool> UpdatePassword([FromBody] string json)
-        {
-            var parser = new Parser(json);
-            string id = parser.AsString("Id");
-            string oldPassword = parser.AsString("OldPassword");
-            string newPassword = parser.AsString("NewPassword");
-            var result = await _identityRepository.UpdatePassword(id, oldPassword, newPassword);
-            return result;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<bool> UpdateRole([FromBody] string json)
-        {
-            var parser = new Parser(json);
-            string id = parser.AsString("Id");
-            string role = parser.AsString("Role");
-            var result = await _identityRepository.UpdateRole(id, role);
-            return result;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<string> SearchUsers([FromBody] string json)
-        {
-            var parser = new Parser(json);
-            var phrase = parser.AsString("Phrase");
-            var role = parser.AsString("Role");
-            var page = parser.AsInt("Page");
-            var pageSize = parser.AsInt("PageSize");
-            var sortType = parser.AsInt("SortType");
-            var result = new
-            {
-                Users = await _identityRepository.SearchUsers(phrase, role, sortType, page, pageSize),
-                Total = await _identityRepository.CountUsers(phrase, role)
-            };
-            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
         }
     }
 }

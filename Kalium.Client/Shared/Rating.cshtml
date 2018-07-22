@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Blazor.Components
-<div class="star-rating" style="float: none;">
+<div class="star-rating">
     <div class="star-rating-icons" data-toggle="tooltip" data-placement="right">
         @foreach (var width in widths)
         {
@@ -21,15 +21,17 @@
     {
         for (int i = 1; i <= widths.Length; i++)
         {
-            if (rating >= i * 1.0)
+            if (rating > i)
             {
-                widths[i - 1] = 100;
+                widths[i-1] = 100;
+            } else if (rating < i)
+            {
+                widths[i-1] = 0;
             }
             else
             {
-                widths[i - 1] = (int) (Math.Max(rating - i + 1, 0) * 100);
+                widths[i-1] = (int) (rating - i) * 100;
             }
         }
-        Console.WriteLine();
     }
 }

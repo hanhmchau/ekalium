@@ -65,11 +65,8 @@ namespace Kalium.Shared.Conversions
                 Status = order.Status,
                 ShipToDifferentAddress = order.ShipToDifferentAddress,
                 UserId = order.User.Id,
-                UserName = order.User.UserName,
                 OrderItems = order.OrderItems.Select(oi => oi.Simplify()).ToList(),
-                Coupons = order.Coupons?.Select(c => c.Simplify()).ToList(),
-                Note = order.Note,
-                UserAvatar = order.User.RealAvatar
+                Coupons = order.Coupons?.Select(c => c.Simplify()).ToList()
             };
         }
     }

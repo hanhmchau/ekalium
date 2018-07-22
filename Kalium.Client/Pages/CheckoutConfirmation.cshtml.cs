@@ -29,13 +29,11 @@ namespace Kalium.Client.Pages
 
         [Inject]
         public IMegaService MegaService { get; set; }
-        public User CurrentUser { get; set; }
 
         protected override async Task OnInitAsync()
         {
             await ImportCart();
-            CurrentUser = await MegaService.AccountService.GetCurrentUser();
-            if (CurrentUser == null)
+            if (MegaService.AccountService.GetCurrentUser() == null)
             {
                 MegaService.UriHelper.NavigateTo("/login");
                 return;
@@ -46,9 +44,6 @@ namespace Kalium.Client.Pages
                 return;
             }
             MegaService.Util.InitComponents();
-            Name = CurrentUser.FullName;
-            Address = CurrentUser.Address;
-            Phone = CurrentUser.PhoneNumber;
         }
 
         protected void ValidateInfo()

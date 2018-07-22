@@ -12,7 +12,7 @@ namespace Kalium.Shared.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public bool Deleted { get; set; } = true;
+        public bool Status { get; set; } = true;
         public ICollection<Product> Products { get; set; }
         [NotMapped]
         public int ProductCount { get; set; }

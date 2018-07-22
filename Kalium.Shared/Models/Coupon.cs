@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +18,5 @@ namespace Kalium.Shared.Models
         public bool IsValid =>
             Type == (int) Consts.Consts.CouponType.Date ? DateTime.Now < DateExpired : Quantity > 0;
         public bool Deleted { get; set; }
-        public ICollection<OrderCoupon> OrderCoupons { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Kalium.Shared.Models
         [NotMapped]
         public double ActualPrice => Price + (OrderItemOptions?.Select(oio => oio.Option).Sum(option => option.Price) ?? 0);
         [NotMapped]
-        public double PriceAfterRefund => ActualPrice * (1 - (Order.Refund?.RefundRate ?? 0));
+        public double PriceAfterRefund => ActualPrice * (1 - Order.Refund?.RefundRate ?? 0);
         [NotMapped]
         public ICollection<Option> Options => OrderItemOptions?.Select(oio => oio.Option).ToList();
     }

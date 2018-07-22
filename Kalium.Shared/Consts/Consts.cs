@@ -33,16 +33,9 @@ namespace Kalium.Shared.Consts
 
     public class Consts
     {
-        public const string DefaultAvatar = "/User/Default.jpg";
         public enum Prefix
         {
 
-        }
-
-        public class Email
-        {
-            public const string Address = "ecommerce@kalium.com";
-            public const string Sender = "Kalium Support";
         }
         public enum Folder
         {
@@ -66,10 +59,7 @@ namespace Kalium.Shared.Consts
             Popularity,
             Newness,
             Rating,
-            Price,
-            Alphabet,
-            Role,
-            TotalEarning
+            Price
         }
 
         public enum Status

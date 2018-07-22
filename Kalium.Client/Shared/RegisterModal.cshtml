@@ -1,5 +1,9 @@
-﻿@using Kalium.Shared.Consts
-@inherits Kalium.Client.Shared.RegisterModalModel
+﻿@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using Kalium.Shared.Consts
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Newtonsoft.Json
+@using Kalium.Shared.Models
 
 <div class="woocommerce-account my-modal" id="register-modal">
     <form method="post" class="woocommerce-form woocommerce-form-register register">
@@ -66,5 +70,117 @@
 </div>
 
 @functions{
-   
+    [Parameter]
+    private bool DuplicateEmail { get; set; }
+    [Parameter]
+    private bool DuplicateUsername { get; set; }
+    [Parameter]
+    private bool PasswordMode { get; set; } = true;
+    [Parameter]
+    private string Username { get; set; }
+    [Parameter]
+    private string Email { get; set; }
+    [Parameter]
+    private string Password { get; set; }
+    [Parameter]
+    private User CurrentUser { get; set; }
+    [Parameter]
+    private bool HasTypedUsername { get; set; }
+    [Parameter]
+    private bool HasTypedEmail { get; set; }
+    [Parameter]
+    private bool HasTypedPassword { get; set; }
+    [Parameter]
+    private bool GeneralError { get; set; }
+    [Parameter]
+    private Action<User> OnUpdateCurrentUser { get; set; }
+
+    private bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email) && ValidatorUtils.IsValidEmail(Email)
+            && !DuplicateEmail && !DuplicateUsername;
+    }
+
+    private void TogglePasswordMode()
+    {
+        PasswordMode = !PasswordMode;
+    }
+
+    private async void TryRegister()
+    {
+        if (!IsValid()) return;
+        DuplicateEmail = await IsDuplicateEmail(Email);
+        DuplicateUsername = await IsDuplicateUsername(Username);
+        StateHasChanged();
+        if (DuplicateEmail || DuplicateUsername)
+        {
+            return;
+        }
+        var result = await Http.PostJsonAsync<User>("/api/Identity/TryRegister/", Serialize(new
+        {
+            Username,
+            Email,
+            Password
+        }));
+        if (result != null)
+        {
+            GeneralError = false;
+            CurrentUser = result as User;
+            OnUpdateCurrentUser.Invoke(CurrentUser);
+            HideModal();
+        }
+        else
+        {
+            GeneralError = true;
+        }
+    }
+
+    private async void CheckUsername(string username)
+    {
+        HasTypedUsername = true;
+        Username = username;
+        DuplicateUsername = await IsDuplicateUsername(Username);
+        StateHasChanged();
+    }
+
+    private async Task<bool> IsDuplicateUsername(string username)
+    {
+        return await Http.PostJsonAsync<bool>("/api/Identity/CheckDuplicateUsername/", Serialize(new
+        {
+            Username
+        }));
+    }
+
+    private async void CheckEmail(string email)
+    {
+        HasTypedEmail = true;
+        Email = email;
+        DuplicateEmail = await IsDuplicateEmail(Email);
+        StateHasChanged();
+    }
+
+    private async Task<bool> IsDuplicateEmail(string email)
+    {
+        return await Http.PostJsonAsync<bool>("/api/Identity/CheckDuplicateEmail/", Serialize(new
+        {
+            Email
+        }));
+
+    }
+
+    private string Serialize(object obj)
+    {
+        return JsonConvert.SerializeObject(obj);
+    }
+
+    private void ShowModal(string id)
+    {
+        HideModal();
+        RegisteredFunction.Invoke<bool>("showModal", id);
+    }
+
+    private void HideModal()
+    {
+        RegisteredFunction.Invoke<bool>("hideModal");
+    }
 }

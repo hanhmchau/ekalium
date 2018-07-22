@@ -19,23 +19,10 @@ namespace Kalium.Server.Repositories
         {
             Collection = context.Category;
         }
-        public CategorySearchHelper Like(string phrase)
-        {
-            Collection = Collection.Where(c => c.Name.Contains(phrase));
-            return this;
-        }
-
-        public CategorySearchHelper IncludeCountHidden()
+        public CategorySearchHelper IncludeCount()
         {
             Collection.ForEach(col =>
-                col.ProductCount = Context.Entry(col).Collection(c => c.Products).Query().Count(p => p.Status != (int)Consts.Status.Deleted));
-            return this;
-        }
-
-        public CategorySearchHelper IncludeCountPublic()
-        {
-            Collection.ForEach(col =>
-                col.ProductCount = Context.Entry(col).Collection(c => c.Products).Query().Count(p => p.Status == (int) Consts.Status.Public));
+                col.ProductCount = Context.Entry(col).Collection(c => c.Products).Query().Count());
             return this;
         }
 
@@ -45,26 +32,14 @@ namespace Kalium.Server.Repositories
             return this;
         }
 
-        public CategorySearchHelper SortBy(Consts.SortType sortType)
+        public CategorySearchHelper SortByPopularity()
         {
-            Expression<Func<Category, IComparable>> comparator = c => c.Name;
-            switch (sortType)
-            {
-                case Consts.SortType.Newness:
-                    comparator = c => c.Id;
-                    break;
-                case Consts.SortType.Popularity:
-                    comparator = p => p.ProductCount;
-                    break;
-            }
-
-            Collection = Collection.OrderByDescending(comparator);
+            Collection = Collection.OrderByDescending(cat => cat.ProductCount);
             return this;
         }
-
         public CategorySearchHelper Active()
         {
-            Collection = Collection.Where(cat => !cat.Deleted);
+            Collection = Collection.Where(cat => cat.Status);
             return this;
         }
     }
@@ -74,13 +49,6 @@ namespace Kalium.Server.Repositories
         Task<Category> FindCategoryById(int id);
         Task<Category> FindCategoryByName(string name);
         Task<ICollection<Category>> SearchCategories();
-        Task<ICollection<Category>> SearchCategories(string phrase, int sortType, int page, int pageSize);
-        Task<int> GetCategoryCount(int id);
-        Task DeleteCategory(int id);
-        Task Update(Category category);
-        Task Create(string name);
-        Task<int> CountCategories(string phrase, int sortType);
-        Task<ICollection<Category>> SearchTopCategories(int top);
     }
 
     public class CategoryRepository : ICategoryRepository
@@ -106,40 +74,6 @@ namespace Kalium.Server.Repositories
             _cache.Set(cacheKey, newCat);
             return newCat;
         }
-
-        public async Task<int> GetCategoryCount(int id)
-        {
-            var cat = await _context.Category.FindAsync(id);
-            var count = _context.Entry(cat).Collection(c => c.Products).Query()
-                .Count(p => p.Status == (int) Consts.Status.Public);
-            return count;
-        }
-
-        public async Task DeleteCategory(int id)
-        {
-            var cat = await _context.Category.FindAsync(id);
-            cat.Deleted = true;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Update(Category category)
-        {
-            var cat = await _context.Category.FindAsync(category.Id);
-            cat.Name = category.Name;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Create(string name)
-        {
-            var newCat = new Category
-            {
-                Name = name,
-                Deleted = false
-            };
-            _context.Category.Add(newCat);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Category> FindCategoryByName(string name)
         {
             var cacheKey = Consts.GetCachePrefix(Consts.CachePrefix.CategoryUrl, name);
@@ -152,46 +86,14 @@ namespace Kalium.Server.Repositories
             _cache.Set(cacheKey, newProduct);
             return newProduct;
         }
-        public async Task<ICollection<Category>> SearchTopCategories(int top)
-        {
-            var searcher = new CategorySearchHelper(_context);
-            var col = await searcher
-                .Active()
-                .IncludeCountPublic()
-                .Get();
-            return col.OrderByDescending(c => c.ProductCount).Where(c => c.ProductCount > 0).Take(top).ToList();
-        }
-
         public async Task<ICollection<Category>> SearchCategories()
         {
             var searcher = new CategorySearchHelper(_context);
             return await searcher
                 .Active()
-                .IncludeCountPublic()
-                .SortBy(Consts.SortType.Popularity)
+                .IncludeCount()
+                .SortByPopularity()
                 .Get();
-        }
-
-        public async Task<ICollection<Category>> SearchCategories(string phrase, int sortType, int page, int pageSize)
-        {
-            var searcher = new CategorySearchHelper(_context);
-            return await searcher
-                .Active()
-                .IncludeCountPublic()
-                .Like(phrase)
-                .SortBy((Consts.SortType) sortType)
-                .Page(page, pageSize)
-                .Get();
-        }
-
-        public async Task<int> CountCategories(string phrase, int sortType)
-        {
-            var searcher = new CategorySearchHelper(_context);
-            return await searcher
-                .Active()
-                .IncludeCountPublic()
-                .Like(phrase)
-                .Count();
         }
     }
 }

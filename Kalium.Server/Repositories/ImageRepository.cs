@@ -41,7 +41,8 @@ namespace Kalium.Server.Repositories
             {
                 if (item.Length > 0)
                 {
-                    string extension = Path.GetExtension(item.FileName);
+                    string extension = Path.GetExtension(ContentDispositionHeaderValue.Parse(item.ContentDisposition).FileName.Trim()
+                        .ToString());
                     string fileName = Guid.NewGuid() + extension;
                     string relativePath = Path.Combine(folder, fileName);
                     string fullPath = Path.Combine(webRootPath, relativePath);

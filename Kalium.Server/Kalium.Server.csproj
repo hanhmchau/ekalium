@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <UserSecretsId>2fc918bd-e7b6-4106-99db-5d30f10327a9</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,9 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.1.1" />
     <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="SendGrid" Version="9.9.0" />
     <PackageReference Include="toastr" Version="2.1.1" />
   </ItemGroup>
 

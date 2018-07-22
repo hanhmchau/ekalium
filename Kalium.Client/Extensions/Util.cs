@@ -8,11 +8,6 @@ using Microsoft.AspNetCore.Blazor.Services;
 
 namespace Kalium.Client.Extensions
 {
-    public class DateRange
-    {
-        public string Begin { get; set; }
-        public string End { get; set; }
-    }
     public interface IUtil
     {
         void ShowModal(string id);
@@ -29,9 +24,6 @@ namespace Kalium.Client.Extensions
         void NavigateToNotFound();
         void RefreshShop();
         void AnnounceUpdateProduct(int id);
-        bool ValidateForm(string selector);
-        DateRange GetDates(string selector);
-        void NavigateToHome();
     }
 
     public class Util : IUtil
@@ -106,11 +98,6 @@ namespace Kalium.Client.Extensions
             _uriHelper.NavigateTo("/404");
         }
 
-        public void NavigateToHome()
-        {
-            _uriHelper.NavigateTo("/");
-        }
-
         public void RefreshShop()
         {
             RegisteredFunction.Invoke<bool>("refreshShopList");
@@ -119,17 +106,6 @@ namespace Kalium.Client.Extensions
         public void AnnounceUpdateProduct(int id)
         {
             RegisteredFunction.Invoke<bool>("refreshProduct", id);
-        }
-
-        public bool ValidateForm(string selector)
-        {
-            return RegisteredFunction.Invoke<bool>("validateForm", selector);
-        }
-
-        public DateRange GetDates(string selector)
-        {
-            var range = RegisteredFunction.Invoke<DateRange>("getDates", selector);
-            return range;
         }
     }
 }

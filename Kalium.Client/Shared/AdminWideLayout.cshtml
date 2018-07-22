@@ -20,13 +20,8 @@
                     <div class="header-container">
                         <ul class="nav-left">
                             <li>
-                                <a href="/">
-                                    <i class="ti-home"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin">
-                                    <i class="ti-crown"></i>
+                                <a class="side-nav-toggle" href="javascript:void(0);">
+                                    <i class="ti-view-grid"></i>
                                 </a>
                             </li>
                             <li class="search-box">
@@ -124,23 +119,36 @@
                         <ul class="nav-right">
                             <li class="user-profile dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img class="profile-img img-fluid" src="@CurrentUser.RealAvatar" alt="">
+                                    <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
                                     <div class="user-info">
-                                        <span class="name pdd-right-5">@CurrentUser.UserName</span>
+                                        <span class="name pdd-right-5">Nate Leong</span>
                                         <i class="ti-angle-down font-size-10"></i>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="/user/@CurrentUser.UserName">
+                                        <a href="#">
                                             <i class="ti-settings pdd-right-10"></i>
+                                            <span>Setting</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-user pdd-right-10"></i>
                                             <span>Profile</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/user/@CurrentUser.UserName/orders">
-                                            <i class="ti-wallet pdd-right-10"></i>
-                                            <span>Orders</span>
+                                        <a href="#">
+                                            <i class="ti-email pdd-right-10"></i>
+                                            <span>Inbox</span>
+                                        </a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-power-off pdd-right-10"></i>
+                                            <span>Logout</span>
                                         </a>
                                     </li>
                                 </ul>
