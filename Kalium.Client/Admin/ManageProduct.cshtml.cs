@@ -55,6 +55,7 @@ namespace Kalium.Client.Admin
             await LoadCategories();
             MegaService.Util.InitializeSignalR();
             MegaService.Util.InitAdminComponents();
+            Loaded = true;
         }
 
         protected async Task Delete()
@@ -71,7 +72,7 @@ namespace Kalium.Client.Admin
                     MegaService.Toastr.Success("Successfully deleted.");
                     if (Products.Count == 1)
                     {
-                        Page--;
+                        Page = Math.Max(Page--, 1);
                     }
                     await LoadProducts();
                     MegaService.Util.RefreshShop();
@@ -145,7 +146,6 @@ namespace Kalium.Client.Admin
                 Products.Add(p);
             });
             Total = (int)data["Total"];
-            Console.WriteLine(Page);
             TotalPage = (int)Math.Ceiling(Total * 1.0 / PageSize);
             Begin = Math.Max((Page - 1) * PageSize + 1, 1);
             End = Math.Min(Page * PageSize, Total);

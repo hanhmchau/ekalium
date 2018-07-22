@@ -1,15 +1,12 @@
 ﻿@page "/login"
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
-@using System.Net
-@using Kalium.Client.Shared
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Newtonsoft.Json
 @using Kalium.Shared.Models
-@using Kalium.Client.Extensions
 @using Microsoft.AspNetCore.Blazor.Components
-@using Microsoft.AspNetCore.Http.Extensions
-@inject IUtil MyUtil
+@using Kalium.Client.Extensions
+@inject IMegaService MegaService
 
 <div class="container default-margin">
     <div class="woocommerce">
@@ -25,9 +22,9 @@
 
                     @if (GeneralError)
                     {
-                    <div class="background-red text-white" style="text-align: center; padding: 10px;">
-                        Invalid ID or password. Please try again.
-                    </div>
+                        <div class="background-red text-white" style="text-align: center; padding: 10px;">
+                            Invalid ID or password. Please try again.
+                        </div>
                     }
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--equal-width labeled-input-row--width-group-1">
                         <div class="labeled-input-row--label">
@@ -42,7 +39,7 @@
                     </p>
                     @if (!IsValidUsername())
                     {
-                    <div class="text-red">Please enter username.</div>
+                        <div class="text-red">Please enter username.</div>
                     }
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
@@ -58,7 +55,7 @@
                     </p>
                     @if (!IsValidPassword())
                     {
-                    <div class="text-red">Please enter password.</div>
+                        <div class="text-red">Please enter password.</div>
                     }
 
                     <div class="form-row form-row--remember-me" style="padding: 10px 0">
@@ -106,9 +103,6 @@
     [Parameter]
     private bool GeneralError { get; set; }
 
-    [Parameter]
-    private Action<User> OnUpdateCurrentUser { get; set; } = (user) => { };
-
     private bool IsValidUsername()
     {
         return !(HasTypedUsername && string.IsNullOrWhiteSpace(Username));
@@ -132,16 +126,21 @@
                     Password,
                     RememberMe
                 }));
-                GeneralError = false;
-                CurrentUser = result as User;
-                OnUpdateCurrentUser.Invoke(CurrentUser);
-                HideModal();
-                MyUtil.Return();
+
+                if (result != null)
+                {
+                    GeneralError = false;
+                    CurrentUser = result as User;
+                    HideModal();
+                    MegaService.Util.Return();
+                }
+                else
+                {
+                    GeneralError = true;
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine(e.Message);
                 GeneralError = true;
             }
         }

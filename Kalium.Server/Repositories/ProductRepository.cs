@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Kalium.Server.Context;
 using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
+using MessagePack.Formatters;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using MoreLinq;
@@ -50,7 +53,15 @@ namespace Kalium.Server.Repositories
         }
         public ProductSearchHelper IncludeOrderItems()
         {
-            Collection = Collection.Include(p => p.OrderItems);
+            Collection = Collection
+                .Include(p => p.OrderItems)
+                    .ThenInclude(o => o.Order)
+                        .ThenInclude(o => o.Refund)
+                .Include(p => p.OrderItems)
+                    .ThenInclude(o => o.Product)
+                .Include(p => p.OrderItems)
+                    .ThenInclude(o => o.Order)
+                        .ThenInclude(o => o.OrderCoupons);
             return this;
         }
         public ProductSearchHelper IncludeExtras()
@@ -98,6 +109,9 @@ namespace Kalium.Server.Repositories
                     break;
                 case Consts.SortType.Price:
                     comparator = p => -p.DiscountedPrice;
+                    break;
+                case Consts.SortType.TotalEarning:
+                    comparator = p => p.TotalEarning;
                     break;
             }
 
@@ -174,33 +188,49 @@ namespace Kalium.Server.Repositories
     {
         Task<Product> FindProductById(int id);
         Task<Product> FindProductByUrl(string url);
+        void ClearCache(Product p);
+        Task AddCoupon(int id, Coupon coupon);
+        Task RemoveCoupon(int id, Coupon c);
+        Task RemoveImage(int id, Image image);
+        Task RemoveExtra(int id, int extraId);
+        Task<Extra> UpdateExtra(int productId, Extra extra);
+        Task Update(Product product);
+        Task<bool> DeleteProduct(int id);
+        Task<bool> CanReview(int id);
+        Task<int> AddReview(int productId, int rating, string content);
+        Task DeleteReview(int reviewId);
+        Task<ICollection<Product>> SearchTopProducts(int top);
+        Task<ICollection<Product>> SearchProducts();
+
         Task<ICollection<Product>> SearchProducts(int page, int pageSize, string category, double minPrice,
             double maxPrice, int status, ICollection<string> origins, ICollection<string> materials,
             ICollection<int> brands, int sortType, bool includeHidden);
+
         Task<Product> AddProduct(Product product);
         Product UpdateProduct(Product product);
-        Task<ICollection<Product>> SearchProducts();
+
         Task<int> CountProducts(string category, double minPrice, double maxPrice, int status,
             ICollection<string> origins, ICollection<string> materials, ICollection<int> brands, bool includeHidden);
+
         Task<ICollection<string>> GetOrigins(int top);
         Task<ICollection<string>> GetMaterials(int top);
         Task<Product> FindProductByIdForCart(int id);
-        Task<ICollection<Brand>> GetBrands();
         Task<Product> FindProductByIdForCartNoFreshen(int id);
+        Task<ICollection<Brand>> GetBrands();
         Task<string> GenerateNameUrl(string name);
-        Task<int> CreateProduct(string name, string nameUrl, int brand, int category, string origin, string material,
-            double price, bool hasDiscount, double discountedPrice, string description, string features);
+
+        Task<int> CreateProduct(string name, string nameUrl, int brand, int category, string origin, string material, double price,
+            bool hasDiscount, double discountedPrice, string description, string features);
 
         Task<Product> FindActiveProductByUrl(string url);
-        Task AddImages(int modelId, ICollection<Image> images);
-        void ClearCache(Product p);
-        Task AddCoupon(int id, Coupon coupon);
-        Task RemoveCoupon(int id, Coupon coupon);
-        Task RemoveImage(int id, Image image);
-        Task RemoveExtra(int id, int extra);
-        Task<Extra> UpdateExtra(int id, Extra extra);
-        Task Update(Product product);
-        Task<bool> DeleteProduct(int id);
+        Task AddImages(int productId, ICollection<Image> images);
+        Task<double> GetEarningThisMonth();
+        Task<double> GetEarningToday();
+        Task<double> FindPercentageOfMethod(Consts.PaymentMethod cashOnDelivery);
+        Task<ICollection<Category>> GetCategoryDistribution();
+        Task<ICollection<double>> GetEarningInPeriod(TimeSpan fromDays);
+        Task<int> CountProducts();
+        Task<int> SendEmail(int productId);
     }
 
     public class ProductRepository: IProductRepository
@@ -208,12 +238,14 @@ namespace Kalium.Server.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
         private readonly IIdentityRepository _identityRepository;
+        private readonly EmailSender _emailSender;
 
-        public ProductRepository(ApplicationDbContext ctx, IMemoryCache cache, IIdentityRepository identityRepository)
+        public ProductRepository(ApplicationDbContext ctx, IMemoryCache cache, IIdentityRepository identityRepository, EmailSender emailSender)
         {
             _context = ctx;
             _cache = cache;
             _identityRepository = identityRepository;
+            _emailSender = emailSender;
         }
 
         public async Task<Product> FindProductById(int id)
@@ -238,7 +270,6 @@ namespace Kalium.Server.Repositories
             newProduct.Coupons = newProduct.Coupons?.Where(c => !c.Deleted).ToList();
             newProduct.Reviews = newProduct.Reviews?.Where(r => !r.Deleted).ToList();
             newProduct.Reviews = newProduct.Reviews?.Where(r => !r.Deleted).ToList();
-            newProduct.Auctions = newProduct.Auctions?.Where(a => a.Status == (int) Consts.Status.Public).ToList();
             return newProduct;
         }
 
@@ -249,25 +280,23 @@ namespace Kalium.Server.Repositories
             {
                 return FreshenProduct(product as Product);
             }
-            else
+
+            var newProduct = await _context.Products
+                .Where(p => p.Status != (int)Consts.Status.Deleted)
+                .Include(p => p.Category)
+//                .Include(p => p.Brand)
+                .Include(p => p.Images)
+                .Include(p => p.Reviews)
+                    .ThenInclude(r => r.User)
+                .Include(p => p.Extras)
+                .ThenInclude(extra => extra.Options)
+                .FirstOrDefaultAsync(p => p.NameUrl.Equals(url, StringComparison.CurrentCultureIgnoreCase));
+            if (newProduct != null)
             {
-                var newProduct = await _context.Products
-                    .Where(p => p.Status != (int)Consts.Status.Deleted)
-                    .Include(p => p.Category)
-                    .Include(p => p.Brand)
-                    .Include(p => p.Images)
-                    .Include(p => p.Reviews)
-                    .Include(p => p.Discussions)
-                    .Include(p => p.Extras)
-                    .ThenInclude(extra => extra.Options)
-                    .FirstOrDefaultAsync(p => p.NameUrl.Equals(url, StringComparison.CurrentCultureIgnoreCase));
-                if (newProduct != null)
-                {
-                    newProduct = FreshenProduct(newProduct);
-                }
-                _cache.Set(cacheKey, newProduct);
-                return newProduct;
+                newProduct = FreshenProduct(newProduct);
             }
+            _cache.Set(cacheKey, newProduct);
+            return newProduct;
         }
 
         public void ClearCache(Product p)
@@ -353,6 +382,78 @@ namespace Kalium.Server.Repositories
             }
 
             return false;
+        }
+
+        public async Task<bool> CanReview(int id)
+        {
+            var currentUser = await _identityRepository.GetCurrentUserAsync();
+            if (currentUser == null)
+            {
+                return false;
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Reviews)
+                    .ThenInclude(r => r.User)
+                .Include(p => p.OrderItems)
+                    .ThenInclude(o => o.Order)
+                        .ThenInclude(o => o.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            var hasBought = product.OrderItems
+                .Select(o => o.Order)
+                .Where(o => o.Refund == null)
+                .Select(o => o.User.Id)
+                .Any(i => i.Equals(currentUser.Id));
+            var hasReviewed = product.Reviews.Where(r => !r.Deleted).Select(r => r.User.Id).Contains(currentUser.Id);
+
+            return hasBought && !hasReviewed;
+        }
+
+        public async Task<int> AddReview(int productId, int rating, string content)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            var currentUser = await _identityRepository.GetCurrentUserAsync();
+            var review = new Review
+            {
+                Product = product,
+                Rating = rating,
+                Content = content,
+                DateCreated = DateTime.Now,
+                User = currentUser
+            };
+
+            await _context.Review.AddAsync(review);
+            await _context.SaveChangesAsync();
+            ClearCache(product);
+            return review.Id;
+        }
+
+        public async Task DeleteReview(int reviewId)
+        {
+            var review = await _context.Review.FindAsync(reviewId);
+            review.Deleted = true;
+            await _context.SaveChangesAsync();
+        }
+        public async Task<ICollection<Product>> SearchTopProducts(int top)
+        {
+            var searcher = new ProductSearchHelper(_context);
+            var col = await searcher
+                .IncludeImages()
+                .IncludeOrderItems()
+                .Get();
+            col.ForEach(p =>
+            {
+                p.TotalEarningBackup = p.TotalEarning;
+                p.QuantitySoldBackup = p.QuantitySold;
+                p.OrderItems = null;
+                p.Brand = null;
+                p.Category = null;
+            });
+            col = col.OrderByDescending(p => p.TotalEarningBackup)
+                .Where(p => p.TotalEarningBackup > 0)
+                .Take(top).ToList();
+            return col;
         }
 
         public async Task<ICollection<Product>> SearchProducts() => await _context.Products.ToListAsync();
@@ -443,7 +544,7 @@ namespace Kalium.Server.Repositories
 
         public async Task<ICollection<Brand>> GetBrands()
         {
-            return await _context.Brand.OrderBy(brand => brand.Name).ToListAsync();
+            return await _context.Brand.Where(brand => !brand.Deleted).OrderBy(brand => brand.Name).ToListAsync();
         }
 
         public async Task<string> GenerateNameUrl(string name)
@@ -513,6 +614,100 @@ namespace Kalium.Server.Repositories
             ClearCache(product);
         }
 
+        public async Task<double> GetEarningThisMonth()
+        {
+            var bug = await _context.Orders
+                .Include(o => o.OrderCoupons)
+                .ThenInclude(oc => oc.Coupon)
+                .ThenInclude(c => c.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.OrderItemOptions)
+                .ThenInclude(oio => oio.Option)
+                .Include(o => o.Refund)
+                .Where(o => o.DateCreated.AddMonths(1) >= DateTime.Now)
+                .ToListAsync();
+            return bug.Sum(b => b.PostCouponTotal);
+        }
+
+        public async Task<double> GetEarningToday()
+        {
+            return await GetEarningThisDay(DateTime.Now);
+        }
+        public async Task<int> CountProducts()
+        {
+            return await _context.Products.CountAsync();
+        }
+
+        public async Task<int> SendEmail(int productId)
+        {
+            var users = await _identityRepository.GetSubscribedUsers();
+            var emails = users.Select(u => u.Email).ToList();
+            var product = await _context.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
+            var order = await _context.Orders
+                .Include(o => o.OrderCoupons)
+                .ThenInclude(oc => oc.Coupon)
+                .ThenInclude(c => c.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.OrderItemOptions)
+                .ThenInclude(oio => oio.Option)
+                .ThenInclude(opt => opt.Extra)
+                .Include(o => o.User)
+                .Include(o => o.Refund)
+                .FirstAsync();
+            var result = await _emailSender.SendProductEmail($"[Kalium] {product.Name}", product, emails);
+            return result ? users.Count : -1;
+        }
+
+        public async Task<double> GetEarningThisDay(DateTime date)
+        {
+            var n = (await _context.Orders
+                .Include(o => o.OrderCoupons)
+                .ThenInclude(oc => oc.Coupon)
+                .ThenInclude(c => c.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.OrderItemOptions)
+                .ThenInclude(oio => oio.Option)
+                .ThenInclude(opt => opt.Extra)
+                .Include(o => o.Refund)
+                .Where(o => o.DateCreated.Date == date.Date)
+                .ToListAsync());
+            
+            return n.Sum(b => b.PostCouponTotal);
+        }
+
+        public async Task<double> FindPercentageOfMethod(Consts.PaymentMethod method)
+        {
+            var total = await _context.Orders.CountAsync();
+            var methodCount = await _context.Orders
+                .Where(o => o.PaymentMethod == (int) method)
+                .CountAsync();
+            return methodCount * 100.0 / total;
+        }
+
+        public async Task<ICollection<Category>> GetCategoryDistribution()
+        {
+            var catHelper = new CategorySearchHelper(_context);
+            return await catHelper.Active().IncludeCountHidden().Get();
+        }
+
+        public async Task<ICollection<double>> GetEarningInPeriod(TimeSpan fromDays)
+        {
+            var earnings = new List<Double>();
+            foreach (var day in Enumerable.Range(1, fromDays.Days).Reverse())
+            {
+                var date = DateTime.Today - TimeSpan.FromDays(day);
+                earnings.Add(await GetEarningThisDay(date));
+            }
+
+            return earnings;
+        }
+
         private async Task<string> GenerateNameUrl(string name, int index)
         {
             var normalizedName = name
@@ -529,3 +724,4 @@ namespace Kalium.Server.Repositories
         }
     }
 }
+

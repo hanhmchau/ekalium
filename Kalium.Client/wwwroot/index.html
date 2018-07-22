@@ -22,14 +22,52 @@
     <meta property="og:url" content="index.html" />
     <meta property="og:site_name" content="Kalium Shop" />
 <style>
+    .daterangepicker td.in-range {
+        background-color: #f8f8ff !important;
+    }
     .badge-in-checkbox {
         transform: translateX(15px) translateY(-18px);
     }
+
     .badge-in-checkbox-small {
         transform: translateX(15px) translateY(-15px);
     }
+
     .cursor-pointer {
         cursor: pointer;
+    }
+
+
+    .empty-data {
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        margin-top: 40px;
+        color: darkgray !important;
+    }
+
+    .empty-data img {
+        height: 40px;
+    }
+
+    .empty-data p {
+        margin-top: 10px;
+        font-size: 25px;
+        font-family: Roboto !important;
+    }
+
+    .empty-data .action {
+        margin-top: 20px;
+    }
+
+    .empty-data i {
+        font-size: 60px;
+    }
+
+    .img-hover:hover {
+        -moz-filter: brightness(60%);
+        -webkit-filter: brightness(60%);
+        filter: brightness(60%);
     }
 </style>
 
@@ -37,22 +75,22 @@
         window._wpemojiSettings = { "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/", "ext": ".png", "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/", "svgExt": ".svg", "source": { "concatemoji": "https:\/\/demo.kaliumtheme.com\/shop\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.6" } };
         !function (a, b, c) { function d(a, b) { var c = String.fromCharCode; l.clearRect(0, 0, k.width, k.height), l.fillText(c.apply(this, a), 0, 0); var d = k.toDataURL(); l.clearRect(0, 0, k.width, k.height), l.fillText(c.apply(this, b), 0, 0); var e = k.toDataURL(); return d === e } function e(a) { var b; if (!l || !l.fillText) return !1; switch (l.textBaseline = "top", l.font = "600 32px Arial", a) { case "flag": return !(b = d([55356, 56826, 55356, 56819], [55356, 56826, 8203, 55356, 56819])) && (b = d([55356, 57332, 56128, 56423, 56128, 56418, 56128, 56421, 56128, 56430, 56128, 56423, 56128, 56447], [55356, 57332, 8203, 56128, 56423, 8203, 56128, 56418, 8203, 56128, 56421, 8203, 56128, 56430, 8203, 56128, 56423, 8203, 56128, 56447]), !b); case "emoji": return b = d([55357, 56692, 8205, 9792, 65039], [55357, 56692, 8203, 9792, 65039]), !b }return !1 } function f(a) { var c = b.createElement("script"); c.src = a, c.defer = c.type = "text/javascript", b.getElementsByTagName("head")[0].appendChild(c) } var g, h, i, j, k = b.createElement("canvas"), l = k.getContext && k.getContext("2d"); for (j = Array("flag", "emoji"), c.supports = { everything: !0, everythingExceptFlag: !0 }, i = 0; i < j.length; i++)c.supports[j[i]] = e(j[i]), c.supports.everything = c.supports.everything && c.supports[j[i]], "flag" !== j[i] && (c.supports.everythingExceptFlag = c.supports.everythingExceptFlag && c.supports[j[i]]); c.supports.everythingExceptFlag = c.supports.everythingExceptFlag && !c.supports.flag, c.DOMReady = !1, c.readyCallback = function () { c.DOMReady = !0 }, c.supports.everything || (h = function () { c.readyCallback() }, b.addEventListener ? (b.addEventListener("DOMContentLoaded", h, !1), a.addEventListener("load", h, !1)) : (a.attachEvent("onload", h), b.attachEvent("onreadystatechange", function () { "complete" === b.readyState && c.readyCallback() })), g = c.source || {}, g.concatemoji ? f(g.concatemoji) : g.wpemoji && g.twemoji && (f(g.twemoji), f(g.wpemoji))) }(window, document, window._wpemojiSettings);
     </script>
-<style type="text/css">
-    img.wp-smiley,
-    img.emoji {
-        display: inline !important;
-        border: none !important;
-        box-shadow: none !important;
-        height: 1em !important;
-        width: 1em !important;
-        margin: 0 .07em !important;
-        vertical-align: -0.1em !important;
-        background: none !important;
-        padding: 0 !important;
-    }
-</style>
-<style>
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
     </style>
+    <style>
+        </style>
     <link rel='stylesheet' id='rs-plugin-settings-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/revslider/public/assets/css/settingsf1f1.css?ver=5.4.7.3' type='text/css' media='all' />
     <style id='rs-plugin-settings-inline-css' type='text/css'>
         .tp-caption a {
@@ -90,14 +128,15 @@
     <link data-type="outside" rel='stylesheet' id='bootstrap-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/bootstrap.css' type='text/css' media='all' />
     <link data-type="outside" rel='stylesheet' id='main-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/main7793.css?ver=2.4' type='text/css' media='all' />
     <link data-type="outside" rel='stylesheet' id='style-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/style7793.css?ver=2.4' type='text/css' media='all' />
-    <link data-type="outside" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link data-type="outside" href="/misc/select2.min.css" rel="stylesheet" />
     <link data-type="outside" rel='stylesheet' id='custom-skin-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/css/custom-skin6269.css?ver=7520a15ef57078c7eb9c724cdd2109e6' type='text/css' media='all' />
-    <link data-type="outside" rel='stylesheet' id='typolab-facfb629ec7edae42cdc8d1f3cc8dbc6-css' href='https://fonts.googleapis.com/css?family=Dosis%3A300%2Cregular&amp;subset=latin&amp;ver=02d7a2f95f721c1f5360b45fd5e2b659' type='text/css' media='all' />
+    <!-- <link data-type="outside" rel='stylesheet' id='typolab-facfb629ec7edae42cdc8d1f3cc8dbc6-css' href='https://fonts.googleapis.com/css?family=Dosis%3A300%2Cregular&amp;subset=latin&amp;ver=02d7a2f95f721c1f5360b45fd5e2b659' type='text/css' media='all' /> -->
     <link data-type="outside" rel='stylesheet' id='js_composer_front-css' href='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/js_composer/assets/css/js_composer.min8b06.css?ver=5.4.7' type='text/css' media='all' />
-    <link data-type="shared" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css' type='text/css' media='all' />
+    <link data-type="shared" rel='stylesheet' href='/misc/toastr.min.css' type='text/css' media='all' />
 
+    <link data-type="shared" rel="stylesheet" type="text/css" href="/misc/daterangepicker.css" />
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"> -->
 
     <!-- $1$begin::Page Vendors #1# -->
     <!-- <link data-type="metronic" href="assets/vendors/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" /> -->
@@ -106,33 +145,31 @@
     <!-- -->
     <!-- <link data-type="metronic" href="assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css" /> -->
     <!-- <link data-type="metronic" href="assets/demo/default/base/style.bundle.css" rel="stylesheet" type="text/css" /> -->
-<!-- $1$end::Base Styles #1# -->
+    <!-- $1$end::Base Styles #1# -->
+    <!-- plugins css -->
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/PACE/themes/blue/pace-theme-minimal.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css" />
 
+    <!-- page plugins css -->
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/bower-jvectormap/jquery-jvectormap-1.2.2.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/nvd3/build/nv.d3.min.css" />
+    <!-- page plugins css -->
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.default.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap-daterangepicker/daterangepicker.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
+    <link data-type="metronic" rel="stylesheet" href="/bower_components/summernote/dist/summernote.css" />
+    <link data-type="shared" rel="stylesheet" href="/assets/css/sweetalert.css" />
+    <!-- core css -->
+    <link data-type="metronic" href="/assets/css/ei-icon.css" rel="stylesheet">
+    <link data-type="metronic" href="/assets/css/themify-icons.css" rel="stylesheet">
+    <link data-type="metronic" href="/assets/css/font-awesome.min.css" rel="stylesheet">
+    <link data-type="metronic" href="/assets/css/animate.min.css" rel="stylesheet">
+    <link data-type="metronic" href="/assets/css/app.css" rel="stylesheet">
 
-<!-- plugins css -->
-<link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/PACE/themes/blue/pace-theme-minimal.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css" />
-
-<!-- page plugins css -->
-<link data-type="metronic" rel="stylesheet" href="/bower_components/bower-jvectormap/jquery-jvectormap-1.2.2.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/nvd3/build/nv.d3.min.css" />
-<!-- page plugins css -->
-<link data-type="metronic" rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.default.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap-daterangepicker/daterangepicker.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
-<link data-type="metronic" rel="stylesheet" href="/bower_components/summernote/dist/summernote.css" />
-<link data-type="shared" rel="stylesheet" href="/assets/css/sweetalert.css" />
-<!-- core css -->
-<link data-type="metronic" href="/assets/css/ei-icon.css" rel="stylesheet">
-<link data-type="metronic" href="/assets/css/themify-icons.css" rel="stylesheet">
-<link data-type="metronic" href="/assets/css/font-awesome.min.css" rel="stylesheet">
-<link data-type="metronic" href="/assets/css/animate.min.css" rel="stylesheet">
-<link data-type="metronic" href="/assets/css/app.css" rel="stylesheet">
-
-<script type="text/javascript">
-    var ajaxurl = ajaxurl || 'https://demo.kaliumtheme.com/shop/wp-admin/admin-ajax.php';
-</script>
+    <script type="text/javascript">
+        var ajaxurl = ajaxurl || 'https://demo.kaliumtheme.com/shop/wp-admin/admin-ajax.php';
+    </script>
     <style id="typolab-font-variants">
         h1, .h1, .page-heading h1, h2, .h2, .page-heading h2, h3, .h3, .page-heading h3, h4, .h4, .page-heading h4, h5, .h5, .page-heading h5, h6, .h6, .page-heading h6 {
             font-family: 'Dosis';
@@ -156,20 +193,11 @@
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min46df.js?ver=3.3.5'></script>
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/woocommerce-quantity-increment/assets/js/wc-quantity-increment.min1845.js?ver=4.9.6'></script>
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/js_composer/assets/js/vendors/woocommerce-add-to-cart8b06.js?ver=5.4.7'></script>
-    <link rel='https://api.w.org/' href='/wp-json/index.html' />
     <link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc0db0.php?rsd" />
-    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-includes/wlwmanifest.xml" />
     <meta name="generator" content="WordPress 4.9.6" />
     <meta name="generator" content="WooCommerce 3.3.5" />
     <link rel="canonical" href="index.html" />
     <link rel='shortlink' href='/index.html' />
-    <link rel="alternate" type="application/json+oembed" href="wp-json/oembed/1.0/embedb58d.json?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2F" />
-    <link rel="alternate" type="text/xml+oembed" href="wp-json/oembed/1.0/embed2c03?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2F&amp;format=xml" />
-
-    <noscript>
-        <img height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=261506237612914&amp;ev=PageView&amp;noscript=1" />
-    </noscript>
     <link rel="shortcut icon" href="demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/favicon.png">
     <script>var mobile_menu_breakpoint = 991;</script>
     <style>
@@ -246,15 +274,14 @@
         }
     </style>
     <meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress." />
-    <!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css" media="screen"><![endif]-->
     <meta name="generator" content="Powered by Slider Revolution 5.4.7.3 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface." />
     <script type="text/javascript">
-    function setREVStartSize(e) {
-        try {
-            e.c = jQuery(e.c); var i = jQuery(window).width(), t = 9999, r = 0, n = 0, l = 0, f = 0, s = 0, h = 0;
-            if (e.responsiveLevels && (jQuery.each(e.responsiveLevels, function (e, f) { f > i && (t = r = f, l = e), i > f && f > r && (r = f, n = e) }), t > r && (l = n)), f = e.gridheight[l] || e.gridheight[0] || e.gridheight, s = e.gridwidth[l] || e.gridwidth[0] || e.gridwidth, h = i / s, h = h > 1 ? 1 : h, f = Math.round(h * f), "fullscreen" == e.sliderLayout) { var u = (e.c.width(), jQuery(window).height()); if (void 0 != e.fullScreenOffsetContainer) { var c = e.fullScreenOffsetContainer.split(","); if (c) jQuery.each(c, function (e, i) { u = jQuery(i).length > 0 ? u - jQuery(i).outerHeight(!0) : u }), e.fullScreenOffset.split("%").length > 1 && void 0 != e.fullScreenOffset && e.fullScreenOffset.length > 0 ? u -= jQuery(window).height() * parseInt(e.fullScreenOffset, 0) / 100 : void 0 != e.fullScreenOffset && e.fullScreenOffset.length > 0 && (u -= parseInt(e.fullScreenOffset, 0)) } f = u } else void 0 != e.minHeight && f < e.minHeight && (f = e.minHeight); e.c.closest(".rev_slider_wrapper").css({ height: f })
-        } catch (d) { console.log("Failure at Presize of Slider:" + d) }
-    };</script>
+        function setREVStartSize(e) {
+            try {
+                e.c = jQuery(e.c); var i = jQuery(window).width(), t = 9999, r = 0, n = 0, l = 0, f = 0, s = 0, h = 0;
+                if (e.responsiveLevels && (jQuery.each(e.responsiveLevels, function (e, f) { f > i && (t = r = f, l = e), i > f && f > r && (r = f, n = e) }), t > r && (l = n)), f = e.gridheight[l] || e.gridheight[0] || e.gridheight, s = e.gridwidth[l] || e.gridwidth[0] || e.gridwidth, h = i / s, h = h > 1 ? 1 : h, f = Math.round(h * f), "fullscreen" == e.sliderLayout) { var u = (e.c.width(), jQuery(window).height()); if (void 0 != e.fullScreenOffsetContainer) { var c = e.fullScreenOffsetContainer.split(","); if (c) jQuery.each(c, function (e, i) { u = jQuery(i).length > 0 ? u - jQuery(i).outerHeight(!0) : u }), e.fullScreenOffset.split("%").length > 1 && void 0 != e.fullScreenOffset && e.fullScreenOffset.length > 0 ? u -= jQuery(window).height() * parseInt(e.fullScreenOffset, 0) / 100 : void 0 != e.fullScreenOffset && e.fullScreenOffset.length > 0 && (u -= parseInt(e.fullScreenOffset, 0)) } f = u } else void 0 != e.minHeight && f < e.minHeight && (f = e.minHeight); e.c.closest(".rev_slider_wrapper").css({ height: f })
+            } catch (d) { console.log("Failure at Presize of Slider:" + d) }
+        };</script>
     <style type="text/css" data-type="vc_shortcodes-custom-css">
         .vc_custom_1433194808382 {
             padding-top: 20px !important;
@@ -304,10 +331,10 @@
             }
         </style>
     </noscript>
-    <script type="text/javascript" src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/revslider/public/assets/js/extensions/revolution.extension.slideanims.min.js"></script>
-    <script type="text/javascript" src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/revslider/public/assets/js/extensions/revolution.extension.layeranimation.min.js"></script>
-    <script type="text/javascript" src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/revslider/public/assets/js/extensions/revolution.extension.navigation.min.js"></script>
-    <script type="text/javascript" src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/plugins/revslider/public/assets/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script type="text/javascript" src="/misc/revolution.extension.slideanims.min.js"></script>
+    <script type="text/javascript" src="/misc/revolution.extension.layeranimation.min.js"></script>
+    <script type="text/javascript" src="/misc/revolution.extension.navigation.min.js"></script>
+    <script type="text/javascript" src="/misc/revolution.extension.parallax.min.js"></script>
 
 </head>
 <body class="home page-template-default page page-id-377 has-fixed-footer wpb-js-composer js-comp-ver-5.4.7 vc_responsive woocommerce">
@@ -530,18 +557,15 @@
         }
     </style>
     <noscript>
-        <div style="display:inline;">
-            <img height="1" width="1" style="border-style:none;" alt="" src="http://googleads.g.doubleclick.net/pagead/viewthroughconversion/991533214/?value=0&amp;guid=ON&amp;script=0" />
-        </div>
     </noscript>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/misc/jquery.min.js" type="text/javascript"></script>
     <script type='text/javascript' src='/jqueryui/jquery-ui.js'></script>
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/js/slick/slick.min.js'></script>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js'></script>
+    <script type='text/javascript' src='/misc/toastr.min.js'></script>
     <script type='text/javascript' src='/lib/signalr.js'></script>
     <script type='text/javascript' src='/jqueryui/jquery-ui.js'></script>
     <script type='text/javascript' src='/demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/themes/kalium/assets/js/slick/slick.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="/misc/select2.min.js"></script>
     <!-- <script src="/assets/js/vendor.js"></script> -->
     <!--     $1$ page plugins js #1# -->
     <script src="/bower_components/bower-jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
@@ -561,15 +585,16 @@
 <script src="/bower_components/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 <script src="/bower_components/datatables/media/js/jquery.dataTables.js"></script>
     <!-- $1$ page plugins js #1# -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/misc/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="/misc/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.4.0/perfect-scrollbar.min.js"></script>
+    <script src="/misc/perfect-scrollbar.min.js"></script>
     <script src="/assets/js/app.min.js"></script>
     <!--     $1$ page js #1# -->
     <script src="assets/js/dashboard/dashboard.js"></script>
 
-
+<script type="text/javascript" src="/misc/moment.min.js"></script>
+<script type="text/javascript" src="/misc/daterangepicker.min.js"></script>
 
     <script>
         let $ = jQuery;
@@ -664,6 +689,37 @@
                 }
             });
 
+        $(document).on('change',
+            '#user-avatar',
+            function () {
+                var files = $(this).prop("files");
+                var id = $(this).attr('data-id');
+                var fdata = new FormData();
+                fdata.append('id', id);
+                for (var i = 0; i < files.length; i++)
+                {
+                    fdata.append("files", files[i]);
+                }
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/Identity/UploadAvatar",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            $('#user-image, #sidebar-avatar').attr('src', response[0].url);
+                            toastr["success"]("Images uploaded.");
+                            $('#hidden-avatar').val(response[0].url);
+                            $('#avatar-notice').click();
+                        }
+                    });
+                }
+                else {
+                    toastr["warning"]("Upload failed. Please try again.");
+                }
+            });
+
         $(document).ready(function () {
             $('#product-image').on('click',
                 function() {
@@ -701,6 +757,10 @@
                 var result = key && price && date && quantity;
                 resolve(result);
             });
+        });
+
+        Blazor.registerFunction('validateForm', (selector) => {
+            return $(selector).valid();
         });
 
         Blazor.registerFunction('validateExtra', (selector) => {
@@ -784,8 +844,10 @@
             return true;
         });
 
-        Blazor.registerFunction('initDashboard', () => {
-            loadDashboard();
+        Blazor.registerFunction('initDashboard', (categoryPieChartLabels, categoryPieChartData,
+            earningLastWeekLabels, earningLastWeekData) => {
+            loadDashboardWithParameters(categoryPieChartLabels, categoryPieChartData,
+                earningLastWeekLabels, earningLastWeekData);
             return true;
         });
 
@@ -837,11 +899,16 @@
             return true;
         });
 
+        Blazor.registerFunction('colorStar', (star) => {
+            var $starEl = $(`#star-${star}`);
+            $('.star-rating').removeClass('active');
+            $starEl.addClass('active');
+            return true;
+        });
+
         // call this when updating the shopping list catalogue
         Blazor.registerFunction('refreshShopList', () => {
-            console.log('wan');
             if (connection) {
-                console.log('walla');
                 connection.invoke("AnnounceAdd").catch(err => console.error(err.toString()));
             }
             return true;
@@ -870,7 +937,10 @@
             };
             var cartJson = localStorage.getItem('CART');
             if (cartJson) {
-                bigCart = JSON.parse(cartJson);
+                var carto = JSON.parse(cartJson);
+                if (carto) {
+                    bigCart = carto;
+                }
             }
             var cart = bigCart.Cart;
             var product = cart.find(el => el.id === obj.id && equalChoices(el.choices, choices));
@@ -925,6 +995,16 @@
 
         Blazor.registerFunction('getDate', (selector) => {
             return $(selector).datepicker('getDate');
+        });
+
+        Blazor.registerFunction('getDates', (selector) => {
+            var datepicker = $(selector).data('daterangepicker');
+            var begin = datepicker.startDate.format('D_MM_YYYY');
+            var end = datepicker.endDate.format('D_MM_YYYY');
+            return {
+                begin,
+                end
+            };
         });
 
         Blazor.registerFunction('slick', () => {
@@ -989,12 +1069,23 @@
                     }
                 });
 
+                $('#date-range-picker').daterangepicker({
+                    opens: 'left'
+                }, function (start, end, label) {
+                    $('#daterange-notifier').click();
+                });
+
                 $('.datatable').DataTable();
 
                 $('#selectize-category-selectized').attr('name', 'category-input');
                 $('#selectize-brand-selectized').attr('name', 'brand-input');
 
                 var $validator = $("#shipping-form").validate({
+                    ignore: [],
+                    debug: true
+                });
+
+                var $validator2 = $(".validated-form").validate({
                     ignore: [],
                     debug: true
                 });
@@ -1090,6 +1181,7 @@
         Blazor.registerFunction('hideModal', () => {
             $('.my-modal').removeClass('show', 'd-block');
             $('.modal-backdrop').removeClass('show', 'd-block');
+            $('.modal').removeClass('show', 'd-block');
             //            let modals = document.getElementsByClassName("modal");
             //            modals.forEach(el => {
             //                el.classList.remove("show");

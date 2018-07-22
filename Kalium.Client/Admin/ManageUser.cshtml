@@ -1,0 +1,158 @@
+﻿@page "/admin/manage-user"
+@using Kalium.Client.Admin
+@using Kalium.Shared.Consts
+@using Kalium.Shared.Models
+@inherits ManageUserModel
+
+<div class="container-fluid">
+    <div class="page-title">
+        <h4>User</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block dataTables_wrapper">
+                    <div class="dataTables_length d-inline-block">
+                        <label>
+                            Sort:
+                            <select name="dt-opt_length" aria-controls="dt-opt" onchange="@(async e =>
+                                                                                            {
+                                                                                                await ChangeSortType((Consts.SortType) int.Parse(e.Value.ToString()));
+                                                                                            })">
+                                <option value="@((int) Consts.SortType.Newness)"><a>Newest first</a></option>
+                                <option value="@((int) Consts.SortType.Role)"><a>Highest role first</a></option>
+                                <option value="@((int) Consts.SortType.Alphabet)"><a>Alphabet order</a></option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="dt-opt_filter" class="dataTables_filter d-inline-block float-right">
+                        <label>
+                            Search:
+                            <input onchange="@((e) => SearchPhrase(e.Value.ToString()))" class="" placeholder="" aria-controls="dt-opt" type="search" />
+                        </label>
+                    </div>
+                    @if (Users != null && Users.Any())
+                    {
+                    <div class="table-overflow">
+                        <table id="dt-opt" class="table table-lg table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="pl-md-5">Role</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Users)
+                                {
+                                <tr>
+                                    <td>
+                                        <div class="list-info mrg-top-10">
+                                            <img class="thumb-img" src="@user?.RealAvatar" alt="">
+                                            <div class="info">
+                                                <span class="title">@user?.UserName</span>
+                                                @* <span class="sub-title">ID 860</span> *@
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="relative mrg-top-15 dataTables_length">
+                                            <select name="dt-opt_length" class="ml-md-2" style="width: 150px;" aria-controls="dt-opt" onchange="@(async e =>
+                                                                                                                                {
+                                                                                                                                    await Save(user, e.Value.ToString());
+                                                                                                                                })">
+                                                @if (user.MainRole.Equals(Kalium.Shared.Models.Role.Admin.Name()))
+                                                         {
+                                                <option selected value="Admin">Admin</option>
+                                                         }
+                                                         else
+                                                         {
+                                                             <option value="Admin">Admin</option>
+                                                         }
+                                                @if (user.MainRole.Equals(Kalium.Shared.Models.Role.Moderator.Name()))
+                                                {
+                                                             <option selected value="Moderator">Moderator</option>
+                                                }
+                                                else
+                                                {
+                                                             <option value="Moderator">Moderator</option>
+                                                }
+                                                @if (user.MainRole.Equals(Kalium.Shared.Models.Role.Member.Name()))
+                                                {
+                                                    <option selected value="Member">Member</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="Member">Member</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="mrg-top-15">
+                                            <span class="text-info">@user.Email</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="mrg-top-15">
+                                            <span>@user.PhoneNumber</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="mrg-top-10 text-center">
+                                            <a class="btn btn-icon btn-flat btn-rounded dropdown-toggle" href="/user/@user.UserName.ToLower()">
+                                                <i class="ti-new-window"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="dataTables_info" id="dt-opt_info" role="status" aria-live="polite">Showing @Begin to @End of @Total entries</div>
+                        @if (TotalPage > 1)
+                            {
+                        <div class="dataTables_paginate paging_simple_numbers text-right" id="dt-opt_paginate">
+                            <a class="paginate_button previous @(Page == 1 ? "disabled" : "")" onclick="@(async () => { await ChangePage(Page - 1); })"
+                               aria-controls="dt-opt" data-dt-idx="0" tabindex="0" id="dt-opt_previous">
+                                Previous
+                            </a>
+                            <span>
+                                @foreach (var i in Enumerable.Range(1, TotalPage))
+                                        {
+                                <a class="paginate_button @(i == Page ? "current" : "")" value="@i" onclick="@(async () =>
+                                                                                                                           {
+                                                                                                                               var currentIndex = i;
+                                                                                                                               await ChangePage(currentIndex);
+                                                                                                                           })"
+                                   aria-controls="dt-opt" data-dt-idx="1" tabindex="0">
+                                    @i
+                                </a>
+                                        }
+                            </span>
+                            <a class="paginate_button next @(Page == TotalPage ? "disabled" : "")" onclick="@(async () => { await ChangePage(Page + 1); })"
+                               aria-controls="dt-opt" data-dt-idx="3" tabindex="0" id="dt-opt_next">
+                                Next
+                            </a>
+                        </div>
+                            }
+                    </div>
+                    }
+                    else
+                    {
+                        if (Loaded)
+                        {
+                            <NoData />
+                        }
+                        else
+                        {
+                            <Searching />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

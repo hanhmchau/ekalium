@@ -21,11 +21,18 @@ using Kalium.Server.Repositories;
 using Kalium.Server.HubR;
 using Kalium.Shared.Consts;
 using Kalium.Shared.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Kalium.Server
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -100,6 +107,7 @@ namespace Kalium.Server
             services.AddTransient<ICheckoutRepository, CheckoutRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IBrandRepository, BrandRepository>();
 
             services.AddTransient<IProductHub, ProductHub>();
             services.AddTransient<IFetcher, Fetcher>();
@@ -107,6 +115,19 @@ namespace Kalium.Server
             services.AddSignalR(options => { options.EnableDetailedErrors = true; });
 
             services.AddResponseCaching();
+
+            services.AddSingleton<EmailSender, EmailSender>();
+//
+//            services
+//                .Configure<AuthMessageSenderOptions>(Configuration.GetSection(nameof(AuthMessageSenderOptions)))
+//                .AddOptions()
+//                .BuildServiceProvider();
+
+            services.Configure<AuthMessageSenderOptions>(optionsSetup =>
+                {
+                    optionsSetup.SendGridUser = Configuration["AuthMessageSenderOptions:SendGridUser"];
+                    optionsSetup.SendGridKey = Configuration["AuthMessageSenderOptions:SendGridKey"];
+                });
         }
 
         static Func<RedirectContext<CookieAuthenticationOptions>, Task> ReplaceRedirectorWithStatusCode(HttpStatusCode statusCode) => context =>

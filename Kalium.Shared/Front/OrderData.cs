@@ -11,6 +11,8 @@ namespace Kalium.Shared.Front
     {
         public int Id { get; set; }
         public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string UserAvatar { get; set; }
         public string BillingName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -28,5 +30,7 @@ namespace Kalium.Shared.Front
         public double PostCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice) - Coupons?.Sum(c => c?.Reduction) ?? 0;
         public bool IsCancellable => (Status == (int)Consts.Consts.OrderStatus.Processing ||
                                       Status == (int)Consts.Consts.OrderStatus.Delivering) && RefundDate == null;
+        public string Note { get; set; }
+        public double PostCouponTotalBackup { get; set; }
     }
 }

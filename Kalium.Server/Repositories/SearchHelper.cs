@@ -20,7 +20,10 @@ namespace Kalium.Server.Repositories
 
         public SearchHelper<T> Page(int page, int pageSize)
         {
-            Collection = Collection.Skip((page - 1) * pageSize).Take(pageSize);
+            if (page > -1 && pageSize > -1)
+            {
+                Collection = Collection.Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return this;
         }
     }

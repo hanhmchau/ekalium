@@ -140,7 +140,7 @@
                             width: 230px;
                             height: 37.5px;
                         }
-                    </style><a itemprop="url" href="https://demo.kaliumtheme.com/shop" class="header-logo logo-image">
+                    </style><a itemprop="url" href="/" class="header-logo logo-image">
                         <img itemprop="logo" src="demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/kaliumstore1.png" width="460" height="75" class="main-logo" alt="kalium-shop" />
                     </a>
                 </div>
@@ -149,116 +149,39 @@
 
                         <nav>
                             <ul id="menu-main-menu-1" class="menu">
-                                <li onclick=@(() => ShowContextMenu("sub-menu-item-1")) id="menu-item-300" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-377 current_page_item menu-item-has-children menu-item-378">
-                                    <a><span>Home Py</span></a>
-                                    <ul class="sub-menu" id="sub-menu-item-1">
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-580"><a href="indexcbd2.html?shop-minicart-icon=1"><span>Minicart Icon &#8211; Cart</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-it  em-object-custom menu-item-581"><a href="index58bc.html?shop-minicart-icon=2"><span>Minicart Icon &#8211; Bag</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>Minicart Icon &#8211; Basket</span></a></li>
-                                        <li onclick="@(() => ShowModal("register-modal"))" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Register</span></a></li>
-                                        <li onclick="@(() => ShowModal("login-modal"))" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Login</span></a></li>
-                                        <li onclick="@LogOut" class="modal-trigger menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a><span>Log Out</span></a></li>
-                                        @if (CurrentUser != null)
-                                        {
-                                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>@CurrentUser.UserName</span></a></li>
-                                        }
-                                        else
-                                        {
-                                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-582"><a href="index7351.html?shop-minicart-icon=3"><span>Hihi Not Logged In!</span></a></li>
-                                        }
-                                    </ul>
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-542">
+                                    <a class="cursor-pointer" href="/">
+                                        <span>Homepage</span>
+                                    </a>
                                 </li>
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-352">
-                                    <a href="shop/index.html"><span>Shop</span></a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-342"><a href="shop/index.html"><span>Full Width Shop</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-563"><a href="shop/index2354.html?shop-sidebar=left"><span>Sidebar Left</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-564"><a href="shop/index2633.html?shop-sidebar=right"><span>Sidebar Right</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-609"><a href="shop-carousel/index.html"><span>Shop Carousel</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-570"><a href="shop/index0c9c.html?shop-catalog-mode=yes"><span>Catalog Mode (No prices)</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-583">
-                                            <a href="#"><span>Columns</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-565"><a href="shop/index3886.html?shop-columns=two&amp;shop-sidebar=right"><span>Two Columns</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-566"><a href="shop/index0a13.html?shop-columns=three"><span>Three Columns</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-567"><a href="shop/index9bef.html?shop-columns=four"><span>Four Columns</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-366">
-                                            <a href="categories/index.html"><span>Categories</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-548"><a href="product-category/accessories/index.html"><span>Accessories</span></a></li>
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-358"><a href="product-category/children/index.html"><span>Children</span></a></li>
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-359"><a href="product-category/accessories/home/index.html"><span>Home</span></a></li>
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-360"><a href="product-category/magazines/index.html"><span>Magazines</span></a></li>
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-361"><a href="product-category/office/index.html"><span>Office</span></a></li>
-                                                <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-362"><a href="product-category/outdoor/index.html"><span>Outdoor</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-588">
-                                            <a href="#"><span>Pagination</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-591"><a href="shop/index0087.html?shop-pagination-type=endless-reveal"><span>Endless &#8211; Reveal</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-589"><a href="shop/indexc5bd.html?shop-pagination-type=normal"><span>Normal</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-590"><a href="shop/indexf91e.html?shop-pagination-type=endless"><span>Endless</span></a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-352">
+                                    <a href="/shop"><span>Shop</span></a>
                                 </li>
-                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-367">
-                                    <a href="#"><span>Grid Types</span></a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-368"><a href="shop/index8fc5.html?shop-catalog-layout=default"><span>Default</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-369"><a href="shop/index8fc9.html?shop-catalog-layout=full-bg"><span>Full Background</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-370"><a href="shop/index54d8.html?shop-catalog-layout=distanced-centered"><span>Distanced</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-371"><a href="shop/index39cc.html?shop-catalog-layout=transparent-bg"><span>Minimal</span></a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-353">
-                                    <a href="#"><span>Product</span></a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-357"><a href="product/hasami-mug/index.html"><span>Simple Product</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-356"><a href="product/oak-tray/index.html"><span>Variable Product</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-355"><a href="product/cast-iron-animals/index.html"><span>Grouped Product</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-354"><a href="product/charley-colors/index.html"><span>External Product</span></a></li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-576">
-                                            <a href="#"><span>Product Layout</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-577"><a href="product/bridge-backpack/indexb29f.html?shop-single-image-layout=default"><span>Default</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-578"><a href="product/bridge-backpack/indexe0e1.html?shop-single-image-layout=plain"><span>Plain</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-579"><a href="product/bridge-backpack/index48a6.html?shop-single-image-layout=plain-sticky"><span>Plain Sticky</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-568"><a href="product/boskke-cube/index123f.html?shop-single-image-align=left"><span>Product Image Left</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-569"><a href="product/boskke-cube/index85ea.html?shop-single-image-align=right"><span>Product Image Right</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-575">
-                                            <a target="_blank" href="#"><span>Image Sizes</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-571"><a href="product/hasami-mug/indexddbb.html?shop-single-image-size=small"><span>Product Image &#8211; Small</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-573"><a href="product/hasami-mug/index4097.html?shop-single-image-size=large"><span>Product Image &#8211; Large</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-572"><a href="product/hasami-mug/indexc4af.html?shop-single-image-size=medium"><span>Product Image &#8211; Medium</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-574"><a href="product/hasami-mug/indexd819.html?shop-single-image-size=xlarge"><span>Product Image &#8211; X Large</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-584">
-                                            <a href="#"><span>Rating Type</span></a>
-                                            <ul class="sub-menu">
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-587"><a href="product/hanging-vessel/indexa221.html?shop-rating-style=circles"><span>Circles</span></a></li>
-                                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-586"><a href="product/hanging-vessel/index8ea3.html?shop-rating-style=stars"><span>Stars</span></a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-488">
-                                    <a href="#"><span>Woo Pages</span></a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="cart/index.html"><span>Cart</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="checkout/index.html"><span>Checkout</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="my-account/index.html"><span>My Account</span></a></li>
-                                        <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-481"><a href="order-tracking/index.html"><span>Order Tracking</span></a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-542"><a target="_blank" href="https://themeforest.net/item/kalium-creative-theme-for-professionals/10860525?ref=Laborator"><span>Buy!</span></a></li>
+
+                                @if (CurrentUser == null)
+                                {
+                                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-542">
+                                        <a class="cursor-pointer" onclick="@(() => ShowModal("login-modal"))">
+                                            <span>Login</span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-488" onclick=@(() => ShowContextMenu("sub-menu-item-1"))>
+                                        <img height="20" style="border-radius: 50%" src="@CurrentUser.Avatar" />
+                                        <a><span>@CurrentUser.UserName</span></a>
+                                        <ul class="sub-menu" id="sub-menu-item-1">
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="/user/@CurrentUser.UserName.ToLower()"><span>Profile</span></a></li>
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="/user/@CurrentUser.UserName.ToLower()/orders"><span>My Orders</span></a></li>
+                                            @if (CurrentUser.Roles.Contains("Admin"))
+                                            {
+                                                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="/admin"><span>Administration</span></a></li>
+                                            }
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-481"><a class="cursor-pointer" onclick="@LogOut"><span>Log Out</span></a></li>
+                                        </ul>
+                                    </li>
+                                }
                             </ul>
                         </nav>
 
@@ -298,9 +221,8 @@
                         </div>
                         <div class="menu-cart-icon-container menu-skin-dark">
 
-                            <a href="cart/index.html" class="cart-icon-link icon-type-ecommerce-basket">
+                            <a href="/cart" class="cart-icon-link icon-type-ecommerce-basket">
                                 <i class="icon-ecommerce-basket"></i>
-
                                 <span class="items-count hide-notification cart-items-0">&hellip;</span>
                             </a>
 
@@ -454,6 +376,7 @@ private bool IsLoggedIn { get; set; }
         await Http.GetJsonAsync<bool>("/api/Identity/LogOut/");
         CurrentUser = null;
         IsLoggedIn = false;
+        StateHasChanged();
     }
 
 private void UpdateCurrentUser(User user)

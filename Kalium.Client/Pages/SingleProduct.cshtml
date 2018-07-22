@@ -5,518 +5,519 @@
 <div id="primary" class="content-area container">
 <main id="main" class="site-main" role="main">
 <div class="single-product">
-<div class="single-product--product-details">
-@if (Product != null)
-{
-    <div id="product-@Product.Id" class="post-@Product.Id product type-product status-publish has-post-thumbnail product_cat-home first instock shipping-taxable purchasable product-type-variable has-default-attributes catalog-layout-transparent-bg product-images-columns-large product-images-align-left">
-    <div class="single-product-images">
-        <div class="kalium-woocommerce-product-gallery images-layout-type-default">
-            <div class="main-product-images carousel has-lightbox" style="opacity: 1;">
-                <div class="woocommerce-product-gallery__image">
-                    <a href="@BigImage.Url" class="wow fadeIn fast">
-                        <span class="image-placeholder" style="padding-bottom: 127.64331210%; background-color: #eeeeee">
-                            <span class="loader align-center" data-id="ball-pulse-sync">
-                                <span class="loader-row">
-                                    <span class="loader-inner ball-pulse-sync">
-                                        <span></span><span></span><span></span>
-                                    </span>
-                                </span>
-                            </span>
-                            <img width="785" height="1002" class="attachment-woocommerce_single size-woocommerce_single img-256 lazyload"
-                                 title="5" src="@BigImage.Url"
-                                 data-large_image="@BigImage.Url"
-                                 data-large_image_width="785" data-large_image_height="1002"/>
-                        </span>
-                    </a>
-                    <button class="product-gallery-lightbox-trigger" data-id="256" title="View full size"><i class="flaticon-close38"></i></button>
-                </div>
-            </div>
-
-            <div class="thumbnails" data-columns="4">
-                @foreach (Image image in Product.Images)
-                {
-                    <div class="woocommerce-product-gallery__image" onclick="@((e) => UpdateBigImage(image))">
-                        <a class="wow fadeIn fast">
-                            <span class="image-placeholder" style="padding-bottom: 100.00000000%; background-color: #eeeeee">
-                                <span class="loader align-center" data-id="ball-pulse-sync">
-                                    <span class="loader-row">
-                                        <span class="loader-inner ball-pulse-sync"><span></span><span></span><span></span></span>
-                                    </span>
-                                </span>
-                                <img width="220" height="220" class="attachment-220x220 size-220x220 img-256 lazyload" title="5"
-                                     src="@image.Url" />
-                            </span>
-                        </a>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="summary entry-summary">
-        <h1 class="product_title entry-title">@Product.Name</h1>
-        <div class="woocommerce-product-rating">
-            <Rating rating="@Product.AverageRating" />
-            <a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<span class="count">@(Product.Reviews?.Count ?? 0)</span> customer reviews)</a>
-        </div>
-        <div class="woocommerce-product-details__short-description">
-            <p>@Product.Description</p>
-        </div>
-        <div class="product_meta">
-            <span class="posted_in">Category: <a href="/shop/@Product.Category.Name.ToLower()" rel="tag">@Product.Category.Name</a></span>
-        </div>
-        @if (Product.Extras != null && Product.Extras.Any())
+    <div class="single-product--product-details">
+        @if (Product != null)
         {
-            <p class="price">
-                @if (Product.IsOnSale)
-                {
-                    <span class="woocommerce-Price-amount amount" style="text-decoration: line-through; color: lightgray; font-size: 14px;">
-                        <span class="woocommerce-Price-currencySymbol">£</span>@Product.Price
-                    </span>
-                }
-                <span class="woocommerce-Price-amount amount">
-                    <span class="woocommerce-Price-currencySymbol">£</span>@Product.DiscountedPrice
-                </span>
-            </p>
-
-        }
-        <form class="variations_form cart" method="post" enctype="multipart/form-data" data-product_id="40"
-              data-product_variations="[{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Extra Small&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:18,&quot;display_regular_price&quot;:18,&quot;image&quot;:{&quot;title&quot;:&quot;1&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;252&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>18.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:323,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-252 lazyload\&quot;  title=\&quot;1\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;252\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-252 lazyload\&quot;  title=\&quot;1\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Small&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:20,&quot;display_regular_price&quot;:20,&quot;image&quot;:{&quot;title&quot;:&quot;2&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;253&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>20.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:324,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-253 lazyload\&quot;  title=\&quot;2\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;253\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-253 lazyload\&quot;  title=\&quot;2\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Medium&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:24,&quot;display_regular_price&quot;:24,&quot;image&quot;:{&quot;title&quot;:&quot;3&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;254&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>24.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:325,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-254 lazyload\&quot;  title=\&quot;3\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;254\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-254 lazyload\&quot;  title=\&quot;3\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Large&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:25,&quot;display_regular_price&quot;:25,&quot;image&quot;:{&quot;title&quot;:&quot;4&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;255&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>25.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:326,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-255 lazyload\&quot;  title=\&quot;4\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;255\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-255 lazyload\&quot;  title=\&quot;4\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}}]">
-
-            <table class="variations" cellspacing="0">
-                <tbody>
-                @foreach (var extra in Product.Extras ?? new List<Extra>())
-                {
-                    <tr>
-                        <td class="label">
-                            <label for="size" style="font-weight: bold;">@extra.Name</label>
-                            <span style="font-size: 10px">@(extra.Optional ? "Optional" : "")</span>
-                            <span style="font-size: 8px">@extra.Description</span>
-                        </td>
-                        <td class="value">
-                            <div class="select-option-ui">
-                                <span>
-                                    @(GetOption(extra) != null ? GetOption(extra).Name : "Choose an option")
-                                </span><i class="flaticon-bottom4"></i>
-                                <select id="size" onchange="@(e => SelectOption(e.Value, extra))"
-                                        class=" form-control" name="attribute_size"
-                                        data-attribute_name="attribute_size" data-show_option_none="yes">
-                                    @if (extra.Optional)
-                                    {
-                                        <option value="0" selected class="attached enabled">Choose an option</option>
-                                    }
-                                    else
-                                    {
-                                        <option hidden selected disabled class="attached enabled">Choose an option</option>
-                                    }
-                                    @foreach (var option in extra.Options ?? new List<Option>())
-                                    {
-                                        <option value="@option.Id" class="attached enabled">@option.Name</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="dotted-extra-divider"></div>
-                            @* <a class="reset_variations pointer" style="visibility: visible; display: block;">Clear</a> *@
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-            <div class="single_variation_wrap">
-                <div class="woocommerce-variation single_variation" style="">
-                    <div class="woocommerce-variation-description"></div>
-                    <div class="woocommerce-variation-price">
-                        <span class="price">
-                            <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@TotalPrice</span>
-                        </span>
-                    </div>
-                    <div class="woocommerce-variation-availability"></div>
-                </div>
-                <div class="woocommerce-variation-add-to-cart variations_button woocommerce-variation-add-to-cart-enabled">
-
-                    <div class="quantity buttons_added">
-                        <input value="-" class="minus" type="button">
-                        <label class="screen-reader-text" for="quantity_5b3b1ff5d0b61">Quantity</label>
-                        <input id="product-quantity" class="input-text qty text input-integer-only" step="1" min="1"
-                               max="@Product.Quantity" name="quantity" value="1" title="Qty" size="4" pattern="[0-9]*"
-                               inputmode="numeric" aria-labelledby="" type="number" />
-                        <input value="+" class="plus" type="button">
-                    </div>
-
-                    <button type="button" onclick="@AddToCart" class="single_add_to_cart_button button alt">Add to cart</button>
-
-                    <input name="add-to-cart" value="40" type="hidden">
-                    <input name="product_id" value="40" type="hidden">
-                    <input name="variation_id" class="variation_id" value="323" type="hidden">
-                </div>
-            </div>
-
-        </form>
-
-        <div class="share-product-container">
-            <h3>Share this item:</h3>
-            <div class="share-product social-links">
-                <a class="facebook" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
-                    <i class="icon fa fa-facebook"></i>
-                </a>
-                <a class="twitter" href="https://twitter.com/share?text=Oak+Tray&amp;url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
-                    <i class="icon fa fa-twitter"></i>
-                </a>
-                <a class="pinterest" href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F&amp;description=Oak+Tray&amp;media=https://demo.kaliumtheme.com/shop/wp-content/uploads/2015/05/51.jpg">
-                    <i class="icon fa fa-pinterest"></i>
-                </a>
-                <a class="tumblr" href="http://www.tumblr.com/share/link?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F&amp;name=Oak+Tray&amp;description=Pellentesque+habitant+morbi+tristique+senectus+et+netus+et+malesuada+fames+ac+turpis+egestas.+Vestibulum+tortor+quam%2C+feugiat+vitae%2C+ultricies+eget%2C+tempor+sit+amet%2C+ante.+Donec+eu+libero+sit+amet+quam+egestas+semper.+Aenean+ultricies+mi+vitae+est.+Mauris+placerat+eleifend%26hellip%3B">
-                    <i class="icon fa fa-tumblr"></i>
-                </a>
-                <a class="envelope-o" href="mailto:?subject=Oak+Tray&amp;body=Check out what I just spotted: https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
-                    <i class="icon fa fa-envelope-o"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="woocommerce-tabs wc-tabs-wrapper col-sm-12">
-        <ul class="tabs wc-tabs tabs" role="tablist">
-            <li class="description_tab active tab-control" id="tab-title-description" role="tab" target="#tab-description">
-                <a class="pointer">Description</a>
-            </li>
-            <li class="additional_information_tab tab-control" id="tab-title-additional_information" role="tab" target="#tab-additional_information">
-                <a class="pointer">Additional information</a>
-            </li>
-            <li class="reviews_tab tab-control" id="tab-title-reviews" role="tab" target="#tab-reviews">
-                <a class="pointer">Reviews (@Product.Reviews?.Count)</a>
-            </li>
-        </ul>
-        <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab post-formatting" id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
-            @Product.Description
-        </div>
-        <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content wc-tab post-formatting" id="tab-additional_information" role="tabpanel" aria-labelledby="tab-title-additional_information">
-
-            <h2>Additional information</h2>
-            <table class="shop_attributes">
-
-
-                <tbody>
-                @if (Product.Origin != null)
-                {
-                    <tr>
-                        <th>Origin</th>
-                        <td>
-                            <p>@Product.Origin</p>
-                        </td>
-                    </tr>
-                }
-                @if (Product.Material != null)
-                {
-                    <tr>
-                        <th>Material</th>
-                        <td>
-                            <p>@Product.Material</p>
-                        </td>
-                    </tr>
-                }
-                @if (Product.Process != null)
-                {
-                    <tr>
-                        <th>Process</th>
-                        <td>
-                            <p>@Product.Process</p>
-                        </td>
-                    </tr>
-                }
-                @if (Product.Format != null)
-                {
-                    <tr>
-                        <th>Material</th>
-                        <td>
-                            <p>@Product.Format</p>
-                        </td>
-                    </tr>
-                }
-                @if (Product.Features != null)
-                {
-                    <tr>
-                        <th>Features</th>
-                        <td>
-                            <p>@Product.Features</p>
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--reviews panel entry-content wc-tab post-formatting" id="tab-reviews" role="tabpanel" aria-labelledby="tab-title-reviews">
-            <div id="reviews" class="woocommerce-Reviews">
-                <div id="comments">
-                    <h2 class="woocommerce-Reviews-title">@(Product.Reviews?.Count ?? 0) reviews for <span>@Product.Name</span></h2>
-
-                    <ol class="commentlist">
-                        @foreach (var review in Product.Reviews ?? new List<Review>())
-                        {
-                            <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-@review.Id">
-                                <div id="comment-360" class="comment_container">
-                                    <img alt="" src="@review.User.Avatar" class="avatar avatar-60 photo" width="60" height="60">
-                                    <div class="comment-text">
-                                        <Rating rating="@review.Rating" />
-                                        <p class="meta">
-                                            <strong class="woocommerce-review__author">@review.User.UserName</strong>
-                                            <span class="woocommerce-review__dash">–</span>
-                                            <time class="woocommerce-review__published-date">@review.DateCreated.ToShortDateString()</time>
-                                        </p>
-                                        <div class="description">
-                                            <p>@review.Content</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                        }
-                    </ol>
-
-                </div>
-
-                <div id="review_form_wrapper">
-                    <div id="review_form">
-                        <div id="respond" class="comment-respond">
-                            <span id="reply-title" class="comment-reply-title">
-                                Add a review
-                                <small>
-                                    <a rel="nofollow" id="cancel-comment-reply-link" href="/shop/product/oak-tray/?attribute_size=Extra+Small#respond" style="display: none;">Cancel reply</a>
-                                </small>
-                            </span>
-                            <form action="https://demo.kaliumtheme.com/shop/wp-comments-post.php" method="post" id="commentform" class="comment-form requires-cookie-consent" novalidate="">
-                                <p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p>
-                                <div class="comment-form-rating">
-                                    <label for="rating">Your rating</label>
-                                    <p class="stars">
-                                        <span>
-                                            <a class="star-1" href="#">1</a><a class="star-2" href="#">2</a><a class="star-3" href="#">3</a><a class="star-4" href="#">4</a><a class="star-5" href="#">5</a>
+            <div id="product-@Product.Id" class="post-@Product.Id product type-product status-publish has-post-thumbnail product_cat-home first instock shipping-taxable purchasable product-type-variable has-default-attributes catalog-layout-transparent-bg product-images-columns-large product-images-align-left">
+                <div class="single-product-images">
+                    <div class="kalium-woocommerce-product-gallery images-layout-type-default">
+                        <div class="main-product-images carousel has-lightbox" style="opacity: 1;">
+                            <div class="woocommerce-product-gallery__image">
+                                <a href="@BigImage.Url" class="wow fadeIn fast">
+                                    <span class="image-placeholder" style="padding-bottom: 127.64331210%; background-color: #eeeeee">
+                                        <span class="loader align-center" data-id="ball-pulse-sync">
+                                            <span class="loader-row">
+                                                <span class="loader-inner ball-pulse-sync">
+                                                    <span></span><span></span><span></span>
+                                                </span>
+                                            </span>
                                         </span>
-                                    </p>
-                                    <select name="rating" id="rating" aria-required="true" required="" style="display: none;">
-                                        <option value="">Rate…</option>
-                                        <option value="5">Perfect</option>
-                                        <option value="4">Good</option>
-                                        <option value="3">Average</option>
-                                        <option value="2">Not that bad</option>
-                                        <option value="1">Very poor</option>
-                                    </select>
+                                        <img width="785" height="1002" class="attachment-woocommerce_single size-woocommerce_single img-256 lazyload"
+                                             title="5" src="@BigImage.Url"
+                                             data-large_image="@BigImage.Url"
+                                             data-large_image_width="785" data-large_image_height="1002" />
+                                    </span>
+                                </a>
+                                <button class="product-gallery-lightbox-trigger" data-id="256" title="View full size"><i class="flaticon-close38"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="thumbnails" data-columns="4">
+                            @foreach (Image image in Product.Images)
+                            {
+                                <div class="woocommerce-product-gallery__image" onclick="@((e) => UpdateBigImage(image))">
+                                    <a class="wow fadeIn fast">
+                                        <span class="image-placeholder" style="padding-bottom: 100.00000000%; background-color: #eeeeee">
+                                            <span class="loader align-center" data-id="ball-pulse-sync">
+                                                <span class="loader-row">
+                                                    <span class="loader-inner ball-pulse-sync"><span></span><span></span><span></span></span>
+                                                </span>
+                                            </span>
+                                            <img width="220" height="220" class="attachment-220x220 size-220x220 img-256 lazyload" title="5"
+                                                 src="@image.Url" />
+                                        </span>
+                                    </a>
                                 </div>
-                                <p class="labeled-textarea-row comment-form-comment">
-                                    <label for="comment">Your review&nbsp;<span class="required">*</span></label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" required=""></textarea>
-                                </p>
-                                <p class="labeled-input-row comment-form-author">
-                                    <label for="author">Name&nbsp;<span class="required">*</span></label> <input id="author" name="author" value="" size="30" aria-required="true" required="" type="text">
-                                </p>
-                                <p class="labeled-input-row comment-form-email">
-                                    <label for="email">Email&nbsp;<span class="required">*</span></label> <input id="email" name="email" value="" size="30" aria-required="true" required="" type="email">
-                                </p>
-                                <div class="clear"></div>
-                                <p class="form-submit">
-                                    <input name="submit" id="submit" class="button" value="Submit" type="submit"> <input name="comment_post_ID" value="40" id="comment_post_ID" type="hidden">
-                                    <input name="comment_parent" id="comment_parent" value="0" type="hidden">
-                                </p>
-                                <p style="display: none;">
-                                    <input id="akismet_comment_nonce" name="akismet_comment_nonce" value="fba45ee44d" type="hidden">
-                                </p>
-                                <p style="display: none;"></p> <input id="ak_js" name="ak_js" value="1530601461217" type="hidden">
-                            </form>
-                        </div><!-- #respond -->
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="summary entry-summary">
+                    <h1 class="product_title entry-title">@Product.Name</h1>
+                    <div class="woocommerce-product-rating">
+                        <Rating rating="@Product.AverageRating" />
+                        <a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<span class="count">@(Product.Reviews?.Count ?? 0)</span> customer reviews)</a>
+                    </div>
+                    <div class="woocommerce-product-details__short-description">
+                        <p>@Product.Description</p>
+                    </div>
+                    <div class="product_meta">
+                        <span class="posted_in">Category: <a href="/shop/@Product.Category.Name.ToLower()" rel="tag">@Product.Category.Name</a></span>
+                    </div>
+                    @if (Product.Extras != null && Product.Extras.Any())
+                    {
+                        <p class="price">
+                            @if (Product.IsOnSale)
+                            {
+                                <span class="woocommerce-Price-amount amount" style="text-decoration: line-through; color: lightgray; font-size: 14px;">
+                                    <span class="woocommerce-Price-currencySymbol">£</span>@Product.Price
+                                </span>
+                            }
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">£</span>@Product.DiscountedPrice
+                            </span>
+                        </p>
+
+                    }
+                    <form class="variations_form cart" method="post" enctype="multipart/form-data" data-product_id="40"
+                          data-product_variations="[{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Extra Small&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:18,&quot;display_regular_price&quot;:18,&quot;image&quot;:{&quot;title&quot;:&quot;1&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;252&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>18.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:323,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-252 lazyload\&quot;  title=\&quot;1\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;252\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-252 lazyload\&quot;  title=\&quot;1\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/11-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Small&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:20,&quot;display_regular_price&quot;:20,&quot;image&quot;:{&quot;title&quot;:&quot;2&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;253&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>20.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:324,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-253 lazyload\&quot;  title=\&quot;2\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;253\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-253 lazyload\&quot;  title=\&quot;2\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/21-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Medium&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:24,&quot;display_regular_price&quot;:24,&quot;image&quot;:{&quot;title&quot;:&quot;3&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;254&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>24.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:325,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-254 lazyload\&quot;  title=\&quot;3\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;254\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-254 lazyload\&quot;  title=\&quot;3\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/31-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}},{&quot;attributes&quot;:{&quot;attribute_size&quot;:&quot;Large&quot;},&quot;availability_html&quot;:&quot;&quot;,&quot;backorders_allowed&quot;:false,&quot;dimensions&quot;:{&quot;length&quot;:&quot;&quot;,&quot;width&quot;:&quot;&quot;,&quot;height&quot;:&quot;&quot;},&quot;dimensions_html&quot;:&quot;N\/A&quot;,&quot;display_price&quot;:25,&quot;display_regular_price&quot;:25,&quot;image&quot;:{&quot;title&quot;:&quot;4&quot;,&quot;caption&quot;:&quot;&quot;,&quot;url&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;srcset&quot;:false,&quot;sizes&quot;:&quot;(max-width: 785px) 100vw, 785px&quot;,&quot;full_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg&quot;,&quot;full_src_w&quot;:785,&quot;full_src_h&quot;:1002,&quot;gallery_thumbnail_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg&quot;,&quot;gallery_thumbnail_src_w&quot;:220,&quot;gallery_thumbnail_src_h&quot;:220,&quot;thumb_src&quot;:&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-550x700.jpg&quot;,&quot;thumb_src_w&quot;:550,&quot;thumb_src_h&quot;:700,&quot;src_w&quot;:785,&quot;src_h&quot;:1002},&quot;image_id&quot;:&quot;255&quot;,&quot;is_downloadable&quot;:false,&quot;is_in_stock&quot;:true,&quot;is_purchasable&quot;:true,&quot;is_sold_individually&quot;:&quot;no&quot;,&quot;is_virtual&quot;:false,&quot;max_qty&quot;:&quot;&quot;,&quot;min_qty&quot;:1,&quot;price_html&quot;:&quot;<span class=\&quot;price\&quot;><span class=\&quot;woocommerce-Price-amount amount\&quot;><span class=\&quot;woocommerce-Price-currencySymbol\&quot;>&amp;pound;<\/span>25.00<\/span><\/span>&quot;,&quot;sku&quot;:&quot;&quot;,&quot;variation_description&quot;:&quot;&quot;,&quot;variation_id&quot;:326,&quot;variation_is_active&quot;:true,&quot;variation_is_visible&quot;:true,&quot;weight&quot;:&quot;&quot;,&quot;weight_html&quot;:&quot;N\/A&quot;,&quot;kalium_image&quot;:{&quot;main&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:127.64331210%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;785\&quot;  height=\&quot;1002\&quot;  class=\&quot;attachment-woocommerce_single size-woocommerce_single img-255 lazyload\&quot;  title=\&quot;4\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot; \/><\/span><\/a><button class=\&quot;product-gallery-lightbox-trigger\&quot; data-id=\&quot;255\&quot; title=\&quot;View full size\&quot;><i class=\&quot;flaticon-close38\&quot;><\/i><\/button><\/div>&quot;,&quot;thumb&quot;:&quot;<div class=\&quot;woocommerce-product-gallery__image\&quot;><a href=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot; class=\&quot;wow fadeIn fast\&quot;><span class=\&quot;image-placeholder\&quot; style=\&quot;padding-bottom:100.00000000%;background-color:#eeeeee\&quot;><span class=\&quot;loader align-center\&quot; data-id=\&quot;ball-pulse-sync\&quot;><span class=\&quot;loader-row\&quot;><span class=\&quot;loader-inner ball-pulse-sync\&quot;><span><\/span><span><\/span><span><\/span><\/span><\/span><\/span><img width=\&quot;220\&quot;  height=\&quot;220\&quot;  class=\&quot;attachment-220x220 size-220x220 img-255 lazyload\&quot;  title=\&quot;4\&quot;  data-src=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg\&quot;  data-large_image=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41.jpg\&quot;  data-large_image_width=\&quot;785\&quot;  data-large_image_height=\&quot;1002\&quot;  data-srcset=\&quot;https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-220x220.jpg 220w, https:\/\/demo.kaliumtheme.com\/shop\/wp-content\/uploads\/2015\/05\/41-100x100.jpg 100w\&quot;  data-sizes=\&quot;(max-width: 220px) 100vw, 220px\&quot; \/><\/span><\/a><\/div>&quot;}}]">
+
+                        <table class="variations" cellspacing="0">
+                            <tbody>
+                                @foreach (var extra in Product.Extras ?? new List<Extra>())
+                                {
+                                    <tr>
+                                        <td class="label">
+                                            <label for="size" style="font-weight: bold;">@extra.Name</label>
+                                            <span style="font-size: 10px">@(extra.Optional ? "Optional" : "")</span>
+                                            <span style="font-size: 8px">@extra.Description</span>
+                                        </td>
+                                        <td class="value">
+                                            <div class="select-option-ui">
+                                                <span>
+                                                    @(GetOption(extra) != null ? GetOption(extra).Name : "Choose an option")
+                                                </span><i class="flaticon-bottom4"></i>
+                                                <select id="size" onchange="@(e => SelectOption(e.Value, extra))"
+                                                        class=" form-control" name="attribute_size"
+                                                        data-attribute_name="attribute_size" data-show_option_none="yes">
+                                                    @if (extra.Optional)
+                                                    {
+                                                        <option value="0" selected class="attached enabled">Choose an option</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option hidden selected disabled class="attached enabled">Choose an option</option>
+                                                    }
+                                                    @foreach (var option in extra.Options ?? new List<Option>())
+                                                    {
+                                                        <option value="@option.Id" class="attached enabled">@option.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="dotted-extra-divider"></div>
+                                            @* <a class="reset_variations pointer" style="visibility: visible; display: block;">Clear</a> *@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="single_variation_wrap">
+                            <div class="woocommerce-variation single_variation" style="">
+                                <div class="woocommerce-variation-description"></div>
+                                <div class="woocommerce-variation-price">
+                                    <span class="price">
+                                        <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@TotalPrice</span>
+                                    </span>
+                                </div>
+                                <div class="woocommerce-variation-availability"></div>
+                            </div>
+                            <div class="woocommerce-variation-add-to-cart variations_button woocommerce-variation-add-to-cart-enabled">
+
+                                <div class="quantity buttons_added">
+                                    <input value="-" class="minus" type="button">
+                                    <label class="screen-reader-text" for="quantity_5b3b1ff5d0b61">Quantity</label>
+                                    <input id="product-quantity" class="input-text qty text input-integer-only" step="1" min="1"
+                                           max="@Product.Quantity" name="quantity" value="1" title="Qty" size="4" pattern="[0-9]*"
+                                           inputmode="numeric" aria-labelledby="" type="number" />
+                                    <input value="+" class="plus" type="button">
+                                </div>
+
+                                <button type="button" onclick="@AddToCart" class="single_add_to_cart_button button alt">Add to cart</button>
+
+                                <input name="add-to-cart" value="40" type="hidden">
+                                <input name="product_id" value="40" type="hidden">
+                                <input name="variation_id" class="variation_id" value="323" type="hidden">
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="share-product-container">
+                        <h3>Share this item:</h3>
+                        <div class="share-product social-links">
+                            <a class="facebook" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
+                                <i class="icon fa fa-facebook"></i>
+                            </a>
+                            <a class="twitter" href="https://twitter.com/share?text=Oak+Tray&amp;url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
+                                <i class="icon fa fa-twitter"></i>
+                            </a>
+                            <a class="pinterest" href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F&amp;description=Oak+Tray&amp;media=https://demo.kaliumtheme.com/shop/wp-content/uploads/2015/05/51.jpg">
+                                <i class="icon fa fa-pinterest"></i>
+                            </a>
+                            <a class="tumblr" href="http://www.tumblr.com/share/link?url=https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F&amp;name=Oak+Tray&amp;description=Pellentesque+habitant+morbi+tristique+senectus+et+netus+et+malesuada+fames+ac+turpis+egestas.+Vestibulum+tortor+quam%2C+feugiat+vitae%2C+ultricies+eget%2C+tempor+sit+amet%2C+ante.+Donec+eu+libero+sit+amet+quam+egestas+semper.+Aenean+ultricies+mi+vitae+est.+Mauris+placerat+eleifend%26hellip%3B">
+                                <i class="icon fa fa-tumblr"></i>
+                            </a>
+                            <a class="envelope-o" href="mailto:?subject=Oak+Tray&amp;body=Check out what I just spotted: https%3A%2F%2Fdemo.kaliumtheme.com%2Fshop%2Fproduct%2Foak-tray%2F">
+                                <i class="icon fa fa-envelope-o"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="clear"></div>
+                <div class="woocommerce-tabs wc-tabs-wrapper col-sm-12">
+                    <ul class="tabs wc-tabs tabs" role="tablist">
+                        <li class="description_tab active tab-control" id="tab-title-description" role="tab" target="#tab-description">
+                            <a class="pointer">Description</a>
+                        </li>
+                        <li class="additional_information_tab tab-control" id="tab-title-additional_information" role="tab" target="#tab-additional_information">
+                            <a class="pointer">Additional information</a>
+                        </li>
+                        <li class="reviews_tab tab-control" id="tab-title-reviews" role="tab" target="#tab-reviews">
+                            <a class="pointer">Reviews (@Product.Reviews?.Count)</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab post-formatting" id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
+                        @Product.Description
+                    </div>
+                    <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content wc-tab post-formatting" id="tab-additional_information" role="tabpanel" aria-labelledby="tab-title-additional_information">
+
+                        <h2>Additional information</h2>
+                        <table class="shop_attributes">
+
+
+                            <tbody>
+                                @if (Product.Origin != null)
+                                {
+                                    <tr>
+                                        <th>Origin</th>
+                                        <td>
+                                            <p>@Product.Origin</p>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Product.Material != null)
+                                {
+                                    <tr>
+                                        <th>Material</th>
+                                        <td>
+                                            <p>@Product.Material</p>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Product.Process != null)
+                                {
+                                    <tr>
+                                        <th>Process</th>
+                                        <td>
+                                            <p>@Product.Process</p>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Product.Format != null)
+                                {
+                                    <tr>
+                                        <th>Material</th>
+                                        <td>
+                                            <p>@Product.Format</p>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Product.Features != null)
+                                {
+                                    <tr>
+                                        <th>Features</th>
+                                        <td>
+                                            <p>@Product.Features</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content woocommerce-Tabs-panel woocommerce-Tabs-panel--reviews panel entry-content wc-tab post-formatting" id="tab-reviews" role="tabpanel" aria-labelledby="tab-title-reviews">
+                        <div id="reviews" class="woocommerce-Reviews">
+                            <div id="comments">
+                                <h2 class="woocommerce-Reviews-title">@(Product.Reviews?.Count ?? 0) reviews for <span>@Product.Name</span></h2>
+
+                                <ol class="commentlist">
+                                    @foreach (var review in Product.Reviews ?? new List<Review>())
+                                    {
+                                        if (!review.Deleted)
+                                        {
+                                            <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-@review.Id">
+                                                <div id="comment-360" class="comment_container">
+                                                    <img alt="" src="@review.User.RealAvatar" class="avatar avatar-60 photo" width="60" height="60">
+                                                    <div class="comment-text">
+                                                        @if (CurrentUser.Id.Equals(review.User.Id) || IsAuthorized)
+                                                        {
+                                                            <div style="text-align: right; float: right; cursor: pointer; padding: 20px; font-size: 20px;" onclick="@(() => DeleteReview(review))">
+                                                                <span>x</span>
+                                                            </div>
+                                                        }
+                                                        <p class="meta">
+                                                            <strong class="woocommerce-review__author" style="font-weight: 700;">@review.User.UserName</strong>
+                                                            <span class="woocommerce-review__dash">–</span>
+                                                            <time class="woocommerce-review__published-date">@review.DateCreated.ToShortDateString()</time>
+                                                        </p>
+                                                        <Rating rating="@review.Rating"/>
+                                                        <div class="description">
+                                                            <p>@review.Content</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ol>
+
+                            </div>
+
+                            <div id="review_form_wrapper">
+                                <div id="review_form">
+                                    @if (CanReview)
+                                    {
+
+                                        <div id="respond" class="comment-respond">
+                                            <span id="reply-title" class="comment-reply-title">
+                                                Add a review
+                                                <small>
+                                                    <a rel="nofollow" id="cancel-comment-reply-link" href="/shop/product/oak-tray/?attribute_size=Extra+Small#respond" style="display: none;">Cancel reply</a>
+                                                </small>
+                                            </span>
+                                            <form action="https://demo.kaliumtheme.com/shop/wp-comments-post.php" method="post" id="commentform" class="comment-form requires-cookie-consent" novalidate="">
+                                                <p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p>
+                                                <div class="comment-form-rating">
+                                                    <label for="rating">Your rating</label>
+                                                    <p class="stars has-rating">
+                                                        <span>
+                                                            <a class="star-1 star-rating cursor-pointer" id="star-1" onclick="@(() => ColorStar(1))">1</a>
+                                                            <a class="star-2 star-rating cursor-pointer" id="star-2" onclick="@(() => ColorStar(2))">2</a>
+                                                            <a class="star-3 star-rating cursor-pointer" id="star-3" onclick="@(() => ColorStar(3))">3</a>
+                                                            <a class="star-4 star-rating cursor-pointer" id="star-4" onclick="@(() => ColorStar(4))">4</a>
+                                                            <a class="star-5 star-rating cursor-pointer" id="star-5" onclick="@(() => ColorStar(5))">5</a>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <p class="labeled-textarea-row comment-form-comment">
+                                                    <label for="comment">
+                                                        Your review
+                                                        <span class="required">*</span>
+                                                    </label><textarea bind="@ReviewContent" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+                                                </p>
+                                                <div class="clear"></div>
+                                                <p class="form-submit">
+                                                    <input name="submit" id="submit" class="button" value="Submit" type="button" onclick="@AddReview" />
+                                                </p>
+                                            </form>
+                                        </div>
+                                        <!-- #respond -->
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="related products">
+                    <h2>Related products</h2>
+                    <ul class="products columns-4" style="position: relative; height: 364.083px;">
+
+                        <li class="post-313 product type-product status-publish has-post-thumbnail product_cat-home first instock shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 0px; top: 0px;">
+                            <div class="product-images product-images--internal-details">
+                                <a href="https://demo.kaliumtheme.com/shop/product/salad-bowl/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                    <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
+                                        <span class="loader align-center" data-id="ball-pulse-sync">
+                                            <span class="loader-row">
+                                                <span class="loader-inner ball-pulse-sync">
+                                                    <span></span><span></span><span></span>
+                                                </span>
+                                            </span>
+                                        </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-258 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_060_cork_board_and_bowl_3-1340x7851-550x700.jpg" width="550" height="700">
+                                    </span>
+                                </a>
+                                <div class="product-internal-info">
+                                    <div class="item-info">
+                                        <h3>
+                                            <a href="https://demo.kaliumtheme.com/shop/product/salad-bowl/">Salad Bowl</a>
+                                        </h3>
+
+                                        <div class="product-terms">
+                                            <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
+                                        </div>
+
+                                        <div class="product-bottom-details">
+                                            <div class="price-column">
+
+                                                <span class="price">
+                                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>15.00</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="add-to-cart-column">
+                                                <div class="product-loop-add-to-cart-container">
+                                                    <div class="add-to-cart-link">
+                                                        <a href="/shop/product/oak-tray/?attribute_size=Extra+Small&amp;add-to-cart=313" data-quantity="1" class="add_to_cart_button cart-button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="313" aria-label="Add “Salad Bowl” to your cart" rel="nofollow" data-added_to_cart_text="Added to cart">Add to cart</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="post-90 product type-product status-publish has-post-thumbnail product_cat-home product_cat-office instock downloadable shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 292.5px; top: 0px;">
+                            <div class="product-images product-images--internal-details">
+                                <a href="https://demo.kaliumtheme.com/shop/product/woo-album-3/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                    <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
+                                        <span class="loader align-center" data-id="ball-pulse-sync">
+                                            <span class="loader-row">
+                                                <span class="loader-inner ball-pulse-sync">
+                                                    <span></span><span></span><span></span>
+                                                </span>
+                                            </span>
+                                        </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-263 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_087_hanging_planter_1-1340x7851-550x700.jpg" width="550" height="700">
+                                    </span>
+                                </a>
+                                <div class="product-internal-info">
+                                    <div class="item-info">
+                                        <h3>
+                                            <a href="https://demo.kaliumtheme.com/shop/product/woo-album-3/">Sky Planter</a>
+                                        </h3>
+
+                                        <div class="product-terms">
+                                            <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>, <a href="https://demo.kaliumtheme.com/shop/product-category/office/" rel="tag">Office</a>
+                                        </div>
+
+                                        <div class="product-bottom-details">
+                                            <div class="price-column">
+
+                                                <span class="price">
+                                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>9.00</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="add-to-cart-column">
+                                                <div class="product-loop-add-to-cart-container">
+                                                    <div class="add-to-cart-link">
+                                                        <a href="/shop/product/oak-tray/?attribute_size=Extra+Small&amp;add-to-cart=90" data-quantity="1" class="add_to_cart_button cart-button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="90" aria-label="Add “Sky Planter” to your cart" rel="nofollow" data-added_to_cart_text="Added to cart">Add to cart</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="post-99 product type-product status-publish has-post-thumbnail product_cat-home instock shipping-taxable product-type-grouped catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 585px; top: 0px;">
+                            <div class="product-images product-images--internal-details">
+                                <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                    <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
+                                        <span class="loader align-center" data-id="ball-pulse-sync">
+                                            <span class="loader-row">
+                                                <span class="loader-inner ball-pulse-sync">
+                                                    <span></span><span></span><span></span>
+                                                </span>
+                                            </span>
+                                        </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-282 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_061_cast_iron_birds_1-1340x7851-550x700.jpg" width="550" height="700">
+                                    </span>
+                                </a>
+                                <div class="product-internal-info">
+                                    <div class="item-info">
+                                        <h3>
+                                            <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/">Cast Iron Animals</a>
+                                        </h3>
+
+                                        <div class="product-terms">
+                                            <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
+                                        </div>
+
+                                        <div class="product-bottom-details">
+                                            <div class="price-column">
+
+                                                <span class="price"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>22.00</span> – <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>30.00</span></span>
+                                            </div>
+
+                                            <div class="add-to-cart-column">
+                                                <div class="product-loop-add-to-cart-container">
+                                                    <div class="add-to-cart-link">
+                                                        <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/" data-quantity="1" class="add_to_cart_button cart-button product_type_grouped" data-product_id="99" aria-label="View products in the “Cast Iron Animals” group" rel="nofollow" data-added_to_cart_text="Added to cart">View products</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="post-67 product type-product status-publish has-post-thumbnail product_cat-home last outofstock shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 877.5px; top: 0px;">
+                            <div class="product-images product-images--internal-details">
+                                <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                    <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
+                                        <span class="loader align-center" data-id="ball-pulse-sync">
+                                            <span class="loader-row">
+                                                <span class="loader-inner ball-pulse-sync">
+                                                    <span></span><span></span><span></span>
+                                                </span>
+                                            </span>
+                                        </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-229 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_068_hasami_mug_5-1340x7851-550x700.jpg" width="550" height="700">
+                                    </span>
+                                </a>
+                                <div class="product-internal-info">
+                                    <div class="item-info">
+                                        <h3>
+                                            <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/">Hasami Mug</a>
+                                        </h3>
+
+                                        <div class="product-terms">
+                                            <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
+                                        </div>
+
+                                        <div class="product-bottom-details">
+                                            <div class="price-column">
+
+                                                <span class="price">
+                                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>15.00</span>
+                                                </span>
+                                            </div>
+
+                                            <div class="add-to-cart-column">
+                                                <div class="product-loop-add-to-cart-container">
+                                                    <div class="add-to-cart-link">
+                                                        <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/" data-quantity="1" class="add_to_cart_button cart-button product_type_simple ajax_add_to_cart" data-product_id="67" aria-label="Read more about “Hasami Mug”" rel="nofollow" data-added_to_cart_text="Added to cart">Read more</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="onsale oos">Out of stock</div>
+                        </li>
+
+                    </ul>
+                </section>
             </div>
-        </div>
+        }
     </div>
-
-    <section class="related products">
-        <h2>Related products</h2>
-        <ul class="products columns-4" style="position: relative; height: 364.083px;">
-
-            <li class="post-313 product type-product status-publish has-post-thumbnail product_cat-home first instock shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 0px; top: 0px;">
-                <div class="product-images product-images--internal-details">
-                    <a href="https://demo.kaliumtheme.com/shop/product/salad-bowl/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-                        <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
-                            <span class="loader align-center" data-id="ball-pulse-sync">
-                                <span class="loader-row">
-                                    <span class="loader-inner ball-pulse-sync">
-                                        <span></span><span></span><span></span>
-                                    </span>
-                                </span>
-                            </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-258 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_060_cork_board_and_bowl_3-1340x7851-550x700.jpg" width="550" height="700">
-                        </span>
-                    </a>
-                    <div class="product-internal-info">
-                        <div class="item-info">
-                            <h3>
-                                <a href="https://demo.kaliumtheme.com/shop/product/salad-bowl/">Salad Bowl</a>
-                            </h3>
-
-                            <div class="product-terms">
-                                <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
-                            </div>
-
-                            <div class="product-bottom-details">
-                                <div class="price-column">
-
-                                    <span class="price">
-                                        <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>15.00</span>
-                                    </span>
-                                </div>
-
-                                <div class="add-to-cart-column">
-                                    <div class="product-loop-add-to-cart-container">
-                                        <div class="add-to-cart-link">
-                                            <a href="/shop/product/oak-tray/?attribute_size=Extra+Small&amp;add-to-cart=313" data-quantity="1" class="add_to_cart_button cart-button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="313" aria-label="Add “Salad Bowl” to your cart" rel="nofollow" data-added_to_cart_text="Added to cart">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-            <li class="post-90 product type-product status-publish has-post-thumbnail product_cat-home product_cat-office instock downloadable shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 292.5px; top: 0px;">
-                <div class="product-images product-images--internal-details">
-                    <a href="https://demo.kaliumtheme.com/shop/product/woo-album-3/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-                        <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
-                            <span class="loader align-center" data-id="ball-pulse-sync">
-                                <span class="loader-row">
-                                    <span class="loader-inner ball-pulse-sync">
-                                        <span></span><span></span><span></span>
-                                    </span>
-                                </span>
-                            </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-263 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_087_hanging_planter_1-1340x7851-550x700.jpg" width="550" height="700">
-                        </span>
-                    </a>
-                    <div class="product-internal-info">
-                        <div class="item-info">
-                            <h3>
-                                <a href="https://demo.kaliumtheme.com/shop/product/woo-album-3/">Sky Planter</a>
-                            </h3>
-
-                            <div class="product-terms">
-                                <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>, <a href="https://demo.kaliumtheme.com/shop/product-category/office/" rel="tag">Office</a>
-                            </div>
-
-                            <div class="product-bottom-details">
-                                <div class="price-column">
-
-                                    <span class="price">
-                                        <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>9.00</span>
-                                    </span>
-                                </div>
-
-                                <div class="add-to-cart-column">
-                                    <div class="product-loop-add-to-cart-container">
-                                        <div class="add-to-cart-link">
-                                            <a href="/shop/product/oak-tray/?attribute_size=Extra+Small&amp;add-to-cart=90" data-quantity="1" class="add_to_cart_button cart-button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="90" aria-label="Add “Sky Planter” to your cart" rel="nofollow" data-added_to_cart_text="Added to cart">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-            <li class="post-99 product type-product status-publish has-post-thumbnail product_cat-home instock shipping-taxable product-type-grouped catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 585px; top: 0px;">
-                <div class="product-images product-images--internal-details">
-                    <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-                        <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
-                            <span class="loader align-center" data-id="ball-pulse-sync">
-                                <span class="loader-row">
-                                    <span class="loader-inner ball-pulse-sync">
-                                        <span></span><span></span><span></span>
-                                    </span>
-                                </span>
-                            </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-282 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_061_cast_iron_birds_1-1340x7851-550x700.jpg" width="550" height="700">
-                        </span>
-                    </a>
-                    <div class="product-internal-info">
-                        <div class="item-info">
-                            <h3>
-                                <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/">Cast Iron Animals</a>
-                            </h3>
-
-                            <div class="product-terms">
-                                <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
-                            </div>
-
-                            <div class="product-bottom-details">
-                                <div class="price-column">
-
-                                    <span class="price"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>22.00</span> – <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>30.00</span></span>
-                                </div>
-
-                                <div class="add-to-cart-column">
-                                    <div class="product-loop-add-to-cart-container">
-                                        <div class="add-to-cart-link">
-                                            <a href="https://demo.kaliumtheme.com/shop/product/cast-iron-animals/" data-quantity="1" class="add_to_cart_button cart-button product_type_grouped" data-product_id="99" aria-label="View products in the “Cast Iron Animals” group" rel="nofollow" data-added_to_cart_text="Added to cart">View products</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-            <li class="post-67 product type-product status-publish has-post-thumbnail product_cat-home last outofstock shipping-taxable purchasable product-type-simple catalog-layout-transparent-bg columns-xs-1" style="position: absolute; left: 877.5px; top: 0px;">
-                <div class="product-images product-images--internal-details">
-                    <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-                        <span class="image-placeholder" style="padding-bottom: 127.27272727%; background-color: #eeeeee">
-                            <span class="loader align-center" data-id="ball-pulse-sync">
-                                <span class="loader-row">
-                                    <span class="loader-inner ball-pulse-sync">
-                                        <span></span><span></span><span></span>
-                                    </span>
-                                </span>
-                            </span><img class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-229 lazyload" data-src="https://demokaliumsites-laborator.netdna-ssl.com/shop/wp-content/uploads/2015/05/yes_068_hasami_mug_5-1340x7851-550x700.jpg" width="550" height="700">
-                        </span>
-                    </a>
-                    <div class="product-internal-info">
-                        <div class="item-info">
-                            <h3>
-                                <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/">Hasami Mug</a>
-                            </h3>
-
-                            <div class="product-terms">
-                                <a href="https://demo.kaliumtheme.com/shop/product-category/accessories/home/" rel="tag">Home</a>
-                            </div>
-
-                            <div class="product-bottom-details">
-                                <div class="price-column">
-
-                                    <span class="price">
-                                        <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>15.00</span>
-                                    </span>
-                                </div>
-
-                                <div class="add-to-cart-column">
-                                    <div class="product-loop-add-to-cart-container">
-                                        <div class="add-to-cart-link">
-                                            <a href="https://demo.kaliumtheme.com/shop/product/hasami-mug/" data-quantity="1" class="add_to_cart_button cart-button product_type_simple ajax_add_to_cart" data-product_id="67" aria-label="Read more about “Hasami Mug”" rel="nofollow" data-added_to_cart_text="Added to cart">Read more</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="onsale oos">Out of stock</div>
-            </li>
-
-        </ul>
-    </section>
-    </div>
-}
-</div>
 
 </div>
 

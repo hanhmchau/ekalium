@@ -1,0 +1,66 @@
+﻿@using Kalium.Shared.Consts
+@using Kalium.Shared.Models
+@page "/user/{UserName}"
+@inherits Kalium.Client.Pages.UserProfileModel
+@layout MainLayout
+
+<div class="container default-margin woocommerce-account">
+    <div class="woocommerce">
+        <ProfileSidebar User="@User" Username="@CurrentUser?.UserName"></ProfileSidebar>
+        <div class="woocommerce-MyAccount-content">
+            <div class="section-title">
+                <h1>My account</h1>
+                <p>Edit your account details or change your password</p>
+            </div>
+            <form class="woocommerce-EditAccountForm edit-account" id="shipping-form" action="" method="post">
+                <div class="w-100 text-center">
+                    <img id="user-image" class="img-hover trigger-upload" style="border-radius: 50%; cursor: pointer;" data-target="#user-avatar" height="100" src="@User?.RealAvatar" />
+                    <input id="user-avatar" class="hide" type="file" accept=".png,.jpg,.jpeg" data-id="@User?.Id" />
+                </div>
+                <style id="labeled-input-row--width-group-1">
+                    .labeled-input-row--width-group-1 .labeled-input-row--label {
+                        min-width: 99px
+                    }
+                </style>
+                @*                 <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first labeled-input-row labeled-input-row--equal-width labeled-input-row--width-group-1"> *@
+                @*                     <div class="labeled-input-row--label"><label for="account_first_name">Name<span class="required">*</span></label></div> *@
+                @*                     <input class="woocommerce-Input woocommerce-Input--text input-text" name="account_first_name" id="account_first_name" value="@User?.UserName" *@
+                @*                            onchange="@(e => ChangeUsername(e.Value.ToString()))" required type="text"/> *@
+                @*                     @if (DuplicateUsername) *@
+                @*                     { *@
+                @*                         <div class="text-red">Duplicate username.</div> *@
+                @*                     } *@
+                @*                 </p> *@
+                <p class="woocommerce-form-row woocommerce-form-row--last form-row form-row-last labeled-input-row labeled-input-row--width-group-1">
+                    <div class="labeled-input-row--label"><label for="account_last_name">Email<span class="required">*</span></label></div>
+                    <input class="woocommerce-Input woocommerce-Input--text input-text" name="account_last_name" id="account_email" required value="@User?.Email"
+                           onchange="@(e => ChangeEmail(e.Value.ToString()))" type="email" />
+                    @if (DuplicateEmail)
+                    {
+                        <div class="text-red">Duplicate email.</div>
+                    }
+                </p>
+                <div class="clear"></div>
+                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
+                    <div class="labeled-input-row--label"><label for="account_display_name">Full name&nbsp;<span class="required"></span></label></div>
+                    <input class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" bind="@FullName" type="text" />
+                </p>
+                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
+                    <div class="labeled-input-row--label"><label for="account_display_name">Address&nbsp;<span class="required"></span></label></div>
+                    <input class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" bind="@Address" type="text" />
+                </p>
+                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--width-group-1">
+                    <div class="labeled-input-row--label"><label for="account_display_name">Phone&nbsp;<span class="required"></span></label></div>
+                    <input class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" bind="@Phone" type="text" />
+                </p>
+                <p>
+                    <button type="button" class="woocommerce-Button button" name="save_account_details" value="Save changes" onclick="@Save">Save changes</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="avatar-notice" class="hide">
+    <input id="hidden-avatar" value="@User?.RealAvatar" />
+</div>

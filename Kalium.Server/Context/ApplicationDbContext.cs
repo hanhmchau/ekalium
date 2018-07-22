@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kalium.Shared.Consts;
 
 namespace Kalium.Server.Context
 {
@@ -23,6 +24,14 @@ namespace Kalium.Server.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<IdentityUser>().ToTable("User");
             modelBuilder.Entity<IdentityRole>().ToTable("Role");
+
+            modelBuilder.Entity<User>()
+                .Property(b => b.Avatar)
+                .HasDefaultValue(Consts.DefaultAvatar);
+
+            modelBuilder.Entity<User>()
+                .Property(b => b.DateRegistered)
+                .HasDefaultValueSql("getutcdate()");
 
             modelBuilder.Entity<OrderItemOption>()
                 .HasKey(c => new

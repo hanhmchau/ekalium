@@ -15,7 +15,7 @@
             <div class="side-nav">
                 <div class="side-nav-inner">
                     <div class="side-nav-logo">
-                        <a href="index.html">
+                        <a href="/">
                             <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
                             <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
                         </a>
@@ -27,7 +27,7 @@
                     </div>
                     <ul class="side-nav-menu scrollable ps-container ps-theme-default" data-ps-id="8c92b96d-9e2f-b327-cb8f-483c39d0a3f8">
                         <li class="nav-item active">
-                            <a class="mrg-top-30" href="index.html">
+                            <a class="mrg-top-30" href="/admin">
                                 <span class="icon-holder">
                                     <i class="ti-home"></i>
                                 </span>
@@ -51,10 +51,44 @@
                                 <li>
                                     <a href="/admin/manage-product">Manage</a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="/admin/manage-user">
+                                <span class="icon-holder">
+                                    <i class="ti-user"></i>
+                                </span>
+                                <span class="title">User</span>
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li>
-                                    <a href="social.html">Social</a>
+                                    <a href="/admin/manage-user">Manage</a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="/admin/manage-brand">
+                                <span class="icon-holder">
+                                    <i class="ti-comment-alt"></i>
+                                </span>
+                                <span class="title">Brand</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="/admin/manage-category">
+                                <span class="icon-holder">
+                                    <i class="ti-tag"></i>
+                                </span>
+                                <span class="title">Category</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="/admin/manage-order">
+                                <span class="icon-holder">
+                                    <i class="ti-bar-chart"></i>
+                                </span>
+                                <span class="title">Orders</span>
+                            </a>
                         </li>
                         <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
                             <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
@@ -172,36 +206,23 @@
                         <ul class="nav-right">
                             <li class="user-profile dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                                    <img class="profile-img img-fluid" src="@CurrentUser.RealAvatar" alt="">
                                     <div class="user-info">
-                                        <span class="name pdd-right-5">Nate Leong</span>
+                                        <span class="name pdd-right-5">@CurrentUser.UserName</span>
                                         <i class="ti-angle-down font-size-10"></i>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#">
+                                        <a href="/user/@CurrentUser.UserName">
                                             <i class="ti-settings pdd-right-10"></i>
-                                            <span>Setting</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-user pdd-right-10"></i>
                                             <span>Profile</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
-                                            <i class="ti-email pdd-right-10"></i>
-                                            <span>Inbox</span>
-                                        </a>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-power-off pdd-right-10"></i>
-                                            <span>Logout</span>
+                                        <a href="/user/@CurrentUser.UserName/orders">
+                                            <i class="ti-wallet pdd-right-10"></i>
+                                            <span>Orders</span>
                                         </a>
                                     </li>
                                 </ul>

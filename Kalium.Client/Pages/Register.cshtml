@@ -1,0 +1,83 @@
+﻿@page "/register"
+@using Kalium.Shared.Consts
+@inherits Kalium.Client.Shared.RegisterModel
+
+<div class="container default-margin">
+    <div class="woocommerce">
+        <div class="section-title hide">
+            <h1>Login or register</h1>
+            <p>Manage your account and see your orders</p>
+        </div>
+
+        <div class="u-columns col2-set" id="customer_login" style="display: flex; align-items: center; justify-content: center">
+            <div class="u-column1 col-1 woocommerce-account">
+                <form method="post" class="woocommerce-form woocommerce-form-register register">
+                    <h2>Register</h2>
+
+                    @if (GeneralError)
+                    {
+                        <div class="background-red text-white" style="text-align: center; padding: 10px;">
+                            Registration failed. Please try again.
+                        </div>
+                    }
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row">
+                        <label for="reg_email">Username<span class="required">*</span></label>
+                        <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(username => CheckUsername(username.Value as string))"
+                               name="email" id="reg_email" autocomplete="email" value="" type="email" />
+                    </p>
+                    @if (DuplicateUsername)
+                    {
+                        <div class="text-red">This username is already used.</div>
+                    }
+                    @if (HasTypedUsername && string.IsNullOrWhiteSpace(Username))
+                    {
+                        <div class="text-red">Username cannot be empty or contain only whitespaces.</div>
+                    }
+
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row">
+                        <label for="reg_email">Email address<span class="required">*</span></label>
+                        <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(email => CheckEmail(email.Value as string))"
+                               name="email" id="reg_email" autocomplete="email" value="" type="email" />
+                    </p>
+                    @if (DuplicateEmail)
+                    {
+                        <div class="text-red">This email address is already used.</div>
+                    }
+                    @if (HasTypedPassword && string.IsNullOrWhiteSpace(Email))
+                    {
+                        <div class="text-red">Email cannot be empty or contain only whitespaces.</div>
+                    }
+                    else
+                    {
+                        if (!ValidatorUtils.IsValidEmail(Email))
+                        {
+                            <div class="text-red">Invalid email.</div>
+                        }
+                    }
+
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide labeled-input-row labeled-input-row--wrap">
+                        <label for="reg_password">Password<span class="required">*</span></label>
+                        <input class="woocommerce-Input woocommerce-Input--text input-text" onchange="@(password => { Password = password.Value as string; HasTypedPassword = true; })"
+                               name="password" id="reg_password" autocomplete="off" type="@(PasswordMode ? "password" : "text")" />
+                        <div onclick=@TogglePasswordMode><i class="icon @(PasswordMode ? "icon-basic-eye" : "icon-basic-eye-closed")"></i></div>
+                    </p>
+                    @if (HasTypedPassword && (string.IsNullOrEmpty(Password) || Password.Length < 4))
+                    {
+                        <div class="text-red">Password must contain at least 4 characters.</div>
+                    }
+
+                    <div class="woocommerce-privacy-policy-text"></div>
+                    <p class="woocommerce-FormRow form-row">
+                        <button type="button" onclick="@TryRegister" class="woocommerce-Button button @(IsValid() ? "button-disabled" : "")" name="register" value="Register">Register</button>
+                        <a href="/login" style="display: inline-block; padding-left: 15px" class="red-text modal-close">Have an account? Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@functions{
+
+}

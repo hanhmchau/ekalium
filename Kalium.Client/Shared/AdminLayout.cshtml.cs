@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kalium.Client.Extensions;
 using Kalium.Shared.Consts;
+using Kalium.Shared.Models;
 using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.AspNetCore.Blazor.Layouts;
@@ -15,12 +16,13 @@ namespace Kalium.Client.Shared
         [Inject]
         protected IMegaService MegaService { get; set; }
         protected bool Loaded { get; set; }
+        protected User CurrentUser { get; set; }
 
         protected override async Task OnInitAsync()
         {
-            var user = await MegaService.AccountService.GetCurrentUser();
+            CurrentUser = await MegaService.AccountService.GetCurrentUser();
             MegaService.Util.Checkpoint("/admin");
-            if (user == null)
+            if (CurrentUser == null)
             {
                 MegaService.UriHelper.NavigateTo("/login");
                 return;
