@@ -29,6 +29,12 @@
                                     <i class="ti-angle-right"></i>
                                 </a>
                             </div>
+                            <div class="card-heading float-right ml-md-3">
+                                <a class="cursor-pointer" data-toggle="modal" data-target="#email-product">
+                                    Email
+                                    <i class="ti-email"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="card-block">
@@ -505,3 +511,5 @@
     <i class="ti-save"></i>
 </button>
 <!-- Save Button END -->
+
+<AdminConfirmModal Id="email-product" Title="Email" Message="Do you really want to send an email of this product to subscribers?" YesEventHandler=@((Func<Task>) Email)></AdminConfirmModal>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -109,6 +110,54 @@ namespace Kalium.Server.Controllers
             return JsonConvert.SerializeObject(result, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Include,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [HttpPost("[action]")]
+        public async Task<string> UpdateStatus([FromBody] string json)
+        {
+            var parser = new Parser(json);
+            var id = parser.AsInt("Id");
+            var status = parser.AsInt("Status");
+            await _orderRepository.UpdateOrderStatus(id, status);
+            return JsonConvert.SerializeObject(new
+            {
+                Result = true
+            }, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [HttpPost("[action]")]
+        public async Task<string> SearchOrders([FromBody] string json)
+        {
+            var parser = new Parser(json);
+            var sortType = parser.AsInt("SortType");
+            var page = parser.AsInt("Page");
+            var pageSize = parser.AsInt("PageSize");
+            var orderStatus = parser.AsInt("OrderStatus");
+            var start = parser.AsString("StartDate");
+            var end = parser.AsString("EndDate");
+            var user = parser.AsString("User");
+            if (!DateTime.TryParseExact(start, "d_MM_yyyy", null, DateTimeStyles.None,
+                out DateTime startDate))
+            {
+                startDate = DateTime.MinValue;
+            }
+            if (!DateTime.TryParseExact(end, "d_MM_yyyy", null, DateTimeStyles.None,
+                out DateTime endDate))
+            {
+                endDate = DateTime.MinValue;
+            }
+            object result = new
+            {
+                Orders = await _orderRepository.SearchOrders(orderStatus, startDate, endDate, user, sortType, page, pageSize),
+                Total = await _orderRepository.CountOrders(orderStatus, startDate, endDate, user)
+            };
+            return JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
         }

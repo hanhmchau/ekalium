@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Kalium.Server.Context;
 using Kalium.Server.HubR;
@@ -9,6 +10,7 @@ using Kalium.Shared.Consts;
 using Kalium.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using MoreLinq;
 
@@ -23,9 +25,10 @@ namespace Kalium.Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IProductHub _productHub;
+        private readonly IEmailSender _emailSender;
 
         public SeedController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, 
-            ApplicationDbContext ctx, IHttpContextAccessor httpContextAccessor, IProductHub productHub)
+            ApplicationDbContext ctx, IHttpContextAccessor httpContextAccessor, IProductHub productHub, IEmailSender emailSender)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -33,6 +36,7 @@ namespace Kalium.Server.Controllers
             _context = ctx;
             _httpContextAccessor = httpContextAccessor;
             _productHub = productHub;
+            _emailSender = emailSender;
         }
 
 
@@ -220,6 +224,14 @@ back. Requires less postage than a standard card in the United States.".Replace(
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> Email()
+        {
+            await _emailSender.SendEmailAsync("asanriku@gmail.com", "Confirm your email",
+                "I love u really");
+            return Ok("Mail me seeded...");
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> Index()
         {
             // Get the list of the roles from the enum
@@ -266,7 +278,7 @@ back. Requires less postage than a standard card in the United States.".Replace(
             // Our default user
             User user = new User
             {
-                Email = "fishdoe@example.com",
+                Email = "fish@gmail.com",
                 UserName = "fish",
                 LockoutEnabled = false
             };
@@ -276,7 +288,7 @@ back. Requires less postage than a standard card in the United States.".Replace(
             {
                 // WARNING: Do NOT check in credentials of any kind into source control
                 // 5ESTdYB5cyYwA2dKhJqyjPYnKUc & 45Ydw ^ gz ^ jy & FCV3gxpmDPdaDmxpMkhpp & 9TRadU % wQ2TUge!TsYXsh77Qmauan3PEG8!6EP
-                var result = await _userManager.CreateAsync(user, password: "Pudding@1234");
+                var result = await _userManager.CreateAsync(user, password: "1234");
 
                 if (!result.Succeeded) // Return 500 if it fails
                     return StatusCode(StatusCodes.Status500InternalServerError);
@@ -287,13 +299,22 @@ back. Requires less postage than a standard card in the United States.".Replace(
                 if (!result.Succeeded) // Return 500 if it fails
                     return StatusCode(StatusCodes.Status500InternalServerError);
 
-                await _signInManager.PasswordSignInAsync("fish", "Pudding@1234", true, false);
+                await _signInManager.PasswordSignInAsync("fish", "1234", true, false);
             }
 
             // All good, 200 OK!            
             return Ok("Seeded...");
         }
 
+        [HttpGet("[action]")]
+        public async Task<string> Password()
+        {
+            var user = await _userManager.FindByNameAsync("Luculia");
+            var hash = _userManager.PasswordHasher.HashPassword(user, "1234");
+            user.PasswordHash = hash;
+            await _context.SaveChangesAsync();
+            return "Omega lul";
+        }
 
         [HttpGet("[action]")]
         public async Task<string> Announce()

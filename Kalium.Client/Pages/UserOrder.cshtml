@@ -1,0 +1,69 @@
+﻿@using Kalium.Shared.Consts
+@using Kalium.Shared.Models
+@page "/user/{UserName}/orders"
+@inherits Kalium.Client.Pages.UserOrderModel
+@layout MainLayout
+
+<div class="container default-margin woocommerce-account">
+    <div class="woocommerce">
+        <ProfileSidebar User="@User" Username="@CurrentUser?.UserName"></ProfileSidebar>
+        <div class="woocommerce-MyAccount-content">
+
+            <div class="section-title">
+                <h1>My Orders</h1>
+                <p>Your recent orders are displayed in the table below.</p>
+            </div>
+
+            @if (Orders == null || !Orders.Any())
+            {
+                if (Loaded)
+                {
+                    <div class="woocommerce-Message woocommerce-Message--error woocommerce-error">
+                        <a class="woocommerce-Button button" href="/shop">
+                            Go shop
+                        </a>
+                        You haven't placed any orders yet.
+                    </div>
+                }
+            }
+            else
+            {
+                <table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
+                    <thead>
+                        <tr>
+                            <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-number"><span class="nobr">Order</span></th>
+                            <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-date"><span class="nobr">Date</span></th>
+                            <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-status"><span class="nobr">Status</span></th>
+                            <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-total"><span class="nobr">Total</span></th>
+                            <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-actions"><span class="nobr">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Orders)
+                        {
+                            <tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-processing order">
+                                <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-number" data-title="Order">
+                                    <a href="https://demo.kaliumtheme.com/shop/my-account/view-order/1050/">
+                                        #@order.Id
+                                    </a>
+                                </td>
+                                <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-date" data-title="Date">
+                                    <time datetime="2018-07-19T02:22:33+00:00">@order.DateCreated.ToShortDateString()</time>
+                                </td>
+                                <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-status" data-title="Status">
+                                    @(((Consts.OrderStatus)order.Status).Name())
+                                </td>
+                                <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-total" data-title="Total">
+                                    <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">£</span>@order.PostCouponTotal</span>
+                                </td>
+                                <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions" data-title="Actions">
+                                    <a href="/order/@order.Id" class="woocommerce-button button view">View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

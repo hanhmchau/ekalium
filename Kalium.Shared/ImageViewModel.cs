@@ -10,4 +10,9 @@ namespace Kalium.Shared
         public int Id { get; set; }
         public List<IFormFile> Files { get; set; }
     }
+    public class AvatarViewModel
+    {
+        public string Id { get; set; }
+        public List<IFormFile> Files { get; set; }
+    }
 }

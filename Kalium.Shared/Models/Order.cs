@@ -26,12 +26,12 @@ namespace Kalium.Shared.Models
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<OrderCoupon> OrderCoupons { get; set; }
         [NotMapped]
-        public ICollection<Coupon> Coupons => OrderCoupons.Select(oc => oc.Coupon).ToList();
+        public ICollection<Coupon> Coupons => OrderCoupons?.Select(oc => oc.Coupon).ToList();
         public string Note { get; set; }
         [NotMapped]
-        public double PreCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice);
+        public double PreCouponTotal => OrderItems?.Sum(orderItem => orderItem.ActualPrice) ?? 0;
         [NotMapped]
-        public double PostCouponTotal => OrderItems.Sum(orderItem => orderItem.ActualPrice) - Coupons?.Sum(c => c?.Reduction) ?? 0;
+        public double PostCouponTotal => OrderItems?.Sum(orderItem => orderItem.ActualPrice) - (Coupons?.Sum(c => c?.Reduction) ?? 0) ?? 0;
 
         [NotMapped]
         public bool IsCancellable => (Status == (int) Consts.Consts.OrderStatus.Processing ||

@@ -8,7 +8,6 @@
 @using MoreLinq
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@page "/shop/{CategoryName}"
 @page "/shop"
 @inject HttpClient Http
 @inject IUtil MyUtil
@@ -95,7 +94,7 @@
                                             </span>
                                         </span>
                                         <img width="550" height="700" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail img-200 lazyload"
-                                             data-src="@product.MainImage.Url"/>
+                                             data-src="@product.MainImage.Url" />
                                     </span>
                                 </a>
                                 <div class="product-internal-info">
@@ -143,9 +142,9 @@
                             else
                             {
                                 @if (product.Featured)
-                                 {
-                                     <span class="onsale featured">Featured</span>
-                                 }
+                                {
+                                    <span class="onsale featured">Featured</span>
+                                }
                             }
                         </li>
                     }
@@ -212,14 +211,14 @@
                             </li>
                             @foreach (var cat in Categories)
                             {
-                                <li class="cat-item cat-item-17 pointer @(CategoryName != null && CategoryName.Equals(cat.Name) ? "strong" : "")">
+                                <li class="cat-item cat-item-17 pointer @(CategoryName != null && CategoryName.Equals(cat.Name, StringComparison.CurrentCultureIgnoreCase) ? "strong" : "")">
                                     <a onclick="@(() =>
                                                   {
                                                       CategoryName = cat.Name;
                                                       ResetProduct();
                                                   })">@cat.Name</a>
-                                </li>
-                            }
+                                            </li>
+                                        }
                         </ul>
                     </div>
                     <div class="widget woocommerce widget_product_categories">
@@ -260,7 +259,7 @@
 
 
         </div>
-    <div class="hide" id="brand-notifier" onclick="@(() => LoadProducts(true))"></div>
+        <div class="hide" id="brand-notifier" onclick="@(() => LoadProducts(true))"></div>
     </main>
 </div>
 

@@ -22,12 +22,22 @@ namespace Kalium.Client.Pages
 
         protected override async Task OnInitAsync()
         {
-            var user = await MegaService.AccountService.GetCurrentUser();
-            if (user == null)
+            User user = null;
+            var authorized = false;
+            try
             {
-                MegaService.Util.Checkpoint($"/order/{OrderId}");
-                MegaService.UriHelper.NavigateTo("/login");
-                return;
+                user = await MegaService.AccountService.GetCurrentUser();
+                authorized = await MegaService.AccountService.IsAuthorized(Consts.Policy.ManageProducts);
+                if (user == null)
+                {
+                    MegaService.Util.Checkpoint($"/order/{OrderId}");
+                    MegaService.UriHelper.NavigateTo("/login");
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             if (int.TryParse(OrderId, out var numberId))
@@ -37,7 +47,7 @@ namespace Kalium.Client.Pages
                 if (code == 200)
                 {
                     Order = orderJson["Order"].ToObject<OrderData>();
-                    if (!Order.UserId.Equals(user.Id))
+                    if (user != null && !Order.UserId.Equals(user.Id) && !authorized)
                     {
                         MegaService.Util.NavigateToForbidden();
                     }
@@ -51,7 +61,6 @@ namespace Kalium.Client.Pages
 
         protected async Task CancelOrder()
         {
-            Console.WriteLine("Helloooooo, Hellooooo?");
             var result = await MegaService.Fetcher.Fetch($"/api/Order/Cancel?id={Order.Id}");
             var code = result["Code"].ToObject<int>();
             if (code == 200)
@@ -59,8 +68,10 @@ namespace Kalium.Client.Pages
                 var refundDate = result["RefundDate"].ToObject<DateTime>();
                 var refundRate = result["RefundRate"].ToObject<double>();
                 Order.RefundDate = refundDate;
+                Order.Status = (int) Consts.OrderStatus.Cancelled;
                 MegaService.Toastr.Success("Order cancelled.");
                 MegaService.Util.HideModal();
+                StateHasChanged();
             }
             else
             {

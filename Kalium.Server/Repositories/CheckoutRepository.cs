@@ -24,12 +24,14 @@ namespace Kalium.Server.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly EmailSender _emailSender;
 
-        public CheckoutRepository(ApplicationDbContext ctx, IMemoryCache cache, IProductRepository productRepository, IIdentityRepository identityRepository)
+        public CheckoutRepository(ApplicationDbContext ctx, IMemoryCache cache, IProductRepository productRepository, IIdentityRepository identityRepository, EmailSender emailSender)
         {
             _context = ctx;
             _productRepository = productRepository;
             _identityRepository = identityRepository;
+            _emailSender = emailSender;
         }
 
         private async Task<CheckOutResult> ValidateCart(PseudoCart cart)
@@ -175,6 +177,25 @@ namespace Kalium.Server.Repositories
                 await _context.Orders.AddAsync(newOrder);
                 await _context.SaveChangesAsync();
                 checkOutResult.OrderId = newOrder.Id;
+            }
+
+            if (checkOutResult.Succeeded)
+            {
+                var orderToEmail = await _context.Orders
+                    .Include(o => o.OrderCoupons)
+                    .ThenInclude(oc => oc.Coupon)
+                    .ThenInclude(c => c.Product)
+                    .ThenInclude(p => p.Images)
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.OrderItemOptions)
+                    .ThenInclude(oio => oio.Option)
+                    .ThenInclude(opt => opt.Extra)
+                    .Include(o => o.User)
+                    .Include(o => o.Refund).FirstOrDefaultAsync(o => o.Id == checkOutResult.OrderId);
+                var response = await _emailSender.SendOrderEmail($"[Kalium] Order #{checkOutResult.OrderId}", orderToEmail,
+                    currentUser.Email);
             }
 
             return checkOutResult;
